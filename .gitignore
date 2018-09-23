@@ -1,3 +1,8 @@
+*.layout
+*.depend
+bin/
+obj/
+
 # Prerequisites
 *.d
 
