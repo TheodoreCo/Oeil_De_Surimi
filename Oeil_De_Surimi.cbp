@@ -29,13 +29,13 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="`pkg-config gtk+-2.0 --cflags`" />
 			<Add option="-Wall" />
+			<Add option="`pkg-config gtk+-3.0 --cflags`" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config gtk+-2.0 --libs`" />
+			<Add option="`pkg-config gtk+-3.0 --libs`" />
 		</Linker>
-		<Unit filename="main.c">
+		<Unit filename="src/gui/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
