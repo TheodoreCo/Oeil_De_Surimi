@@ -1,0 +1,37 @@
+Image d'entrée : Format bitmap
+On vise l'obtention d'un format binaire avant la partie ocr, avec un 1 pour les blancs et un 0 pour les noirs, et un nobmre d'octets égal au nombre de pixels dans l'image.
+
+Installer un "hexreader" pour avoir une idée de la bitmap
+lire wiki bitmap format
+
+limite: reconaissance uniquement des textes horizontaux
+
+Découpage du projet: 
+1) Interface graphique, gtk3, avec des accès à:
+-chargement d'une image à reconnaitre
+-stockage des résultats de la reconaissance
+-statistiques, apprentissage/entrainement ...
+
+
+2) Pré-traitement de l'image pour passer d'un fichier bitmap (de 1 à 24 bits) à un fichier binaire.
+
+https://fr.wikipedia.org/wiki/Windows_bitmap
+https://en.wikipedia.org/wiki/BMP_file_format
+
+2.1) Traitement de l'image pour obtenir le fichier binaire.
+
+Se documenter sur un algorythme anti-bruit.
+Et un autre pour la reconaissance des contours... 
+
+Autres ?
+
+2.2) Traitement du fichier binaire pour obtenir les lignes et les caractères qui constituent l'input du module 3.
+
+
+3) Ecrire l'algo du réseau neuronal. Chercher des images publiques de caractères afin d'entrainer le réseau.
+Stocker les résultats de l'entrainement dans des fichiers, et utiliser ces fichiers lors de la reconnaissance finale.
+
+
+Avoir deux dicos, les chercher dans des bases libres de droits, français et anglais.
+Avoir un mot par ligne, il est possible de dériver des mots qui n'existent pas à l'aide de conjugaison.
+Limitations: une seule langue reconnue à la fois.
