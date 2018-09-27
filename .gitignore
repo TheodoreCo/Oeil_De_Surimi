@@ -3,6 +3,9 @@
 bin/
 obj/
 
+# glide file duplicates
+*.glide~
+
 # Prerequisites
 *.d
 

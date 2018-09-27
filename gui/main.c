@@ -18,6 +18,10 @@ int main (int argc, char *argv[])
     gtk_widget_show(window);
     gtk_main();
 
+    //GtkImage *image_widget = (GtkImage)GTK_WIDGET(gtk_builder_get_object(builder, "oeil_de_surimi_bmp_image"));
+
+
+
     return 0;
 }
 
@@ -25,4 +29,9 @@ int main (int argc, char *argv[])
 void on_window_main_destroy()
 {
     gtk_main_quit();
+}
+
+void on_oeil_de_surimi_select_img_clicked() {
+
+    // Change image widget here !
 }
