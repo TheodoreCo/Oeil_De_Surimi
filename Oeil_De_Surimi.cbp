@@ -30,12 +30,12 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="`pkg-config gtk+-3.0 --cflags`" />
+			<Add option="`pkg-config gtk+-3.0 --cflags` -rdynamic" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config gtk+-3.0 --libs`" />
+			<Add option="`pkg-config gtk+-3.0 --libs` -export-dynamic" />
 		</Linker>
-		<Unit filename="src/gui/main.c">
+		<Unit filename="gui/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
