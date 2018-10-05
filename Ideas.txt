@@ -35,3 +35,22 @@ Stocker les résultats de l'entrainement dans des fichiers, et utiliser ces fichi
 Avoir deux dicos, les chercher dans des bases libres de droits, français et anglais.
 Avoir un mot par ligne, il est possible de dériver des mots qui n'existent pas à l'aide de conjugaison.
 Limitations: une seule langue reconnue à la fois.
+
+------------------------
+5/10: pour la génération du fichier Makefile à partir de la configuration codeblocks:
+sudo apt-install cdb2make
+
+https://sourceforge.net/p/cbp2make/wiki/Home/
+
+Ensuite:
+cbp2make -in Oeil_De_Surimi.cbp -out Makefile
+
+-----------------------
+Créer une structure représentant le NN (neural network). Ce qu'il faudrait paramétrer (entre autres):
+- nombre de inputs
+- nombre de outputs
+- nombre de couches intermédiaires (hidden layers)
+- nombre de neurones par couche intermédiaire (pour simplifier, le même nombre de neurones pour toutes les couches intermédiaires)
+- les weights entre les couches + les bias
+- la fonction utilisée pour les calculs (sigmoïde, ...)
+- ...
