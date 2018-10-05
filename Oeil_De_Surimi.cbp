@@ -30,7 +30,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="`pkg-config gtk+-3.0 --cflags` -rdynamic" />
+			<Add option="`pkg-config gtk+-3.0 --cflags` -rdynamic  -O3 -g -std=c99 -Wall -Wextra  -Wstrict-prototypes -Wold-style-definition -Wno-unused-parameter -Wno-unused-result" />
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config gtk+-3.0 --libs` -export-dynamic" />
@@ -42,6 +42,10 @@
 		<Unit filename="gui/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="neural_network/neural_network.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="neural_network/neural_network.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />
