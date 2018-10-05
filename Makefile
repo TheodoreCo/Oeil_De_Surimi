@@ -40,9 +40,9 @@ OBJDIR_RELEASE = obj/Release
 DEP_RELEASE = 
 OUT_RELEASE = bin/Release/Oeil_De_Surimi
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)/gui/image_operation.o $(OBJDIR_DEBUG)/gui/main.o
+OBJ_DEBUG = $(OBJDIR_DEBUG)/gui/image_operation.o $(OBJDIR_DEBUG)/gui/main.o $(OBJDIR_DEBUG)/neural_network/neural_network.o
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/gui/image_operation.o $(OBJDIR_RELEASE)/gui/main.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)/gui/image_operation.o $(OBJDIR_RELEASE)/gui/main.o $(OBJDIR_RELEASE)/neural_network/neural_network.o
 
 all: debug release
 
@@ -51,6 +51,7 @@ clean: clean_debug clean_release
 before_debug: 
 	test -d bin/Debug || mkdir -p bin/Debug
 	test -d $(OBJDIR_DEBUG)/gui || mkdir -p $(OBJDIR_DEBUG)/gui
+	test -d $(OBJDIR_DEBUG)/neural_network || mkdir -p $(OBJDIR_DEBUG)/neural_network
 
 after_debug: 
 
@@ -65,14 +66,19 @@ $(OBJDIR_DEBUG)/gui/image_operation.o: gui/image_operation.c
 $(OBJDIR_DEBUG)/gui/main.o: gui/main.c
 	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c gui/main.c -o $(OBJDIR_DEBUG)/gui/main.o
 
+$(OBJDIR_DEBUG)/neural_network/neural_network.o: neural_network/neural_network.c
+	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c neural_network/neural_network.c -o $(OBJDIR_DEBUG)/neural_network/neural_network.o
+
 clean_debug: 
 	rm -f $(OBJ_DEBUG) $(OUT_DEBUG)
 	rm -rf bin/Debug
 	rm -rf $(OBJDIR_DEBUG)/gui
+	rm -rf $(OBJDIR_DEBUG)/neural_network
 
 before_release: 
 	test -d bin/Release || mkdir -p bin/Release
 	test -d $(OBJDIR_RELEASE)/gui || mkdir -p $(OBJDIR_RELEASE)/gui
+	test -d $(OBJDIR_RELEASE)/neural_network || mkdir -p $(OBJDIR_RELEASE)/neural_network
 
 after_release: 
 
@@ -87,10 +93,14 @@ $(OBJDIR_RELEASE)/gui/image_operation.o: gui/image_operation.c
 $(OBJDIR_RELEASE)/gui/main.o: gui/main.c
 	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c gui/main.c -o $(OBJDIR_RELEASE)/gui/main.o
 
+$(OBJDIR_RELEASE)/neural_network/neural_network.o: neural_network/neural_network.c
+	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c neural_network/neural_network.c -o $(OBJDIR_RELEASE)/neural_network/neural_network.o
+
 clean_release: 
 	rm -f $(OBJ_RELEASE) $(OUT_RELEASE)
 	rm -rf bin/Release
 	rm -rf $(OBJDIR_RELEASE)/gui
+	rm -rf $(OBJDIR_RELEASE)/neural_network
 
 .PHONY: before_debug after_debug clean_debug before_release after_release clean_release
 
