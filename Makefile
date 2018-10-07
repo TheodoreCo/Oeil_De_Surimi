@@ -40,13 +40,39 @@ OBJDIR_RELEASE = obj/Release
 DEP_RELEASE = 
 OUT_RELEASE = bin/Release/Oeil_De_Surimi
 
+INC_TEST_NN_RELEASE = $(INC)
+CFLAGS_TEST_NN_RELEASE = $(CFLAGS) -O2
+RESINC_TEST_NN_RELEASE = $(RESINC)
+RCFLAGS_TEST_NN_RELEASE = $(RCFLAGS)
+LIBDIR_TEST_NN_RELEASE = $(LIBDIR)
+LIB_TEST_NN_RELEASE = $(LIB)
+LDFLAGS_TEST_NN_RELEASE = $(LDFLAGS) -s
+OBJDIR_TEST_NN_RELEASE = obj/Test_NN_Release
+DEP_TEST_NN_RELEASE = 
+OUT_TEST_NN_RELEASE = bin/Test_NN_Release/Oeil_De_Surimi
+
+INC_TEST_NN_DEBUG = $(INC)
+CFLAGS_TEST_NN_DEBUG = $(CFLAGS) -g
+RESINC_TEST_NN_DEBUG = $(RESINC)
+RCFLAGS_TEST_NN_DEBUG = $(RCFLAGS)
+LIBDIR_TEST_NN_DEBUG = $(LIBDIR)
+LIB_TEST_NN_DEBUG = $(LIB)
+LDFLAGS_TEST_NN_DEBUG = $(LDFLAGS)
+OBJDIR_TEST_NN_DEBUG = obj/Test_NN_Debug
+DEP_TEST_NN_DEBUG = 
+OUT_TEST_NN_DEBUG = bin/Test_NN_Debug/Oeil_De_Surimi
+
 OBJ_DEBUG = $(OBJDIR_DEBUG)/gui/image_operation.o $(OBJDIR_DEBUG)/gui/main.o $(OBJDIR_DEBUG)/neural_network/neural_network.o
 
 OBJ_RELEASE = $(OBJDIR_RELEASE)/gui/image_operation.o $(OBJDIR_RELEASE)/gui/main.o $(OBJDIR_RELEASE)/neural_network/neural_network.o
 
-all: debug release
+OBJ_TEST_NN_RELEASE = $(OBJDIR_TEST_NN_RELEASE)/neural_network/main_test.o $(OBJDIR_TEST_NN_RELEASE)/neural_network/neural_network.o
 
-clean: clean_debug clean_release
+OBJ_TEST_NN_DEBUG = $(OBJDIR_TEST_NN_DEBUG)/neural_network/main_test.o $(OBJDIR_TEST_NN_DEBUG)/neural_network/neural_network.o
+
+all: debug release test_nn_release test_nn_debug
+
+clean: clean_debug clean_release clean_test_nn_release clean_test_nn_debug
 
 before_debug: 
 	test -d bin/Debug || mkdir -p bin/Debug
@@ -102,5 +128,49 @@ clean_release:
 	rm -rf $(OBJDIR_RELEASE)/gui
 	rm -rf $(OBJDIR_RELEASE)/neural_network
 
-.PHONY: before_debug after_debug clean_debug before_release after_release clean_release
+before_test_nn_release: 
+	test -d bin/Test_NN_Release || mkdir -p bin/Test_NN_Release
+	test -d $(OBJDIR_TEST_NN_RELEASE)/neural_network || mkdir -p $(OBJDIR_TEST_NN_RELEASE)/neural_network
+
+after_test_nn_release: 
+
+test_nn_release: before_test_nn_release out_test_nn_release after_test_nn_release
+
+out_test_nn_release: before_test_nn_release $(OBJ_TEST_NN_RELEASE) $(DEP_TEST_NN_RELEASE)
+	$(LD) $(LIBDIR_TEST_NN_RELEASE) -o $(OUT_TEST_NN_RELEASE) $(OBJ_TEST_NN_RELEASE)  $(LDFLAGS_TEST_NN_RELEASE) $(LIB_TEST_NN_RELEASE)
+
+$(OBJDIR_TEST_NN_RELEASE)/neural_network/main_test.o: neural_network/main_test.c
+	$(CC) $(CFLAGS_TEST_NN_RELEASE) $(INC_TEST_NN_RELEASE) -c neural_network/main_test.c -o $(OBJDIR_TEST_NN_RELEASE)/neural_network/main_test.o
+
+$(OBJDIR_TEST_NN_RELEASE)/neural_network/neural_network.o: neural_network/neural_network.c
+	$(CC) $(CFLAGS_TEST_NN_RELEASE) $(INC_TEST_NN_RELEASE) -c neural_network/neural_network.c -o $(OBJDIR_TEST_NN_RELEASE)/neural_network/neural_network.o
+
+clean_test_nn_release: 
+	rm -f $(OBJ_TEST_NN_RELEASE) $(OUT_TEST_NN_RELEASE)
+	rm -rf bin/Test_NN_Release
+	rm -rf $(OBJDIR_TEST_NN_RELEASE)/neural_network
+
+before_test_nn_debug: 
+	test -d bin/Test_NN_Debug || mkdir -p bin/Test_NN_Debug
+	test -d $(OBJDIR_TEST_NN_DEBUG)/neural_network || mkdir -p $(OBJDIR_TEST_NN_DEBUG)/neural_network
+
+after_test_nn_debug: 
+
+test_nn_debug: before_test_nn_debug out_test_nn_debug after_test_nn_debug
+
+out_test_nn_debug: before_test_nn_debug $(OBJ_TEST_NN_DEBUG) $(DEP_TEST_NN_DEBUG)
+	$(LD) $(LIBDIR_TEST_NN_DEBUG) -o $(OUT_TEST_NN_DEBUG) $(OBJ_TEST_NN_DEBUG)  $(LDFLAGS_TEST_NN_DEBUG) $(LIB_TEST_NN_DEBUG)
+
+$(OBJDIR_TEST_NN_DEBUG)/neural_network/main_test.o: neural_network/main_test.c
+	$(CC) $(CFLAGS_TEST_NN_DEBUG) $(INC_TEST_NN_DEBUG) -c neural_network/main_test.c -o $(OBJDIR_TEST_NN_DEBUG)/neural_network/main_test.o
+
+$(OBJDIR_TEST_NN_DEBUG)/neural_network/neural_network.o: neural_network/neural_network.c
+	$(CC) $(CFLAGS_TEST_NN_DEBUG) $(INC_TEST_NN_DEBUG) -c neural_network/neural_network.c -o $(OBJDIR_TEST_NN_DEBUG)/neural_network/neural_network.o
+
+clean_test_nn_debug: 
+	rm -f $(OBJ_TEST_NN_DEBUG) $(OUT_TEST_NN_DEBUG)
+	rm -rf bin/Test_NN_Debug
+	rm -rf $(OBJDIR_TEST_NN_DEBUG)/neural_network
+
+.PHONY: before_debug after_debug clean_debug before_release after_release clean_release before_test_nn_release after_test_nn_release clean_test_nn_release before_test_nn_debug after_test_nn_debug clean_test_nn_debug
 
