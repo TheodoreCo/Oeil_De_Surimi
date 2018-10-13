@@ -59,7 +59,19 @@ binary_image *bi_image_from_file(char *filename)
                 fread(&g, sizeof(unsigned char), 1, file);
                 fread(&b, sizeof(unsigned char), 1, file);
 
+                /* NOT A GOOD WAY TO TURN A COLOR IMAGE TO GRAYSCALE /!\
+
+                The right way is :
+                grey =  0.2126 * r + 0.7152 * g + 0.0722 * b;
+                because colors don't have the same luminance
+                */
+
                 b_image->pixel[img_w*i+j] = ((int)r + (int)g + (int)b) / 3;
+
+                /*
+                Here the image needs to be contrasted and calibrated.
+                TODO - Improve contrast
+                */
 
                 //datax[i][j] = ((int)r + (int)g + (int)b) / 3;
             }

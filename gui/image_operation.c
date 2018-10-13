@@ -110,6 +110,8 @@ gboolean draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
                 double col_pix = b_image->pixel[y*img_w + x]/255.0;
                 if (bin_img_type == B_AND_W)
                 {
+                    // THRESHOLD TO DEFINE WITH TESTS
+                    //   0.5 makes some text disappear
                     col_pix = col_pix > 0.5 ? 1 : 0;
                 }
                 cairo_set_source_rgb (cr, col_pix, col_pix, col_pix);

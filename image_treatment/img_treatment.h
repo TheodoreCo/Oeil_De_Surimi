@@ -23,6 +23,8 @@ typedef struct c_rect {
 /*
     A l_rect defines the coordinates of the up-left and down-right points of
     the rectancle surrounding a line of characters.
+
+    Maybe not the best way to represent text blocks
 */
 typedef struct l_rect {
     // Up-left coordinates of the rectangle surrounding the line
@@ -69,6 +71,9 @@ binary_image *bi_detect_text_blocks(binary_image *b_img);
     (containing the detected char-surrounding rectangles)
 */
 binary_image *bi_image_detect_char_blocks(binary_image *b_img);
+
+
+
 
 // TODO: other useful functions, like denoising, etc.
 
