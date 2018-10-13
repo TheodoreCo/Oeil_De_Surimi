@@ -54,3 +54,25 @@ Créer une structure représentant le NN (neural network). Ce qu'il faudrait param
 - les weights entre les couches + les bias
 - la fonction utilisée pour les calculs (sigmoïde, ...)
 - ...
+/-----------------------
+8/10
+Pas trouvé un ensemble d'images avec l'alphabet pour l'entraînement du réseau.
+Pour éviter de générer les images une à une avec Photoshop ou autre, on va les générer par un script php
+
+1. Instaler PHP:
+sudo apt install php7.2-cli
+sudo apt install hhvm
+sudo apt install php-gd
+
+2. (Optionnellement) Les polices Verdana, Georgia, Times New Roman, Courrier New sont la propriété de Microsoft, mais peuvent être installées sous Linux.
+Lire: https://www.pcworld.com/article/2863497/how-to-install-microsoft-fonts-in-linux-office-suites.html
+Optionnellement, installer donc ces polices avec:
+
+sudo apt-get install ttf-mscorefonts-installer
+
+3. Copier quelques fonts dans ./train/fonts et exécuter le script php dans ./train
+Le script PHP a été récupéré sur https://boyter.org/2013/09/collection-letters-training/ et est en cours de modification pour générer des images bitmap N/B bitmap avec la bonne taille etc.
+
+
+
+
