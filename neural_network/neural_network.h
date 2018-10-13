@@ -2,6 +2,8 @@
 #define NEURAL_NETWORK_H_INCLUDED
 
 #include <stdio.h>
+#include <stdlib.h> /* for malloc, random etc */
+#include <time.h>
 
 /*
     Convention: to emulate an OO language, all functions concerning the neur_net structure will:
@@ -20,11 +22,18 @@ typedef struct neur_net {
     int num_hid_neur;   /* Number of neurons per hidden layer */
     int num_outputs;    /* Number of outputs */
 
+    // Total number of weights & bias
+    int total_weights;
+
+    /* Total number of neurons + inputs and size of output buffer. */
+    int total_neurons;
+
     double *weights;    /* All weights, including biases.*/
-    double *inputs;     /* Array if inputs for every neuron in the input layer, up to down */
+    //double *inputs;     /* Array if inputs for every neuron in the input layer, up to down */
     double *outputs;    /* Array of outputs for every neuron in the hidden or output layer, left to right and up to down */
     double *deltas;     /* Array of differences between outputs and expectations (during learning cycles) */
 } neur_net;
+
 
 // Instantiate neural network
 neur_net *nn_new_instance(int num_inputs, int num_hid_lay, int num_hid_neur, int num_outputs);
@@ -54,6 +63,8 @@ void nn_save_to_file(neur_net *nn, FILE *file);
 // Of course, the first thing to do is to compute the outputs by calling nn_run.
 void nn_learn(neur_net const *nn, double const *inputs, double const *expected, double learning_rate);
 
+// Trains the NN for XOR learning using the backpropagation.
+void nn_xor_learn(neur_net const* nn, int num_epochs, double learning_rate);
 
 // Structure inspired from https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/src/network.py
 //typedef struct neur_net {
@@ -63,4 +74,5 @@ void nn_learn(neur_net const *nn, double const *inputs, double const *expected, 
 //    double *weights;    // weights between neurons in layer x and neurons in layers x+1. Len =
 //    double *deltas;     // deltas for each neuron (except input ones) after a learning cycle. Len = total_neurons - inputs
 //} neur_net;
+
 #endif // NEURAL_NETWORK_H_INCLUDED
