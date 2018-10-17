@@ -1,9 +1,4 @@
-#ifndef NEURAL_NETWORK_H_INCLUDED
-#define NEURAL_NETWORK_H_INCLUDED
 
-#include <stdio.h>
-#include <stdlib.h> /* for malloc, random etc */
-#include <time.h>
 
 /*
     Convention: to emulate an OO language, all functions concerning the neur_net structure will:
