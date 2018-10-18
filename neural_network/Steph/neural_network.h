@@ -4,27 +4,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct neur 
+struct neur
 {   
     unsigned int num_weights;
 
     double value;
     double *weights;
     double biase;
-}
+};
 
-typedef struct layer
+typedef struct neur neur;
+
+typedef struct layer layer;
+struct layer
 {
     unsigned int num_neur;
     neur **neur_array;
-}
+};
 
-typedef struct neur_net
+typedef struct neur_net neur_net;
+struct neur_net
 {
     unsigned int num_arrays;
+
     layer **layer_array;
     layer *outputs;
-}
+};
 
 neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, size_t num_hidd_neur, size_t num_outputs);
 
@@ -49,3 +54,5 @@ neur_net *nn_load(char *path);
 //TODO run function
 
 //TODO train function
+
+#endif
