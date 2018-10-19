@@ -37,9 +37,9 @@ void neur_net_free(neur_net *nn);
 
 void pretty_print(neur_net *nn);
 
-void neur_compute(neur *n);
+void neur_compute(neur *n, layer *prev_layer);
 
-void layer_compute(layer *l);
+void layer_compute(layer *l, layer *prev_layer);
 
 double *feed_forward(neur_net *nn, double *inputs);
 

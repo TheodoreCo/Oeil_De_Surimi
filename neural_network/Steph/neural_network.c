@@ -18,12 +18,10 @@ neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, size_t num_hi
         layer *lay = malloc(sizeof(layer));
         if (i == 0)
         {
-            printf("Init input layer \n");
             lay->num_neur = num_inputs;
             lay->neur_array = malloc(sizeof(neur) * num_inputs);
             for(unsigned int j = 0; j < num_inputs; j++)     //creation du layer d'input
             {
-                printf("init neurone %u \n",j);
                 neur *act = malloc(sizeof(neur));
                 act->value = 0;
                 act->biase = 0;
@@ -33,12 +31,10 @@ neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, size_t num_hi
         }
         else if(i == (int) layer_num -1)
         {
-            printf("Init output layer \n");
             lay->num_neur = num_outputs;
             lay->neur_array = malloc(sizeof(neur) * num_outputs);
             for(unsigned int k = 0; k < num_outputs; k++)      // creation du layer d'output
             {
-                printf("init neurone %u \n",k);
                 neur *act = malloc(sizeof(neur));
                 act->value = 0;
                 act->biase = (double) rand() / RAND_MAX * 2.0 - 1.0;
@@ -47,7 +43,6 @@ neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, size_t num_hi
                 for(unsigned int l = 0; l < act->num_weights; l++)
                 {
                     act->weights[l] = (double) rand() / RAND_MAX * 2.0 - 1.0;
-                    printf("weight n°%u \n", l);
                 }
                 lay->neur_array[k] = act;
             }
@@ -55,12 +50,10 @@ neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, size_t num_hi
         }
         else
         {
-            printf("Init hidden layer %u \n", i);
             lay->num_neur = num_hidd_neur;
             lay->neur_array = malloc(sizeof(neur) * num_hidd_neur);
             for(unsigned int m = 0; m < num_hidd_neur; m++)      // creation d'un hidden layer
             {
-                printf("init neurone %u \n",m);
                 neur *act = malloc(sizeof(neur));
                 act->value = 0;
                 act->biase = (double) rand() / RAND_MAX * 2.0 - 1.0;
@@ -69,7 +62,6 @@ neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, size_t num_hi
                 for(unsigned int l = 0; l < act->num_weights; l++)
                 {
                     act->weights[l] = (double) rand() / RAND_MAX * 2.0 - 1.0;
-                    printf("weight n°%u \n", l);
                 }
                 lay->neur_array[m] = act;
             }
@@ -115,17 +107,39 @@ void pretty_print(neur_net *nn)
     printf("oui");
 }
 
-/*
 
-void neur_compute(neur *n)
+
+
+void neur_compute(neur *n, layer *prev_layer)		//Utilise le layer precedent pour compute le neurone
 {
-    //TODO
+   double new_value = 0;
+   for(unsigned int i = 0; i < prev_layer->num_neur; i ++)
+   {
+	new_value += (prev_layer->neur_array[i]->value) * (n->weights[i]); 
+   }
+   new_value -= n-> biase; 
+   n->value = sigmoid(new_value);
 }
 
-void layer_compute(layer *l)
+
+void layer_compute(layer *l, layer *prev_layer)
 {
-    //TODO
+   for(unsigned int i = 0; i < l->num_neur; i++)
+   {
+	neur_compute(l->neur_array[i], prev_layer);    
+   }
 }
+
+void inputs_fill(neur_net *nn, double *inputs)
+{
+	for(unsigned int i = 0; nn->layer_array[0]->num_neur ; i ++)
+	{
+		nn->layer_array[0]->neur_array[i]->value = inputs[i];	
+	}
+
+}
+
+
 
 double *feed_forward(neur_net *nn, double *inputs)
 {
@@ -133,16 +147,21 @@ double *feed_forward(neur_net *nn, double *inputs)
     return NULL;
 }
 
+/*
+
 void backprop(neur_net *nn, double *inputs, double *target, double learning_rate)
 {
     //TODO
 }
+ 
+*/
 
 double sigmoid(double x)
 {
     return (1.0 / (1 + exp(-x)));
 }
 
+/*
 
 void nn_save(neur_net *nn, char *path)
 {
