@@ -125,3 +125,50 @@ binary_image *bi_image_detect_char_blocks(binary_image *b_img) {
 
     return b_img;
 }
+
+
+//Plus il y aura de lignes et plus elles seront remplies et plus cette méthode ainsi que l'arrondissement des erreurs seront fonctionnels.
+binary_image *bi_detect_text_lines(binary_image *b_img) {
+    if(!b_img) return 0;
+
+
+    int lines[b_img->h];
+
+
+    // Detect first line containing a black pixel
+    for(int h=0; h<b_img->h; h++) {
+	lines[h]=0;
+
+        for(int w=0; w<b_img->w; w++) {
+            unsigned char pixel = b_img->pixel[h*b_img->w + w];
+            if(!pixel) {
+                // Found a black pixel!
+		lines[h]=1;
+                break;
+            }
+        }
+    }
+    unsigned int length = 0;
+    for(int h=1; h < b_img->h; h++){
+	 if(lines[h]==1 && lines[h-1]==1){
+		length++;
+	 }
+	 else{
+		if (length>0){
+		      //Stocker le tuple (h,length) dans une structure dynamique
+		      length = 0;
+		}
+	 }
+    }
+    //Pour arrondir les erreurs.
+    unsigned int refer; // refer est égale au length le plus courant;
+    // parcour des tuples 
+    // parcours des tuples et supprime ceux ayant une length inférieur à refer/6
+    // parcours les tuples ayant une length supérieur à 2refer while(ref*i<currentlength){i++}
+    	// int temp = length/i;
+    	// unsigned int j;
+    	// for (j=0;j<i;j++){stocker le tuple (h+j*temp,temp)}
+    	// supprimer le tuple de base
+
+    return NULL;
+}
