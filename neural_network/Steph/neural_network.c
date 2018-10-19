@@ -117,7 +117,7 @@ void neur_compute(neur *n, layer *prev_layer)		//Utilise le layer precedent pour
    {
 	new_value += (prev_layer->neur_array[i]->value) * (n->weights[i]); 
    }
-   new_value -= n-> biase; 
+   new_value -= n->biase; 
    n->value = sigmoid(new_value);
 }
 
