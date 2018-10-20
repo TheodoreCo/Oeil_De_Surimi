@@ -11,8 +11,8 @@ neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers,
     unsigned int layer_num = num_hidden_layers + 2; //Nombre total de layers
 	neur_net *nn = malloc(sizeof(neur_net));    //malloc du reseau nn
 
-    nn->layer_array = malloc(sizeof(layer*) * layer_num);   //malloc de l'array de layer de nn
-    nn->num_arrays = layer_num;
+    nn->layer_array = malloc(sizeof(layer*) * layer_num);   //malloc de l'array
+    nn->num_arrays = layer_num;                             //de layer de nn 
 
     for(int i = 0; i < (int) layer_num; i++)           //creation des layers
     {
@@ -140,7 +140,7 @@ void inputs_fill(neur_net *nn, double *inputs)
 {
 	for(unsigned int i = 0; i < nn->layer_array[0]->num_neur ; i++)
 	{
-		nn->layer_array[0]->neur_array[i]->value = inputs[i];           //SEGFAULT
+		nn->layer_array[0]->neur_array[i]->value = inputs[i];           
 	}
 
 }
@@ -155,9 +155,13 @@ double *feed_forward(neur_net *nn, double *inputs)
         layer_compute(nn->layer_array[i],nn->layer_array[i-1]);
     }
 
-    unsigned int output_num = nn->layer_array[nn->num_arrays - 1]->num_neur;    //creation d'un array de double a renvoyer
-    double *res = malloc(sizeof(double) * output_num);                          //basé sur les values des neurones de l'output layer
-    for(unsigned int i = 0; i < output_num; i++)                                //apres feedforward
+    //creation d'un array de double a renvoyer 
+    //basé sur les values des neurones de l'output layer 
+    //apres feedforward
+
+    unsigned int output_num = nn->layer_array[nn->num_arrays - 1]->num_neur;    
+    double *res = malloc(sizeof(double) * output_num);                          
+    for(unsigned int i = 0; i < output_num; i++)                                
     {
         res[i] = nn->layer_array[nn->num_arrays-1]->neur_array[i]->value;
     }
@@ -179,12 +183,6 @@ double sigmoid(double x)
     return (1.0 / (1 + exp(-x)));
 }
 
-double const *nn_run(neur_net const *nn, double const *inputs)
-{
-    //TODO modify fonctions according to our parameters ]
-    return NULL;
-
-}
 /*
 
 void nn_save(neur_net *nn, char *path)
