@@ -3,8 +3,7 @@
 #include "img_treatment.h"
 
 
-binary_image *bi_image_from_file(char *filename)
-{
+binary_image *bi_image_from_file(char *filename) {
     // const int NUM_PIXEL_BYTES = 3; /* Number of bytes per pixel. We only handle 24 bits bitmaps for now. */
     const int BMP_FILE_HEADER_LEN = 14;
 
@@ -127,7 +126,7 @@ binary_image *bi_image_detect_char_blocks(binary_image *b_img) {
 }
 
 
-//Plus il y aura de lignes et plus elles seront remplies et plus cette méthode ainsi que l'arrondissement des erreurs seront fonctionnels.
+//Plus il y aura de lignes et plus elles seront remplies et plus cette mï¿½thode ainsi que l'arrondissement des erreurs seront fonctionnels.
 binary_image *bi_detect_text_lines(binary_image *b_img) {
     if(!b_img) return 0;
 
@@ -161,14 +160,81 @@ binary_image *bi_detect_text_lines(binary_image *b_img) {
 	 }
     }
     //Pour arrondir les erreurs.
-    unsigned int refer; // refer est égale au length le plus courant;
-    // parcour des tuples 
-    // parcours des tuples et supprime ceux ayant une length inférieur à refer/6
-    // parcours les tuples ayant une length supérieur à 2refer while(ref*i<currentlength){i++}
+    unsigned int refer; // refer est ï¿½gale au length le plus courant;
+    // parcour des tuples
+    // parcours des tuples et supprime ceux ayant une length infï¿½rieur ï¿½ refer/6
+    // parcours les tuples ayant une length supï¿½rieur ï¿½ 2refer while(ref*i<currentlength){i++}
     	// int temp = length/i;
     	// unsigned int j;
     	// for (j=0;j<i;j++){stocker le tuple (h+j*temp,temp)}
     	// supprimer le tuple de base
 
     return NULL;
+}
+
+
+
+binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
+{
+    if(!b_img) return 0;
+
+    unsigned char horizontal_RLSA[b_img->w * b_img->h];
+
+    for (size_t y = 0; y < b_img->h; y++) {
+        unsigned int counter = 0;
+        for (size_t x = 0; x < b_img->w; x++) {
+
+            unsigned char pixel = b_img->pixel[y*b_img->w + x];
+            if (pixel) {
+                if (counter <= expansion) {
+                    for (size_t i = 1; i <= counter; i++) {
+                        horizontal_RLSA[y*b_img->w + x - i] = 1;
+                    }
+                }
+                counter = 0;
+
+            } else {
+                counter++;
+            }
+            horizontal_RLSA[y*b_img->w + x] = pixel;
+        }
+    }
+
+    unsigned char vertical_RLSA[b_img->w * b_img->h];
+
+    for (size_t x = 0; x < b_img->w; x++) {
+        unsigned int counter = 0;
+        for (size_t y = 0; y < b_img->h; y++) {
+            unsigned char pixel = b_img->pixel[y*b_img->w + x];
+            if (pixel) {
+                if (counter <= expansion) {
+                    for (size_t i = 1; i <= counter; i++) {
+                        vertical_RLSA[y*b_img->w + x - i] = 1;
+                    }
+                }
+                counter = 0;
+
+            } else {
+                counter++;
+            }
+            vertical_RLSA[y*b_img->w + x] = pixel;
+        }
+    }
+
+    binary_image *result_image = malloc(sizeof (binary_image));
+    if(!result_image) return 0;
+
+    result_image->pixel = malloc(b_img->w*b_img->h*sizeof(result_image->pixel));
+    if(!result_image->pixel) return 0;
+
+    result_image->h = b_img->h;
+    result_image->w = b_img->w;
+    result_image->lr_size = 0;
+    result_image->lr = 0;
+
+    for (size_t i = 0; i < b_img->w * b_img->h; i++) {
+        b_img->pixel[i] = vertical_RLSA[i] * horizontal_RLSA[i];
+    }
+
+    return result_image;
 }
