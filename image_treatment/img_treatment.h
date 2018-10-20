@@ -73,6 +73,11 @@ binary_image *bi_detect_text_blocks(binary_image *b_img);
 binary_image *bi_image_detect_char_blocks(binary_image *b_img);
 
 
+/*
+    Returns a image containing the zones (black pixels) of text blocks in an image
+    using "expansion" as the number of pixel to feed the RLSA algorithm.
+*/
+binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion);
 
 
 // TODO: other useful functions, like denoising, etc.
