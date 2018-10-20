@@ -5,13 +5,14 @@
 
 #include "neural_network.h"
 
-neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, size_t num_hidd_neur, size_t num_outputs)
+neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers,
+        size_t num_hidd_neur, size_t num_outputs)
 {
     unsigned int layer_num = num_hidden_layers + 2; //Nombre total de layers
 	neur_net *nn = malloc(sizeof(neur_net));    //malloc du reseau nn
+
     nn->layer_array = malloc(sizeof(layer*) * layer_num);   //malloc de l'array de layer de nn
     nn->num_arrays = layer_num;
-
 
     for(int i = 0; i < (int) layer_num; i++)           //creation des layers
     {
@@ -20,8 +21,8 @@ neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, size_t num_hi
         {
             lay->num_neur = num_inputs;
             lay->neur_array = malloc(sizeof(neur) * num_inputs);
-            for(unsigned int j = 0; j < num_inputs; j++)     //creation du layer d'input
-            {
+            for(unsigned int j = 0; j < num_inputs; j++)     //creation du
+            {                                                //layer d'input
                 neur *act = malloc(sizeof(neur));
                 act->value = 0;
                 act->biase = 0;
@@ -33,8 +34,8 @@ neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, size_t num_hi
         {
             lay->num_neur = num_outputs;
             lay->neur_array = malloc(sizeof(neur) * num_outputs);
-            for(unsigned int k = 0; k < num_outputs; k++)      // creation du layer d'output
-            {
+            for(unsigned int k = 0; k < num_outputs; k++)      // creation du
+            {                                                  //layer d'output
                 neur *act = malloc(sizeof(neur));
                 act->value = 0;
                 act->biase = (double) rand() / RAND_MAX * 2.0 - 1.0;
@@ -52,8 +53,8 @@ neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, size_t num_hi
         {
             lay->num_neur = num_hidd_neur;
             lay->neur_array = malloc(sizeof(neur) * num_hidd_neur);
-            for(unsigned int m = 0; m < num_hidd_neur; m++)      // creation d'un hidden layer
-            {
+            for(unsigned int m = 0; m < num_hidd_neur; m++)     //creation d'un
+            {                                                   //hidden layer
                 neur *act = malloc(sizeof(neur));
                 act->value = 0;
                 act->biase = (double) rand() / RAND_MAX * 2.0 - 1.0;
@@ -94,12 +95,17 @@ void pretty_print(neur_net *nn)
         printf("layer : %u \n",i);
         for(unsigned int j = 0; j < nn->layer_array[i]->num_neur ; j++)
         {
-            printf("\t neur:%u  key:%lf \n \t biase:%lf \n",j,nn->layer_array[i]->neur_array[j]->value, nn->layer_array[i]->neur_array[j]->biase);
+            printf("\t neur:%u  key:%lf \n \t biase:%lf \n", j,
+                      nn->layer_array[i]->neur_array[j]->value,
+                      nn->layer_array[i]->neur_array[j]->biase);
             if(i != 0)
             {
-                for(unsigned int k = 0; k < nn->layer_array[i]->neur_array[j]->num_weights; k++)
+                for(unsigned int k = 0;
+                        k < nn->layer_array[i]->neur_array[j]->num_weights;
+                        k++)
                 {
-                    printf("\t\t weigth%u : %lf \n", k, nn->layer_array[i]->neur_array[j]->weights[k]);
+                    printf("\t\t weigth%u : %lf \n", k,
+                            nn->layer_array[i]->neur_array[j]->weights[k]);
                 }
             }
         }
@@ -110,8 +116,8 @@ void pretty_print(neur_net *nn)
 
 
 
-void neur_compute(neur *n, layer *prev_layer)		//Utilise le layer precedent pour compute le neurone
-{
+void neur_compute(neur *n, layer *prev_layer)	   //Utilise le layer precedent
+{                                                   //pour compute le neurone
    double new_value = 0;
    for(unsigned int i = 0; i < prev_layer->num_neur; i ++)
    {
@@ -160,7 +166,8 @@ double *feed_forward(neur_net *nn, double *inputs)
 
 /*
 
-void backprop(neur_net *nn, double *inputs, double *target, double learning_rate)
+void backprop(neur_net *nn, double *inputs, double *target,
+                                                        double learning_rate)
 {
     //TODO
 }
