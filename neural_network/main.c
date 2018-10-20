@@ -2,23 +2,34 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <err.h>
 
 #include "neural_network.h"
 
-int main()
+int main(int argc, char *argv[])
 {
+
+    if(argc != 5)
+    {
+        errx(1,"Wrong inputs, please follow this pattern : \n \
+                -Number of inputs\n \
+                -Number of outputs\n \
+                -Number of hidden layers\n \
+                -Number of neurons per hidden layer \n");
+    }
 
 //ASSIGNATIONS
 
     srand(time(NULL));
-    unsigned int inputs_number = 4, 
-                 output_number = 1,
-                 hidd_lay_num = 1,
-                 hidd_neur_num = 3;
+    unsigned int inputs_number = (unsigned int) atoi(argv[1]), 
+                 output_number = (unsigned int) atoi(argv[2]),
+                 hidd_lay_num = (unsigned int) atoi(argv[3]),
+                 hidd_neur_num = (unsigned int) atoi(argv[4]);
 
     double *inputs = malloc(sizeof(double) * inputs_number);
 
-    neur_net *nn = instantiate(inputs_number,hidd_lay_num,hidd_neur_num,output_number);
+    neur_net *nn = instantiate(inputs_number,hidd_lay_num,
+            hidd_neur_num,output_number);
 
 //PRETTY PRINT PRE-TRAITEMENT
 
