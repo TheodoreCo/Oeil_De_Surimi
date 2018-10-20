@@ -180,23 +180,27 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
 
     unsigned char horizontal_RLSA[b_img->w * b_img->h];
 
+    printf("%d %d %d\n", b_img->w, b_img->h, b_img->w*b_img->h);
+
     for (size_t y = 0; y < b_img->h; y++) {
         unsigned int counter = 0;
         for (size_t x = 0; x < b_img->w; x++) {
 
             unsigned char pixel = b_img->pixel[y*b_img->w + x];
-            if (pixel) {
+            printf("pixel (%d, %d) = %d\n",x, y, pixel);
+            if (pixel < 255) { //if black pixel
                 if (counter <= expansion) {
                     for (size_t i = 1; i <= counter; i++) {
-                        horizontal_RLSA[y*b_img->w + x - i] = 1;
+                        horizontal_RLSA[y*b_img->w + x - i] = 0;
                     }
                 }
                 counter = 0;
-
-            } else {
+                horizontal_RLSA[y*b_img->w + x] = 0;
+            } else { //if white pixel
                 counter++;
+                horizontal_RLSA[y*b_img->w + x] = 1;
             }
-            horizontal_RLSA[y*b_img->w + x] = pixel;
+
         }
     }
 
@@ -206,18 +210,18 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
         unsigned int counter = 0;
         for (size_t y = 0; y < b_img->h; y++) {
             unsigned char pixel = b_img->pixel[y*b_img->w + x];
-            if (pixel) {
+            if (pixel < 255) { //if black pixel
                 if (counter <= expansion) {
                     for (size_t i = 1; i <= counter; i++) {
-                        vertical_RLSA[y*b_img->w + x - i] = 1;
+                        vertical_RLSA[y*b_img->w + x - i] = 0;
                     }
                 }
                 counter = 0;
-
-            } else {
+                horizontal_RLSA[y*b_img->w + x] = 0;
+            } else { //if white pixel
                 counter++;
+                horizontal_RLSA[y*b_img->w + x] = 1;
             }
-            vertical_RLSA[y*b_img->w + x] = pixel;
         }
     }
 
@@ -233,7 +237,7 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
     result_image->lr = 0;
 
     for (size_t i = 0; i < b_img->w * b_img->h; i++) {
-        b_img->pixel[i] = vertical_RLSA[i] * horizontal_RLSA[i];
+        b_img->pixel[i] = /*vertical_RLSA[i] * */horizontal_RLSA[i];
     }
 
     return result_image;
