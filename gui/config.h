@@ -26,6 +26,8 @@ typedef struct config {
     int num_hid_neur_xor;
     // Number of training epochs for the XOR NN
     int num_train_epochs_xor;
+    // Expansion for RLSA function
+    unsigned int rlsa_expansion;
 
 } config;
 
@@ -39,6 +41,7 @@ int cf_get_num_output_xor(void);
 int cf_get_num_hid_lay_xor(void);
 int cf_get_num_hid_neur_xor(void);
 int cf_get_num_train_epochs_xor(void);
+unsigned int cf_get_rlsa_expansion(void);
 
 /** Frees the static config structure */
 void cf_free_config(void);

@@ -19,3 +19,6 @@ num_hid_neur_xor     = 3
 # Number of training epochs for the XOR NN
 num_train_epochs_xor = 1000
 
+# Expansion for RLSA function
+rlsa_expansion = 1
+
