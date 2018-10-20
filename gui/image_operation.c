@@ -4,7 +4,7 @@
 #include "../neural_network/neural_network.h"
 #include "config.h"
 
-enum Bin_Img_Type {DO_NOTHING, GRAYSCALE, B_AND_W, B_AND_W_DENOISED} bin_img_type;
+enum Bin_Img_Type {DO_NOTHING, GRAYSCALE, B_AND_W, B_AND_W_DENOISED, RLSA} bin_img_type;
 
 extern GtkBuilder *builder; /* Used to get widgets from different functions */
 extern binary_image *b_image;
@@ -229,5 +229,6 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
     b_image = rlsa_img;
 
     gtk_widget_queue_draw(GTK_WIDGET(drawing_area));
+    bin_img_type = RLSA;
 }
 
