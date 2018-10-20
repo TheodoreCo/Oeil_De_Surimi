@@ -156,6 +156,20 @@
                             <property name="position">2</property>
                           </packing>
                         </child>
+                        <child>
+                          <object class="GtkButton" id="oeil_de_surimi_img_rlsa_btn">
+                            <property name="label" translatable="yes">RLSA</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <signal name="clicked" handler="on_oeil_de_surimi_img_rlsa_btn_clicked" object="oeil_de_surimi_drawing_area" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

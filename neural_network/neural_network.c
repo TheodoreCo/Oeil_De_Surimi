@@ -9,9 +9,9 @@ neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, size_t num_hi
 {
     unsigned int layer_num = num_hidden_layers + 2; //Nombre total de layers
 	neur_net *nn = malloc(sizeof(neur_net));    //malloc du reseau nn
-    nn->layer_array = malloc(sizeof(layer*) * layer_num);   //malloc de l'array de layer de nn 
+    nn->layer_array = malloc(sizeof(layer*) * layer_num);   //malloc de l'array de layer de nn
     nn->num_arrays = layer_num;
-    
+
 
     for(int i = 0; i < (int) layer_num; i++)           //creation des layers
     {
@@ -74,7 +74,7 @@ neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, size_t num_hi
 
 void neur_net_free(neur_net *nn)
 {
-    
+
     if (nn != NULL)
     {
         free(nn);
@@ -84,8 +84,8 @@ void neur_net_free(neur_net *nn)
 
 
 void pretty_print(neur_net *nn)
-{   
-    printf("\n*****************************************************\n");
+{
+    printf("*****************************************************\n");
     printf("********** Oeil de Surimi's Neural Network **********\n");
     printf("*****************************************************\n");
     printf("\n \n");
@@ -115,9 +115,9 @@ void neur_compute(neur *n, layer *prev_layer)		//Utilise le layer precedent pour
    double new_value = 0;
    for(unsigned int i = 0; i < prev_layer->num_neur; i ++)
    {
-	    new_value += (prev_layer->neur_array[i]->value) * (n->weights[i]); 
+	    new_value += (prev_layer->neur_array[i]->value) * (n->weights[i]);
    }
-   new_value += n->biase; 
+   new_value += n->biase;
    n->value = sigmoid(new_value);
 }
 
@@ -126,7 +126,7 @@ void layer_compute(layer *l, layer *prev_layer)
 {
    for(unsigned int i = 0; i < l->num_neur; i++)
    {
-	neur_compute(l->neur_array[i], prev_layer);    
+	neur_compute(l->neur_array[i], prev_layer);
    }
 }
 
@@ -134,7 +134,7 @@ void inputs_fill(neur_net *nn, double *inputs)
 {
 	for(unsigned int i = 0; i < nn->layer_array[0]->num_neur ; i++)
 	{
-		nn->layer_array[0]->neur_array[i]->value = inputs[i];           //SEGFAULT	
+		nn->layer_array[0]->neur_array[i]->value = inputs[i];           //SEGFAULT
 	}
 
 }
@@ -148,12 +148,12 @@ double *feed_forward(neur_net *nn, double *inputs)
     {
         layer_compute(nn->layer_array[i],nn->layer_array[i-1]);
     }
-    
+
     unsigned int output_num = nn->layer_array[nn->num_arrays - 1]->num_neur;    //creation d'un array de double a renvoyer
     double *res = malloc(sizeof(double) * output_num);                          //basé sur les values des neurones de l'output layer
     for(unsigned int i = 0; i < output_num; i++)                                //apres feedforward
     {
-        res[i] = nn->layer_array[nn->num_arrays-1]->neur_array[i]->value;  
+        res[i] = nn->layer_array[nn->num_arrays-1]->neur_array[i]->value;
     }
     return res;
 }
@@ -164,7 +164,7 @@ void backprop(neur_net *nn, double *inputs, double *target, double learning_rate
 {
     //TODO
 }
- 
+
 */
 
 double sigmoid(double x)
@@ -172,6 +172,12 @@ double sigmoid(double x)
     return (1.0 / (1 + exp(-x)));
 }
 
+double const *nn_run(neur_net const *nn, double const *inputs)
+{
+    //TODO modify fonctions according to our parameters ]
+    return NULL;
+
+}
 /*
 
 void nn_save(neur_net *nn, char *path)

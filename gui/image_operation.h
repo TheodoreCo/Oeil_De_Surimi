@@ -17,6 +17,8 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button);
 
 void on_oeil_de_surimi_def_nn_values_btn_clicked(GtkButton *button);
 
+void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button);
+
 //void img_bmp_info(char *filename, unsigned int *file_len, int *dib_header_len);
 
 #endif // IMAGE_OPERATION_H_INCLUDED

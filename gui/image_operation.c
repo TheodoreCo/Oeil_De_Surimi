@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "../image_treatment/img_treatment.h"
 #include "../neural_network/neural_network.h"
+#include "config.h"
 
 enum Bin_Img_Type {DO_NOTHING, GRAYSCALE, B_AND_W, B_AND_W_DENOISED} bin_img_type;
 
@@ -110,9 +111,7 @@ gboolean draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
                 double col_pix = b_image->pixel[y*img_w + x]/255.0;
                 if (bin_img_type == B_AND_W)
                 {
-                    // THRESHOLD TO DEFINE WITH TESTS
-                    //   0.5 makes some text disappear
-                    col_pix = col_pix > 0.5 ? 1 : 0;
+                    col_pix = col_pix > cf_get_b_and_w_threshold() ? 1 : 0;
                 }
                 cairo_set_source_rgb (cr, col_pix, col_pix, col_pix);
 //                printf(" %u", col_pix);
@@ -124,6 +123,31 @@ gboolean draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
         }
     }
     return FALSE;
+}
+
+void free_binary_image(binary_image *b_imgage) {
+    if(b_image)
+    {
+        if(b_image->pixel)
+        {
+            free(b_image->pixel);
+        }
+        for(int i=0; i<b_image->lr_size; i++)
+        {
+            if(!b_image->lr)
+            {
+                for(int j=0; j>b_image->lr->cr_size; j++)
+                {
+                    if(!b_image->lr->cr)
+                    {
+                        free(b_image->lr->cr);
+                    }
+                }
+                free(b_image->lr);
+            }
+        }
+        free(b_image);
+    }
 }
 
 void on_oeil_de_surimi_grayscale_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
@@ -146,7 +170,7 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button) {
     const double hidden_neurons = gtk_spin_button_get_value(hid_neur_spin_btn);
 
     // Build a NN with 2 input neurons, 1 output neuron and the GUI-specified layers & neurons
-    neur_net *nn = nn_new_instance(2, hidden_layers, hidden_neurons, 1);
+    neur_net *nn =  instantiate(2, hidden_layers, hidden_neurons, 1);
 
     // Get needed values to train the NN
     GtkSpinButton *epochs_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_epochs_val"));
@@ -155,7 +179,8 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button) {
     const double learning_rate = gtk_spin_button_get_value(learning_rate_spin_btn);
 
     // Train it for XOR
-    nn_xor_learn(nn, num_epochs, learning_rate);
+    // TODO -- nn_xor_learn is not defined anymore
+    // nn_xor_learn(nn, num_epochs, learning_rate);
 
     // Get the widgets to show results
     GtkEntry *xor_out_1_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_1_entry"));
@@ -188,10 +213,21 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button) {
     g_free(text3);
     g_free(text4);
 
-    nn_free(nn);
+    // TODO: nn_free() is not defined anymore (Steph)
+    // nn_free(nn);
 }
 
 void on_oeil_de_surimi_def_nn_values_btn_clicked(GtkButton *button) {
     // TODO
     // Reinitialize default values
 }
+
+void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area) {
+    binary_image *rlsa_img = bi_image_RLSA(b_image, 20);
+
+    free_binary_image(b_image);
+    b_image = rlsa_img;
+
+    gtk_widget_queue_draw(GTK_WIDGET(drawing_area));
+}
+

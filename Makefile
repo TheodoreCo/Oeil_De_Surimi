@@ -73,9 +73,9 @@ OBJDIR_TEST_XOR_CONSOLE = obj/Test_XOR_Console
 DEP_TEST_XOR_CONSOLE = 
 OUT_TEST_XOR_CONSOLE = bin/Test_XOR_Console/Oeil_De_Surimi
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)/gui/image_operation.o $(OBJDIR_DEBUG)/gui/main.o $(OBJDIR_DEBUG)/image_treatment/img_treatment.o $(OBJDIR_DEBUG)/neural_network/neural_network.o
+OBJ_DEBUG = $(OBJDIR_DEBUG)/gui/config.o $(OBJDIR_DEBUG)/gui/image_operation.o $(OBJDIR_DEBUG)/gui/main.o $(OBJDIR_DEBUG)/image_treatment/img_treatment.o $(OBJDIR_DEBUG)/neural_network/neural_network.o
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/gui/image_operation.o $(OBJDIR_RELEASE)/gui/main.o $(OBJDIR_RELEASE)/image_treatment/img_treatment.o $(OBJDIR_RELEASE)/neural_network/neural_network.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)/gui/config.o $(OBJDIR_RELEASE)/gui/image_operation.o $(OBJDIR_RELEASE)/gui/main.o $(OBJDIR_RELEASE)/image_treatment/img_treatment.o $(OBJDIR_RELEASE)/neural_network/neural_network.o
 
 OBJ_TEST_NN_RELEASE = $(OBJDIR_TEST_NN_RELEASE)/neural_network/main_test.o $(OBJDIR_TEST_NN_RELEASE)/neural_network/neural_network.o
 
@@ -99,6 +99,9 @@ debug: before_debug out_debug after_debug
 
 out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG)
 	$(LD) $(LIBDIR_DEBUG) -o $(OUT_DEBUG) $(OBJ_DEBUG)  $(LDFLAGS_DEBUG) $(LIB_DEBUG)
+
+$(OBJDIR_DEBUG)/gui/config.o: gui/config.c
+	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c gui/config.c -o $(OBJDIR_DEBUG)/gui/config.o
 
 $(OBJDIR_DEBUG)/gui/image_operation.o: gui/image_operation.c
 	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c gui/image_operation.c -o $(OBJDIR_DEBUG)/gui/image_operation.o
@@ -131,6 +134,9 @@ release: before_release out_release after_release
 
 out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE)
 	$(LD) $(LIBDIR_RELEASE) -o $(OUT_RELEASE) $(OBJ_RELEASE)  $(LDFLAGS_RELEASE) $(LIB_RELEASE)
+
+$(OBJDIR_RELEASE)/gui/config.o: gui/config.c
+	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c gui/config.c -o $(OBJDIR_RELEASE)/gui/config.o
 
 $(OBJDIR_RELEASE)/gui/image_operation.o: gui/image_operation.c
 	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c gui/image_operation.c -o $(OBJDIR_RELEASE)/gui/image_operation.o

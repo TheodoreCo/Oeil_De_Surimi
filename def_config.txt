@@ -1,0 +1,21 @@
+# Default Oeil_de_Surimi configuration file
+# No particular order, all non-comment lines should have KEY=VALUE format
+
+# From color image to B_&_W image threshold (all pixels with color < b_and_w_threshold ==> 0)
+b_and_w_threshold    = 0.5
+
+# Number of neurons in the input layer for the XOR NN
+num_input_xor        = 2
+
+# Number of neurons in the output layer for the XOR NN
+num_output_xor       = 1
+
+# Number of hidden layers for the XOR NN
+num_hid_lay_xor      = 1
+
+# Number of hidden neurons in a hidden layer for the XOR NN
+num_hid_neur_xor     = 3
+
+# Number of training epochs for the XOR NN
+num_train_epochs_xor = 1000
+

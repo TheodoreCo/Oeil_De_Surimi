@@ -68,6 +68,15 @@
 		<Linker>
 			<Add option="`pkg-config gtk+-3.0 --libs` -export-dynamic" />
 		</Linker>
+		<Unit filename="gui/config.c">
+			<Option compilerVar="CC" />
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="gui/config.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="gui/image_operation.c">
 			<Option compilerVar="CC" />
 			<Option target="Debug" />

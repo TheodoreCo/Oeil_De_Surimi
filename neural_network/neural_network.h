@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 struct neur
-{   
+{
     unsigned int num_weights;
 
     double value;
@@ -50,6 +50,8 @@ double sigmoid(double x);
 void nn_save(neur_net *nn, char * path);
 
 neur_net *nn_load(char *path);
+
+double const *nn_run(neur_net const *nn, double const *inputs);
 
 //TODO run function
 
