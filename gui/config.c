@@ -67,6 +67,9 @@ config *cf_read_config(char *path) {
         else if(!strcmp(key, "num_train_epochs_xor")) {
             app_config->num_train_epochs_xor = atoi(value);
         }
+        else if(!strcmp(key, "rlsa_expansion")) {
+            app_config->rlsa_expansion = atoi(value);
+        }
     }
 
     if(fp)
@@ -86,6 +89,7 @@ void cf_key_val_to_string(char *path)
         printf("num_hid_lay_xor=%d\n", app_config->num_hid_lay_xor);
         printf("num_hid_neur_xor=%d\n", app_config->num_hid_neur_xor);
         printf("num_train_epochs_xor=%d\n", app_config->num_train_epochs_xor);
+        printf("rlsa_expansion=%d\n", app_config->rlsa_expansion);
         printf("**************** Oeil_de_Surimi config file ******************\n");
     }
 }
@@ -124,6 +128,12 @@ int cf_get_num_train_epochs_xor(void) {
     if (app_config)
         return app_config->num_train_epochs_xor;
     return -1;
+}
+
+unsigned int cf_get_rlsa_expansion(void) {
+    if(app_config)
+        return app_config->rlsa_expansion;
+    return 0;
 }
 
 void cf_free_config(void) {
