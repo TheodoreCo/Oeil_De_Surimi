@@ -241,7 +241,7 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button)
         {1.0, 0.0},
         {1.0, 1.0}
     };
-
+/*
     gchar *text1 = g_strdup_printf ("%.2f", *nn_run(nn, inputs[0]));
     gchar *text2 = g_strdup_printf ("%.2f", *nn_run(nn, inputs[1]));
     gchar *text3 = g_strdup_printf ("%.2f", *nn_run(nn, inputs[2]));
@@ -256,7 +256,7 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button)
     g_free(text2);
     g_free(text3);
     g_free(text4);
-
+*/
     // TODO: nn_free() is not defined anymore (Steph)
     // nn_free(nn);
 }
@@ -282,5 +282,3 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
 //    bi_from_gray_to_b_and_w();
 //    check_pixels("AFTER RLSA AFTER B_W");
 }
-
-

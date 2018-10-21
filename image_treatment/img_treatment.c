@@ -113,6 +113,7 @@ binary_image *bi_image_from_file(char *filename) {
 }
 
 binary_image *bi_detect_text_blocks(binary_image *b_img) {
+    /*
     if(!b_img) return 0;
 
     // Is this pixel white ?
@@ -137,22 +138,24 @@ binary_image *bi_detect_text_blocks(binary_image *b_img) {
     // TODO
     // Continue with detection. For every detected line rectangle,
     // update b_img.lr and b_img.lr_size. Don't forget to malloc !
-
+*/
     return NULL;
 }
 
 binary_image *bi_image_detect_char_blocks(binary_image *b_img) {
+    /*
     // TODO
     // For every b_img->lr...
     // Do not forget the malloc for the detected cr blocks
 
-
-    return b_img;
+*/
+    return NULL;
 }
 
 
 //Plus il y aura de lignes et plus elles seront remplies et plus cette m�thode ainsi que l'arrondissement des erreurs seront fonctionnels.
 binary_image *bi_detect_text_lines(binary_image *b_img) {
+    /*
     if(!b_img) return 0;
 
 
@@ -193,7 +196,7 @@ binary_image *bi_detect_text_lines(binary_image *b_img) {
     	// unsigned int j;
     	// for (j=0;j<i;j++){stocker le tuple (h+j*temp,temp)}
     	// supprimer le tuple de base
-
+*/
     return NULL;
 }
 
@@ -271,12 +274,12 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
     result_image->lr = 0;
 
     for (size_t i = 0; i < b_img->w * b_img->h; i++) {
-        b_img->pixel[i] = vertical_RLSA[i] || horizontal_RLSA[i];
+        result_image->pixel[i] = vertical_RLSA[i] || horizontal_RLSA[i];
 
-        if(i % b_img->w == 0)
+        if(i % result_image->w == 0)
             printf("\n");
 
-        if (b_img->pixel[i]) {
+        if (result_image->pixel[i]) {
             printf(".");
         } else {
             printf("0");
