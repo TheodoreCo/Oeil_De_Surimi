@@ -202,7 +202,9 @@ binary_image *bi_detect_text_lines(binary_image *b_img) {
 binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
 {
     if(!b_img) return 0;
-    printf("%d\n", expansion);
+
+
+
     unsigned char horizontal_RLSA[b_img->w * b_img->h];
     unsigned char vertical_RLSA[b_img->w * b_img->h];
 
@@ -212,7 +214,7 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
         unsigned int counter = 0;
         for (size_t x = 0; x < b_img->w; x++) {
             unsigned char pixel = b_img->pixel[y*b_img->w + x];
-            printf("pixel (%d, %d) = %d / counter = %d\n",x, y, pixel, counter);
+            //printf("pixel (%d, %d) = %d / counter = %d\n",x, y, pixel, counter);
             if (!pixel) { //if black pixel
                 if (counter <= expansion) {
                     for (size_t i = 1; i <= counter; i++)
@@ -222,7 +224,7 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
                 horizontal_RLSA[y*b_img->w + x] = 0;
             } else { //if white pixel
                 counter++;
-                horizontal_RLSA[y*b_img->w + x] = 255;
+                horizontal_RLSA[y*b_img->w + x] = 1;
             }
         }
         if (counter <= expansion) {
@@ -246,7 +248,7 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
                 vertical_RLSA[y*b_img->w + x] = 0;
             } else { //if white pixel
                 counter++;
-                vertical_RLSA[y*b_img->w + x] = 255;
+                vertical_RLSA[y*b_img->w + x] = 1;
             }
         }
         if (counter <= expansion) {
@@ -270,7 +272,7 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
 
     for (size_t i = 0; i < b_img->w * b_img->h; i++) {
         b_img->pixel[i] = vertical_RLSA[i] || horizontal_RLSA[i];
-/*
+
         if(i % b_img->w == 0)
             printf("\n");
 
@@ -279,7 +281,7 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
         } else {
             printf("0");
         }
-*/
+
     }
 
     return result_image;
