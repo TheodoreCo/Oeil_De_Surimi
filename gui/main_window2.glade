@@ -59,6 +59,9 @@
               <object class="GtkPaned" id="oeil_de_surimi_processing_pane">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="position">500</property>
+                <property name="position_set">True</property>
+                <property name="wide_handle">True</property>
                 <child>
                   <object class="GtkGrid">
                     <property name="visible">True</property>
