@@ -28,6 +28,8 @@ typedef struct config {
     int num_train_epochs_xor;
     // Expansion for RLSA function
     unsigned int rlsa_expansion;
+    // Number of neurons in the input layer for the OCR NN
+    int num_input_ocr;
 
 } config;
 
@@ -40,6 +42,7 @@ int cf_get_num_input_xor(void);
 int cf_get_num_output_xor(void);
 int cf_get_num_hid_lay_xor(void);
 int cf_get_num_hid_neur_xor(void);
+int cf_get_num_input_ocr(void);
 int cf_get_num_train_epochs_xor(void);
 unsigned int cf_get_rlsa_expansion(void);
 
