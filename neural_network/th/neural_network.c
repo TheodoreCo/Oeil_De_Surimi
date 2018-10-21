@@ -177,21 +177,8 @@ double const *nn_run(neur_net const *nn, double const *inputs)
 
     int h, j, k;
 
-//    if (!nn->num_hid_lay) {
-//        double *ret = o;
-//        for (j = 0; j < nn->num_outputs; ++j) {
-//            double sum = *w++ * -1.0;
-//            for (k = 0; k < nn->inputs; ++k) {
-//                sum += *w++ * i[k];
-//            }
-//            *o++ = genann_act_output(nn, sum);
-//        }
-//
-//        return ret;
-//    }
-
     //printf("w-nn->weights = %ld\n", w-nn->weights);
-    /* Figure input layer */
+    /* input layer */
     for (j = 0; j < nn->num_hid_neur; ++j)
     {
         double sum = *w++ * -1.0;
@@ -205,7 +192,7 @@ double const *nn_run(neur_net const *nn, double const *inputs)
 
     i += nn->num_inputs;
 
-    /* Figure hidden layers, if any. */
+    /* hidden layers, if any. */
     for (h = 1; h < nn->num_hid_lay; ++h)
     {
         for (j = 0; j < nn->num_hid_neur; ++j)
@@ -234,10 +221,6 @@ double const *nn_run(neur_net const *nn, double const *inputs)
         *o++ = sigmoid(sum);
     }
 
-    /* Sanity check that we used all weights and wrote all outputs. */
-    assert(w - nn->weights == nn->total_weights);
-    assert(o - nn->outputs == nn->total_neurons);
-
     return ret;
 }
 
@@ -261,8 +244,7 @@ void nn_learn(neur_net const *nn, double const *inputs, double const *expected, 
     }
 
 
-    /* Set hidden layer deltas, start on last layer and work backwards. */
-    /* Note that loop is skipped in the case of hidden_layers == 0. */
+    // Set hidden layer deltas, start on last layer and work backwards
     for (h = nn->num_hid_lay - 1; h >= 0; --h)
     {
 
@@ -296,22 +278,18 @@ void nn_learn(neur_net const *nn, double const *inputs, double const *expected, 
     }
 
 
-    /* Train the outputs. */
+    // outputs
     {
-        /* Find first output delta. */
         double const *d = nn->deltas + nn->num_hid_neur * nn->num_hid_lay; /* First output delta. */
 
-        /* Find first weight to first output delta. */
         double *w = nn->weights + (nn->num_hid_lay
                                    ? ((nn->num_inputs+1) * nn->num_hid_neur + (nn->num_hid_neur+1) * nn->num_hid_neur * (nn->num_hid_lay-1))
                                    : (0));
 
-        /* Find first output in previous layer. */
         double const * const i = nn->outputs + (nn->num_hid_lay
                                                 ? (nn->num_inputs + (nn->num_hid_neur) * (nn->num_hid_lay-1))
                                                 : 0);
 
-        /* Set output layer weights. */
         for (j = 0; j < nn->num_outputs; ++j)
         {
             *w++ += *d * learning_rate * -1.0;
@@ -325,19 +303,14 @@ void nn_learn(neur_net const *nn, double const *inputs, double const *expected, 
     }
 
 
-    /* Train the hidden layers. */
     for (h = nn->num_hid_lay - 1; h >= 0; --h)
     {
 
-        /* Find first delta in this layer. */
         double const *d = nn->deltas + (h * nn->num_hid_neur);
 
-        /* Find first input to this layer. */
         double const *i = nn->outputs + (h
                                          ? (nn->num_inputs + nn->num_hid_neur * (h-1))
                                          : 0);
-
-        /* Find first weight to this layer. */
         double *w = nn->weights + (h
                                    ? ((nn->num_inputs+1) * nn->num_hid_neur + (nn->num_hid_neur+1) * (nn->num_hid_neur) * (h-1))
                                    : 0);

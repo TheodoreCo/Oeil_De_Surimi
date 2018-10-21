@@ -37,6 +37,19 @@
 					<Add option="-g" />
 				</Compiler>
 			</Target>
+			<Target title="nn">
+				<Option output="bin/nn/Oeil_De_Surimi" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/nn/" />
+				<Option object_output="obj/nn/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
@@ -77,14 +90,32 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
+		<Unit filename="neural_network/main_xor.c">
+			<Option compilerVar="CC" />
+			<Option target="nn" />
+		</Unit>
+		<Unit filename="neural_network/neural_network.c">
+			<Option compilerVar="CC" />
+			<Option target="nn" />
+		</Unit>
+		<Unit filename="neural_network/neural_network.h">
+			<Option target="nn" />
+		</Unit>
 		<Unit filename="neural_network/th/main_xor.c">
 			<Option compilerVar="CC" />
 			<Option target="Test_XOR_Console" />
 		</Unit>
 		<Unit filename="neural_network/th/neural_network.c">
 			<Option compilerVar="CC" />
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="Test_XOR_Console" />
 		</Unit>
-		<Unit filename="neural_network/th/neural_network.h" />
+		<Unit filename="neural_network/th/neural_network.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="Test_XOR_Console" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<debugger />

@@ -13,7 +13,7 @@ neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers,
 	neur_net *nn = malloc(sizeof(neur_net));    //malloc du reseau nn
 
     nn->layer_array = malloc(sizeof(layer*) * layer_num);   //malloc de l'array
-    nn->num_arrays = layer_num;                             //de layer de nn 
+    nn->num_arrays = layer_num;                             //de layer de nn
 
     for(int i = 0; i < (int) layer_num; i++)           //creation des layers
     {
@@ -141,7 +141,7 @@ void inputs_fill(neur_net *nn, double *inputs)
 {
 	for(unsigned int i = 0; i < nn->layer_array[0]->num_neur ; i++)
 	{
-		nn->layer_array[0]->neur_array[i]->value = inputs[i];           
+		nn->layer_array[0]->neur_array[i]->value = inputs[i];
 	}
 
 }
@@ -156,13 +156,13 @@ double *feed_forward(neur_net *nn, double *inputs)
         layer_compute(nn->layer_array[i],nn->layer_array[i-1]);
     }
 
-    //creation d'un array de double a renvoyer 
-    //basé sur les values des neurones de l'output layer 
+    //creation d'un array de double a renvoyer
+    //basé sur les values des neurones de l'output layer
     //apres feedforward
 
-    unsigned int output_num = nn->layer_array[nn->num_arrays - 1]->num_neur;    
-    double *res = malloc(sizeof(double) * output_num);                          
-    for(unsigned int i = 0; i < output_num; i++)                                
+    unsigned int output_num = nn->layer_array[nn->num_arrays - 1]->num_neur;
+    double *res = malloc(sizeof(double) * output_num);
+    for(unsigned int i = 0; i < output_num; i++)
     {
         res[i] = nn->layer_array[nn->num_arrays-1]->neur_array[i]->value;
     }
@@ -175,7 +175,7 @@ void backprop(neur_net *nn, double *inputs, double *target,
                                                         double learning_rate)
 {
     feed_forward(nn,inputs);
-	
+
     for(unsigned int i = nn->num_arrays-1; i >= 1; i--)
 	{
 
@@ -190,11 +190,11 @@ void backprop(neur_net *nn, double *inputs, double *target,
 					n->d_y = n->value - target[j];
 				}
 				else
-				{	
+				{
 					for(unsigned int k = 0; k < nn->layer_array[i+1]->num_neur; k++)
 					{
 						neur *next_neur = nn->layer_array[i+1]->neur_array[k];
-						n->d_y += (next_neur->weights[j] * (next_neur->value * 
+						n->d_y += (next_neur->weights[j] * (next_neur->value *
 							(1 - next_neur->value)) * next_neur->d_y);
 					}
 				}
@@ -203,13 +203,13 @@ void backprop(neur_net *nn, double *inputs, double *target,
 				{
 					double d_w = nn->layer_array[i-1]->neur_array[k]->value;
 					n->weights[k] -= learning_rate * d_w * n->d_y * d_x;
-						
+
 				}
-			
+
 			}
 
 	}
-    
+
 
 }
 
@@ -223,7 +223,7 @@ void xor_train(neur_net *nn, double learning_rate)
 		target_2 = 0,
 		target_3 = 1,
 		target_4 = 1;
-	
+
 
 	for(unsigned int i = 0; i < 100000; i++)
 	{
@@ -245,7 +245,6 @@ double sigmoid(double x)
 }
 
 
-
 void nn_save(neur_net *nn, char *path)
 {
 	// VALABLE POUR LE XOR
@@ -253,7 +252,7 @@ void nn_save(neur_net *nn, char *path)
 	// OUVERTURE DU FICHIER
 
     FILE* file = NULL;
-    
+
     file = fopen(path, "w+");
 
     if(file == NULL)
@@ -261,7 +260,7 @@ void nn_save(neur_net *nn, char *path)
     errx(1,"Writing error; can't save the network");
     }
 
-	//INFOS POUR INSTANTIATE 
+	//INFOS POUR INSTANTIATE
 
 	fprintf(file,"%u %u %u %u",
 		nn->layer_array[0]->num_neur,
@@ -279,7 +278,7 @@ void nn_save(neur_net *nn, char *path)
 		for(unsigned int j = 0; j < nn->layer_array[i]->num_neur; j++)
 		{
 			fprintf(file,"%u",j);
-			fprintf(file,"(%lf ", 
+			fprintf(file,"(%lf ",
 				nn->layer_array[i]->neur_array[j]->biase);
 			for(unsigned int k = 0;
 			  k < nn->layer_array[i]->neur_array[j]->num_weights;
@@ -296,11 +295,11 @@ void nn_save(neur_net *nn, char *path)
 
 	//FERMETURE DU FICHIER
 
-	fclose(file);	
+	fclose(file);
 
 }
 
-/* 
+/*
 
 neur_net *nn_load(char *path)
 {
@@ -317,36 +316,36 @@ neur_net *nn_load(char *path)
     }
 
 	// LECTURES PARAMETRES DE BASES
-	// NUM_INPUTS - NUM_HIDD_LAYERS - NUM_HIDD_NEUR - NUM_OUTPUTS 
+	// NUM_INPUTS - NUM_HIDD_LAYERS - NUM_HIDD_NEUR - NUM_OUTPUTS
 
 	unsigned int num_inputs = 0;
 	unsigned int num_hidden_layers = 0;
 	unsigned int num_hidd_neur = 0;
 	unsigned int num_outputs = 0;
-	
-	fscanf(file, "%u %u %u %u", 
-		&num_inputs, 
-		&num_hidden_layers, 
-		&num_hidd_neur, 
+
+	fscanf(file, "%u %u %u %u",
+		&num_inputs,
+		&num_hidden_layers,
+		&num_hidd_neur,
 		&num_outputs);
 
 	//INSTANTIATION DU NN
-	
+
 	neur_net *nn = instantiate(num_inputs,
 				num_hidden_layers,
 				num_hidd_neur,
 				num_outputs);
-	
-	
+
+
 	int layer_count = 0,
 		neur_count = 0,
 		weight_count = 0;
-	
+
 	double act_weight = 0,
 		act_biase = 0;
 
 	//TRAITEMENT PREMIER LAYER
-	
+
 	fscanf(file,"%d[",layer_counts);
 	int carac = fgetc(file);
 	while(carac != "]")
@@ -356,9 +355,9 @@ neur_net *nn_load(char *path)
 
 		//ATTRTIBUTION AU NN
 
-		nn->layer_array[layer_count]->neur_array[neur_count]->biase = 
+		nn->layer_array[layer_count]->neur_array[neur_count]->biase =
 			act_biase;
-		
+
 		carac = fgetc(file);
 	}
 
@@ -368,7 +367,7 @@ neur_net *nn_load(char *path)
 	layer_count = 1;
 	while(carac != "~")
 	{
-	
+
 		fscanf(file,"%d[",layer_count);
 		do
 		{

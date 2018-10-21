@@ -51,15 +51,28 @@ OBJDIR_TEST_XOR_CONSOLE = obj/Test_XOR_Console
 DEP_TEST_XOR_CONSOLE = 
 OUT_TEST_XOR_CONSOLE = bin/Test_XOR_Console/Oeil_De_Surimi
 
+INC_NN = $(INC)
+CFLAGS_NN = $(CFLAGS) -O2
+RESINC_NN = $(RESINC)
+RCFLAGS_NN = $(RCFLAGS)
+LIBDIR_NN = $(LIBDIR)
+LIB_NN = $(LIB)
+LDFLAGS_NN = $(LDFLAGS) -s
+OBJDIR_NN = obj/nn
+DEP_NN = 
+OUT_NN = bin/nn/Oeil_De_Surimi
+
 OBJ_DEBUG = $(OBJDIR_DEBUG)/gui/config.o $(OBJDIR_DEBUG)/gui/image_operation.o $(OBJDIR_DEBUG)/gui/main.o $(OBJDIR_DEBUG)/image_treatment/img_treatment.o $(OBJDIR_DEBUG)/neural_network/th/neural_network.o
 
 OBJ_RELEASE = $(OBJDIR_RELEASE)/gui/config.o $(OBJDIR_RELEASE)/gui/image_operation.o $(OBJDIR_RELEASE)/gui/main.o $(OBJDIR_RELEASE)/image_treatment/img_treatment.o $(OBJDIR_RELEASE)/neural_network/th/neural_network.o
 
 OBJ_TEST_XOR_CONSOLE = $(OBJDIR_TEST_XOR_CONSOLE)/neural_network/th/main_xor.o $(OBJDIR_TEST_XOR_CONSOLE)/neural_network/th/neural_network.o
 
-all: debug release test_xor_console
+OBJ_NN = $(OBJDIR_NN)/neural_network/main_xor.o $(OBJDIR_NN)/neural_network/neural_network.o
 
-clean: clean_debug clean_release clean_test_xor_console
+all: debug release test_xor_console nn
+
+clean: clean_debug clean_release clean_test_xor_console clean_nn
 
 before_debug: 
 	test -d bin/Debug || mkdir -p bin/Debug
@@ -153,5 +166,27 @@ clean_test_xor_console:
 	rm -rf bin/Test_XOR_Console
 	rm -rf $(OBJDIR_TEST_XOR_CONSOLE)/neural_network/th
 
-.PHONY: before_debug after_debug clean_debug before_release after_release clean_release before_test_xor_console after_test_xor_console clean_test_xor_console
+before_nn: 
+	test -d bin/nn || mkdir -p bin/nn
+	test -d $(OBJDIR_NN)/neural_network || mkdir -p $(OBJDIR_NN)/neural_network
+
+after_nn: 
+
+nn: before_nn out_nn after_nn
+
+out_nn: before_nn $(OBJ_NN) $(DEP_NN)
+	$(LD) $(LIBDIR_NN) -o $(OUT_NN) $(OBJ_NN)  $(LDFLAGS_NN) $(LIB_NN)
+
+$(OBJDIR_NN)/neural_network/main_xor.o: neural_network/main_xor.c
+	$(CC) $(CFLAGS_NN) $(INC_NN) -c neural_network/main_xor.c -o $(OBJDIR_NN)/neural_network/main_xor.o
+
+$(OBJDIR_NN)/neural_network/neural_network.o: neural_network/neural_network.c
+	$(CC) $(CFLAGS_NN) $(INC_NN) -c neural_network/neural_network.c -o $(OBJDIR_NN)/neural_network/neural_network.o
+
+clean_nn: 
+	rm -f $(OBJ_NN) $(OUT_NN)
+	rm -rf bin/nn
+	rm -rf $(OBJDIR_NN)/neural_network
+
+.PHONY: before_debug after_debug clean_debug before_release after_release clean_release before_test_xor_console after_test_xor_console clean_test_xor_console before_nn after_nn clean_nn
 
