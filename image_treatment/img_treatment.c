@@ -10,11 +10,11 @@ void free_binary_image(binary_image *b_image) {
             free(b_image->pixel);
         }
 
-        for(int i=0; i<b_image->lr_size; i++)
+        for(unsigned int i=0; i<b_image->lr_size; i++)
         {
             if(!b_image->lr)
             {
-                for(int j=0; j>b_image->lr->cr_size; j++)
+                for(unsigned int j=0; j>b_image->lr->cr_size; j++)
                 {
                     if(!b_image->lr->cr)
                     {
@@ -111,94 +111,6 @@ binary_image *bi_image_from_file(char *filename) {
     }
     return 0;
 }
-
-binary_image *bi_detect_text_blocks(binary_image *b_img) {
-    /*
-    if(!b_img) return 0;
-
-    // Is this pixel white ?
-    int is_pix_white;
-    // Do we already have a marked block ?
-    int already_marked = 0;
-
-    // Detect first line containing a black pixel
-    for(int h=0; h<b_img->h; h++) {
-        is_pix_white = 1;
-
-        for(int w=0; w<b_img->w; w++) {
-            unsigned char pixel = b_img->pixel[h*b_img->w + w];
-            if(!pixel) {
-                // Found a black pixel!
-                is_pix_white = 0;
-                break;
-            }
-        }
-    }
-
-    // TODO
-    // Continue with detection. For every detected line rectangle,
-    // update b_img.lr and b_img.lr_size. Don't forget to malloc !
-*/
-    return NULL;
-}
-
-binary_image *bi_image_detect_char_blocks(binary_image *b_img) {
-    /*
-    // TODO
-    // For every b_img->lr...
-    // Do not forget the malloc for the detected cr blocks
-
-*/
-    return NULL;
-}
-
-binary_image *bi_detect_text_lines(binary_image *b_img) {
-    /*
-    if(!b_img) return 0;
-
-
-    int lines[b_img->h];
-
-
-    // Detect first line containing a black pixel
-    for(int h=0; h<b_img->h; h++) {
-	lines[h]=0;
-
-        for(int w=0; w<b_img->w; w++) {
-            unsigned char pixel = b_img->pixel[h*b_img->w + w];
-            if(!pixel) {
-                // Found a black pixel!
-		lines[h]=1;
-                break;
-            }
-        }
-    }
-    unsigned int length = 0;
-    for(int h=1; h < b_img->h; h++){
-	 if(lines[h]==1 && lines[h-1]==1){
-		length++;
-	 }
-	 else{
-		if (length>0){
-		      //Stocker le tuple (h,length) dans une structure dynamique
-		      length = 0;
-		}
-	 }
-    }
-    //Pour arrondir les erreurs.
-    unsigned int refer; // refer est �gale au length le plus courant;
-    // parcour des tuples
-    // parcours des tuples et supprime ceux ayant une length inf�rieur � refer/6
-    // parcours les tuples ayant une length sup�rieur � 2refer while(ref*i<currentlength){i++}
-    	// int temp = length/i;
-    	// unsigned int j;
-    	// for (j=0;j<i;j++){stocker le tuple (h+j*temp,temp)}
-    	// supprimer le tuple de base
-*/
-    return NULL;
-}
-
-
 
 binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
 {

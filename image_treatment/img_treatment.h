@@ -29,13 +29,13 @@ typedef struct c_rect {
 typedef struct l_rect l_rect;
 struct l_rect {
     // Up-left coordinates of the rectangle surrounding the line
-    int min_x, min_y;
+    unsigned int min_x, min_y;
     // Down-right coordinates of the rectangle surrounding the line
-    int max_x, max_y;
+    unsigned int max_x, max_y;
     //pointer to next l_rect
     l_rect *next;
     // Size of the array of char rectangles
-    int cr_size;
+    unsigned int cr_size;
     // An array of char rectangles
     c_rect *cr;
 };
@@ -46,11 +46,11 @@ struct l_rect {
 */
 typedef struct binary_image {
     // Width & height...
-    int w,h;
+    unsigned int w,h;
     // ... and data. Every pixel is represented by a single byte
     unsigned char *pixel;
     // Size of the array of line rectangles
-    int lr_size;
+    unsigned int lr_size;
     // An array of line rectangles
     l_rect *lr;
 } binary_image;
@@ -61,19 +61,20 @@ typedef struct binary_image {
 */
 binary_image *bi_image_from_file(char *filename);
 
+
 /*
     Detects lines of text in the binary image and returns an enriched image
     (containing the detected line-surrounding rectangles).
     Assumption 1: the image is a B/W one and the text lines are horizontal.
     Assumption 2: the image is denoised (no black pixels other than those composing the letters)
 */
-binary_image *bi_detect_text_blocks(binary_image *b_img);
+//binary_image *bi_detect_text_blocks(binary_image *b_img);
 
 /*
     Detects char blocks in the binary image and returns an enriched image
     (containing the detected char-surrounding rectangles)
 */
-binary_image *bi_image_detect_char_blocks(binary_image *b_img);
+//binary_image *bi_image_detect_char_blocks(binary_image *b_img);
 
 
 /*
