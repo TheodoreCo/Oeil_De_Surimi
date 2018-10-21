@@ -2,6 +2,31 @@
 #include <stdlib.h>
 #include "img_treatment.h"
 
+void free_binary_image(binary_image *b_image) {
+    if(b_image)
+    {
+        if(b_image->pixel)
+        {
+            free(b_image->pixel);
+        }
+
+        for(int i=0; i<b_image->lr_size; i++)
+        {
+            if(!b_image->lr)
+            {
+                for(int j=0; j>b_image->lr->cr_size; j++)
+                {
+                    if(!b_image->lr->cr)
+                    {
+                        free(b_image->lr->cr);
+                    }
+                }
+                free(b_image->lr);
+            }
+        }
+        free(b_image);
+    }
+}
 
 binary_image *bi_image_from_file(char *filename) {
     // const int NUM_PIXEL_BYTES = 3; /* Number of bytes per pixel. We only handle 24 bits bitmaps for now. */

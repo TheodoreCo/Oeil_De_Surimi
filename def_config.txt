@@ -1,5 +1,5 @@
 # Default Oeil_de_Surimi configuration file
-# No particular order, all non-comment lines should have KEY=VALUE format
+# No particular order, all non-comment lines should have KEY = VALUE format
 
 # From color image to B_&_W image threshold (all pixels with color < b_and_w_threshold ==> 0)
 b_and_w_threshold    = 0.5
@@ -20,5 +20,5 @@ num_hid_neur_xor     = 3
 num_train_epochs_xor = 1000
 
 # Expansion for RLSA function
-rlsa_expansion = 1
+rlsa_expansion       = 30
 

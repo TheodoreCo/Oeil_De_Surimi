@@ -2,6 +2,7 @@
 #define IMAGE_OPERATION_H_INCLUDED
 
 #include "../image_treatment/img_treatment.h"
+
 gboolean draw_picture(GtkWidget *widget, cairo_t *cr, gpointer data);
 
 /* Builds the binary image by calling bi_image_from_file() */
@@ -18,9 +19,8 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button);
 
 void on_oeil_de_surimi_def_nn_values_btn_clicked(GtkButton *button);
 
+/** Handles the 'RLSA' button click */
 void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button);
-
-void free_binary_image(binary_image *b_imgage);
 
 //void img_bmp_info(char *filename, unsigned int *file_len, int *dib_header_len);
 
