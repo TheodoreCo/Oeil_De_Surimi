@@ -30,6 +30,12 @@ typedef struct config {
     unsigned int rlsa_expansion;
     // Number of neurons in the input layer for the OCR NN
     int num_input_ocr;
+    //Number of neurons in the output layer for the OCR NN
+    int num_output_ocr;
+    //  Number of hidden layers for the OCR NN
+    int num_hid_lay_ocr;
+    // Number of hidden neurons in a hidden layer for the OCR NN
+    int num_hid_neur_ocr;
 
 } config;
 
@@ -43,6 +49,9 @@ int cf_get_num_output_xor(void);
 int cf_get_num_hid_lay_xor(void);
 int cf_get_num_hid_neur_xor(void);
 int cf_get_num_input_ocr(void);
+int cf_get_num_output_ocr(void);
+int cf_get_num_hid_lay_ocr(void);
+int cf_get_num_hid_neur_ocr(void);
 int cf_get_num_train_epochs_xor(void);
 unsigned int cf_get_rlsa_expansion(void);
 

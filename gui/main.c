@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #include <stdlib.h> /* for malloc */
 #include "image_operation.h"
-#include "../neural_network/neural_network.h"
+#include "../neural_network/th/neural_network.h"
 #include "../image_treatment/img_treatment.h"
 #include "config.h"
 

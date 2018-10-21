@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include "../image_treatment/img_treatment.h"
-#include "../neural_network/neural_network.h"
+#include "../neural_network/th/neural_network.h"
 #include "config.h"
 
 enum Bin_Img_Type {DO_NOTHING, GRAYSCALE, B_AND_W, B_AND_W_DENOISED, RLSA} bin_img_type;
@@ -221,7 +221,7 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button)
     const double hidden_neurons = gtk_spin_button_get_value(hid_neur_spin_btn);
 
     // Build a NN with 2 input neurons, 1 output neuron and the GUI-specified layers & neurons
-    neur_net *nn =  instantiate(2, hidden_layers, hidden_neurons, 1);
+    neur_net *nn =  nn_new_instance(2, hidden_layers, hidden_neurons, 1);
 
     // Get needed values to train the NN
     GtkSpinButton *epochs_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_epochs_val"));
@@ -230,8 +230,8 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button)
     const double learning_rate = gtk_spin_button_get_value(learning_rate_spin_btn);
 
     // Train it for XOR
-    // TODO -- nn_xor_learn is not defined anymore
-    // nn_xor_learn(nn, num_epochs, learning_rate);
+    // TODO -- nn_xor_learn is not defined anymore (Steph)
+    nn_xor_learn(nn, num_epochs, learning_rate);
 
     // Get the widgets to show results
     GtkEntry *xor_out_1_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_1_entry"));
@@ -248,7 +248,7 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button)
         {1.0, 0.0},
         {1.0, 1.0}
     };
-/*
+
     gchar *text1 = g_strdup_printf ("%.2f", *nn_run(nn, inputs[0]));
     gchar *text2 = g_strdup_printf ("%.2f", *nn_run(nn, inputs[1]));
     gchar *text3 = g_strdup_printf ("%.2f", *nn_run(nn, inputs[2]));
@@ -263,9 +263,9 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button)
     g_free(text2);
     g_free(text3);
     g_free(text4);
-*/
+
     // TODO: nn_free() is not defined anymore (Steph)
-    // nn_free(nn);
+    nn_free(nn);
 }
 
 void on_oeil_de_surimi_def_nn_values_btn_clicked(GtkButton *button)

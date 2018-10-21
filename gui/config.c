@@ -73,6 +73,15 @@ config *cf_read_config(char *path) {
         else if(!strcmp(key, "num_input_ocr")) {
             app_config->num_input_ocr = atoi(value);
         }
+        else if(!strcmp(key, "num_output_ocr")) {
+            app_config->num_output_ocr = atoi(value);
+        }
+        else if(!strcmp(key, "num_hid_lay_ocr")) {
+            app_config->num_hid_lay_ocr = atoi(value);
+        }
+        else if(!strcmp(key, "num_hid_neur_ocr")) {
+            app_config->num_hid_neur_ocr = atoi(value);
+        }
     }
 
     if(fp)
@@ -93,6 +102,9 @@ void cf_key_val_to_string(char *path)
         printf("num_hid_neur_xor=%d\n", app_config->num_hid_neur_xor);
         printf("num_train_epochs_xor=%d\n", app_config->num_train_epochs_xor);
         printf("num_input_ocr=%d\n", app_config->num_input_ocr);
+        printf("num_output_ocr=%d\n", app_config->num_output_ocr);
+        printf("num_hid_lay_ocr=%d\n", app_config->num_hid_lay_ocr);
+        printf("num_hid_neur_ocr=%d\n", app_config->num_hid_neur_ocr);
         printf("rlsa_expansion=%d\n", app_config->rlsa_expansion);
         printf("**************** Oeil_de_Surimi config file ******************\n");
     }
@@ -143,6 +155,24 @@ unsigned int cf_get_rlsa_expansion(void) {
 int cf_get_num_input_ocr(void) {
     if(app_config)
         return app_config->num_input_ocr;
+    return -1;
+}
+
+int cf_get_num_output_ocr(void) {
+    if(app_config)
+        return app_config->num_output_ocr;
+    return -1;
+}
+
+int cf_get_num_hid_lay_ocr(void) {
+    if(app_config)
+        return app_config->num_hid_lay_ocr;
+    return -1;
+}
+
+int cf_get_num_hid_neur_ocr(void) {
+    if(app_config)
+        return app_config->num_hid_neur_ocr;
     return -1;
 }
 
