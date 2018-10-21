@@ -1,0 +1,15 @@
+To use Oeil_de_Surimi, execute the file Oeil_de_Surimi.
+
+In the tab "Image Processing & OCR", you can select an image and read the characters in it.
+To do so, Click on the button "Select..." and choose a image from your computer. The image will be shown to you, and ready to be processed.
+You can now click on the following buttons :
+* "Grayscale" to turn the image into shades of gray
+* "B&W" to binarize the image (only black and white pixels)
+* "Denoise" to denoise the image (this feature is not available yet)
+* "RLSA" to detect block of text in the image. The blocks found by the algorithm will be highlighted and framed in a red rectangle.
+
+You  can change parameters of those buttons in the "def_config.txt". The "Parameters" is supposed to let you change those parameters, but its not ready yet.
+
+In the tab "IA Training - XOR", you can test our neural network by making it learn the behavior of a XOR gate.
+You can change the number of neurons, epochs, and more in this tab. To Train the neural network, press the button "Run NN...".
+The neural network will then be tested for different values of inputs, and results will be printed in the "Output" column.
