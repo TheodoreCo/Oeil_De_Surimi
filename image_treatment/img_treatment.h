@@ -88,7 +88,10 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion);
 */
 void bi_image_blocks_from_RLSA(binary_image *b_img, binary_image *rlsa_img);
 
-
+/*
+    Return image with highlighted blocks (l_rect)
+*/
+binary_image *bi_image_show_blocks(binary_image *b_img);
 
 
 /** Frees memory malloc'd for the binary_image */

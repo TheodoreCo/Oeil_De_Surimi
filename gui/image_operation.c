@@ -90,12 +90,19 @@ gboolean draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
             {
                 double col_pix = b_image->pixel[y*img_w + x];
 
-                // TODO: What's the RLSA pixel range ? (0 and 1) or (0 and 255) ?
+
+                // RLSA pixel range = (0 and 1)
+
                 if(bin_img_type == GRAYSCALE && col_pix >= 1)
                     col_pix /= 255.0;
 
-                cairo_set_source_rgb (cr, col_pix, col_pix, col_pix);
-//                printf(" %u", col_pix);
+                double r, g, b;
+                r = g = b = col_pix;
+
+                if (bin_img_type == RLSA && col_pix == 2)
+                    g = b = 0;
+
+                cairo_set_source_rgb (cr, r, g, b);
                 cairo_move_to(cr, x, y);
                 cairo_line_to(cr, x, y);
 
@@ -274,17 +281,10 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
 
     bi_image_blocks_from_RLSA(b_image, rlsa_img);
 
-    l_rect *rect = b_image->lr;
-
-    for (size_t i = 0; i < b_image->lr_size; i++) {
-        //printf("TEST : min = (%d, %d)   max = (%d, %d)\n",
-        rect->min_x, rect->min_y,
-        rect->max_x, rect->max_y );
-        rect = rect->next;
-    }
+    binary_image *preview_blocks = bi_image_show_blocks(b_image);
 
     free_binary_image(b_image);
-    b_image = rlsa_img;
+    b_image = preview_blocks;
 
 
 

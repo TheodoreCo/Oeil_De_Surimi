@@ -152,8 +152,6 @@ binary_image *bi_image_detect_char_blocks(binary_image *b_img) {
     return NULL;
 }
 
-
-//Plus il y aura de lignes et plus elles seront remplies et plus cette m�thode ainsi que l'arrondissement des erreurs seront fonctionnels.
 binary_image *bi_detect_text_lines(binary_image *b_img) {
     /*
     if(!b_img) return 0;
@@ -333,7 +331,9 @@ void bi_image_blocks_from_RLSA(binary_image *b_img, binary_image *rlsa_img)
 
 
                 l_rect *rect = malloc(sizeof (l_rect));
-                rect->min_x = min_x;
+                rect->min_x =
+
+                min_x;
                 rect->min_y = min_y;
                 rect->max_x = max_x;
                 rect->max_y = max_y;
@@ -352,4 +352,42 @@ void bi_image_blocks_from_RLSA(binary_image *b_img, binary_image *rlsa_img)
     }
 
     b_img->lr_size = i;
+}
+
+binary_image *bi_image_show_blocks(binary_image *b_img)
+{
+    binary_image *result_image = malloc(sizeof (binary_image));
+    if(!result_image) return 0;
+
+    result_image->pixel = malloc(b_img->w*b_img->h*sizeof(result_image->pixel));
+    if(!result_image->pixel) return 0;
+
+    result_image->h = b_img->h;
+    result_image->w = b_img->w;
+    result_image->lr_size = 0;
+    result_image->lr = b_img->lr;
+
+    l_rect *rect = b_img->lr;
+
+    for (size_t i = 0; i < b_img->h * b_img->w; i++) {
+        result_image->pixel[i] = b_img->pixel[i];
+    }
+
+    while (rect) {
+
+        if (rect->max_x - rect->min_x > 1 || rect->max_y - rect->min_y > 1 )
+        {
+            for (size_t x = rect->min_x; x < rect->max_x ; x++) {
+                result_image->pixel[rect->min_y * b_img->w + x] = 2;
+                result_image->pixel[rect->max_y * b_img->w + x] = 2;
+            }
+            for (size_t y = rect->min_y; y < rect->max_y ; y++) {
+                result_image->pixel[y * b_img->w + rect->min_x] = 2;
+                result_image->pixel[y * b_img->w + rect->max_x] = 2;
+            }
+        }
+        rect = rect->next;
+    }
+
+    return result_image;
 }
