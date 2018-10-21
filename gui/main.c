@@ -56,8 +56,8 @@ int main (int argc, char *argv[])
         /* Connect signal wiring for the drawing area (the binary image).
            We don't want to draw immediatley after loading the bitmap image ==> DO_NOTHING */
         bin_img_type = DO_NOTHING;
-        GtkDrawingArea *drawing_area = GTK_DRAWING_AREA(gtk_builder_get_object(builder, "oeil_de_surimi_drawing_area"));
-        g_signal_connect(drawing_area, "draw", G_CALLBACK(draw_callback), NULL);
+//        GtkDrawingArea *drawing_area = GTK_DRAWING_AREA(gtk_builder_get_object(builder, "oeil_de_surimi_drawing_area"));
+//        g_signal_connect(drawing_area, "draw", G_CALLBACK(draw_callback), NULL);
 
         gtk_widget_show(window);
         gtk_main();

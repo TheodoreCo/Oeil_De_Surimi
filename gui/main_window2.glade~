@@ -59,6 +59,9 @@
               <object class="GtkPaned" id="oeil_de_surimi_processing_pane">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="position">400</property>
+                <property name="position_set">True</property>
+                <property name="wide_handle">True</property>
                 <child>
                   <object class="GtkGrid">
                     <property name="visible">True</property>
@@ -162,7 +165,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <signal name="clicked" handler="on_oeil_de_surimi_img_rlsa_btn_clicked" swapped="no"/>
+                            <signal name="clicked" handler="on_oeil_de_surimi_img_rlsa_btn_clicked" object="oeil_de_surimi_drawing_area" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>

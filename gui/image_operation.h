@@ -5,7 +5,8 @@
 
 gboolean draw_picture(GtkWidget *widget, cairo_t *cr, gpointer data);
 
-/* Builds the binary image by calling bi_image_from_file() */
+/** Builds the binary image (GRAYSCALE) by calling bi_image_from_file().
+Also displays the bitmap image and the binary image */
 void on_oeil_de_surimi_select_img_clicked(GtkButton *button, GtkImage *image);
 
 /* Callback function to draw the binary image */
