@@ -91,7 +91,7 @@ gboolean draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
                 double col_pix = b_image->pixel[y*img_w + x];
 
                 // TODO: What's the RLSA pixel range ? (0 and 1) or (0 and 255) ?
-                if((bin_img_type == GRAYSCALE || bin_img_type == RLSA) && col_pix >= 1)
+                if(bin_img_type == GRAYSCALE && col_pix >= 1)
                     col_pix /= 255.0;
 
                 cairo_set_source_rgb (cr, col_pix, col_pix, col_pix);
