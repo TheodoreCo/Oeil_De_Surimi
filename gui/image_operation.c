@@ -272,8 +272,21 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
     check_pixels("BEF RLSA");
     binary_image *rlsa_img = bi_image_RLSA(b_image, cf_get_rlsa_expansion());
 
+    bi_image_blocks_from_RLSA(b_image, rlsa_img);
+
+    l_rect *rect = b_image->lr;
+
+    for (size_t i = 0; i < b_image->lr_size; i++) {
+        //printf("TEST : min = (%d, %d)   max = (%d, %d)\n",
+        rect->min_x, rect->min_y,
+        rect->max_x, rect->max_y );
+        rect = rect->next;
+    }
+
     free_binary_image(b_image);
     b_image = rlsa_img;
+
+
 
     gtk_widget_queue_draw(GTK_WIDGET(drawing_area));
     bin_img_type = RLSA;

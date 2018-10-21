@@ -60,7 +60,7 @@ binary_image *bi_image_from_file(char *filename) {
         b_image->h = img_h;
         b_image->w = img_w;
         b_image->lr_size = 0;
-        b_image->lr = 0;
+        b_image->lr = NULL;
 
         /*
         Is there some padding ? "The bits representing the bitmap pixels are packed in rows.
@@ -271,21 +271,85 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
     result_image->h = b_img->h;
     result_image->w = b_img->w;
     result_image->lr_size = 0;
-    result_image->lr = 0;
+    result_image->lr = NULL;
 
     for (size_t i = 0; i < b_img->w * b_img->h; i++) {
         result_image->pixel[i] = vertical_RLSA[i] || horizontal_RLSA[i];
 
-        if(i % result_image->w == 0)
-            printf("\n");
+    }
+    return result_image;
+}
 
-        if (result_image->pixel[i]) {
-            printf(".");
-        } else {
-            printf("0");
+
+void mark_zone(unsigned char mark_array[], binary_image *rlsa_img, unsigned int x, unsigned int y,
+unsigned int *min_x, unsigned int *min_y, unsigned int *max_x, unsigned int *max_y) {
+
+    if (rlsa_img->pixel[rlsa_img->w * y + x] ||
+        mark_array[rlsa_img->w * y + x]) return;
+
+    mark_array[rlsa_img->w * y + x] = 1;
+
+    *min_x = (x > *min_x) ? *min_x : x;
+    *max_x = (x < *max_x) ? *max_x : x;
+
+    *min_y = (y > *min_y) ? *min_y : y;
+    *max_y = (y < *max_y) ? *max_y : y;
+
+    if (x > 0)
+        mark_zone(mark_array, rlsa_img, x-1, y, min_x, min_y, max_x, max_y);
+    if (y > 0)
+        mark_zone(mark_array, rlsa_img, x, y-1, min_x, min_y, max_x, max_y);
+    if (x < rlsa_img->w)
+        mark_zone(mark_array, rlsa_img, x+1, y, min_x, min_y, max_x, max_y);
+    if (y < rlsa_img->h)
+        mark_zone(mark_array, rlsa_img, x, y+1, min_x, min_y, max_x, max_y);
+
+    return;
+}
+
+void bi_image_blocks_from_RLSA(binary_image *b_img, binary_image *rlsa_img)
+{
+    printf("Creating blocks...\n");
+
+    unsigned char mark_array[b_img->w * b_img->h];
+    for (size_t i = 0; i < b_img->w * b_img->h; i++)
+        mark_array[i] = 0;
+
+    unsigned int i = 0;
+
+    for (unsigned int x = 0; x < b_img->w; x++) {
+        for (unsigned int y = 0; y < b_img->h; y++) {
+
+            unsigned int min_x = b_img->w - 1,
+                         min_y = b_img->h - 1,
+                         max_x = 0,
+                         max_y = 0;
+
+            if (!rlsa_img->pixel[rlsa_img->w * y + x] &&
+                !mark_array[rlsa_img->w * y + x])
+            {
+                mark_zone(mark_array, rlsa_img, x, y,
+                &min_x, &min_y, &max_x, &max_y);
+
+
+                l_rect *rect = malloc(sizeof (l_rect));
+                rect->min_x = min_x;
+                rect->min_y = min_y;
+                rect->max_x = max_x;
+                rect->max_y = max_y;
+
+                rect->next = b_img->lr;
+
+                rect->cr_size = 0;
+                rect->cr = 0;
+
+                b_img->lr = rect;
+
+                //printf("INSIDE : min = (%d, %d)   max = (%d, %d)\n", min_x, min_y, max_x, max_y);
+                i++;
+            }
         }
-
     }
 
-    return result_image;
+    b_img->lr_size = i;
 }

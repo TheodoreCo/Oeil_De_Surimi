@@ -12,10 +12,10 @@
     the rectangle surronding a character.
 */
 typedef struct c_rect {
-    // Up-left coordinates of the rectangle surrounding the character
-    int h1, w1;
-    // Down-right coordinates of the rectangle surrounding the character
-    int h2, w2;
+    // Up-left coordinates of the rectangle surrounding the line
+    int min_x, min_y;
+    // Down-right coordinates of the rectangle surrounding the line
+    int max_x, max_y;
     // TODO: see if useful to keep track of the character the NN-recognized character !
     // int c;
 } c_rect;
@@ -26,16 +26,19 @@ typedef struct c_rect {
 
     Maybe not the best way to represent text blocks
 */
-typedef struct l_rect {
+typedef struct l_rect l_rect;
+struct l_rect {
     // Up-left coordinates of the rectangle surrounding the line
-    int h1, w1;
+    int min_x, min_y;
     // Down-right coordinates of the rectangle surrounding the line
-    int h2, w2;
+    int max_x, max_y;
+    //pointer to next l_rect
+    l_rect *next;
     // Size of the array of char rectangles
     int cr_size;
     // An array of char rectangles
     c_rect *cr;
-} l_rect;
+};
 
 /*
     A structure representing a collection of mono-byte pixels.
@@ -78,6 +81,15 @@ binary_image *bi_image_detect_char_blocks(binary_image *b_img);
     using "expansion" as the number of pixel to feed the RLSA algorithm.
 */
 binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion);
+
+
+/*
+    Modify the b_img to have l_rect computed from the rlsa_img
+*/
+void bi_image_blocks_from_RLSA(binary_image *b_img, binary_image *rlsa_img);
+
+
+
 
 /** Frees memory malloc'd for the binary_image */
 void free_binary_image(binary_image *b_imgage);

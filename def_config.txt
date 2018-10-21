@@ -20,7 +20,7 @@ num_hid_neur_xor     = 3
 num_train_epochs_xor = 1000
 
 # Expansion for RLSA function
-rlsa_expansion       = 5
+rlsa_expansion       = 10
 
 # Number of neurons in the input layer for the OCR NN
 num_input_ocr        = 1024
