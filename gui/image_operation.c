@@ -17,7 +17,7 @@ extern binary_image *b_image;
 /** Helper function, to be deleted. Displays statistics on the binary image. */
 void check_pixels(char *cutpoint)
 {
-    int b_pix = 0, w_pix = 0, t_pix = 0;
+    int b_pix = 0, w_pix = 0, w_255_pix = 0, t_pix = 0;
     int p_0_50 = 0, p_51_100 = 0, p_101_150 = 0, p_151_200 = 0, p_201_255 = 0;
 
     int w = b_image->w;
@@ -31,8 +31,11 @@ void check_pixels(char *cutpoint)
             t_pix++;
             if(pix == 0)
                 b_pix++;
-            if(pix == 1)
+            else if(pix == 1)
                 w_pix++;
+            else if (pix == 255)
+                w_255_pix++;
+
             if(0 <= pix && pix < 50)
                 p_0_50++;
             else if (51 <= pix && pix < 100)
@@ -45,7 +48,7 @@ void check_pixels(char *cutpoint)
                 p_201_255++;
         }
     }
-    printf("Check stats [%s]: TOTAL=%d, black=%d, white=%d, others=%d\n", cutpoint, t_pix, b_pix, w_pix, t_pix-b_pix-w_pix);
+    printf("Check stats [%s]: TOTAL=%d, black=%d, white-1=%d, white-255=%d, others=%d\n", cutpoint, t_pix, b_pix, w_pix, w_255_pix, t_pix-b_pix-w_pix-w_255_pix);
     printf("\t0..50=[%d] 51..100=[%d] 101..150=[%d] 151..200=[%d] 201..255=[%d]\n", p_0_50, p_51_100, p_101_150, p_151_200, p_201_255);
 }
 
@@ -86,12 +89,9 @@ gboolean draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
             for(int x=0; x<img_w; x++)
             {
                 double col_pix = b_image->pixel[y*img_w + x];
-//                if(bin_img_type == GRAYSCALE || bin_img_type == RLSA) {
-//                    col_pix = b_image->pixel[y*img_w + x]/255.0;
-//                } else {
-//                    col_pix = b_image->pixel[y*img_w + x];
-//                }
-                if(bin_img_type == GRAYSCALE && col_pix > 1)
+
+                // TODO: What's the RLSA pixel range ? (0 and 1) or (0 and 255) ?
+                if((bin_img_type == GRAYSCALE || bin_img_type == RLSA) && col_pix >= 1)
                     col_pix /= 255.0;
 
                 cairo_set_source_rgb (cr, col_pix, col_pix, col_pix);
@@ -270,7 +270,7 @@ void on_oeil_de_surimi_def_nn_values_btn_clicked(GtkButton *button)
 void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
 {
     check_pixels("BEF RLSA");
-    binary_image *rlsa_img = bi_image_RLSA(b_image, 20);
+    binary_image *rlsa_img = bi_image_RLSA(b_image, cf_get_rlsa_expansion());
 
     free_binary_image(b_image);
     b_image = rlsa_img;
