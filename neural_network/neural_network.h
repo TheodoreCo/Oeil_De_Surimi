@@ -11,6 +11,7 @@ struct neur
     double value;
     double *weights;
     double biase;
+    double d_y;
 };
 
 typedef struct neur neur;
@@ -26,12 +27,12 @@ typedef struct neur_net neur_net;
 struct neur_net
 {
     unsigned int num_arrays;
-
     layer **layer_array;
     layer *outputs;
 };
 
-neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, size_t num_hidd_neur, size_t num_outputs);
+neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, 
+	size_t num_hidd_neur, size_t num_outputs);
 
 void neur_net_free(neur_net *nn);
 
@@ -43,11 +44,14 @@ void layer_compute(layer *l, layer *prev_layer);
 
 double *feed_forward(neur_net *nn, double *inputs);
 
-void backprop(neur_net *nn, double *inputs, double *target, double learning_rate);
+void backprop(neur_net *nn, double *inputs, double *target, 
+	double learning_rate);
 
 double sigmoid(double x);
 
 void nn_save(neur_net *nn, char * path);
+
+void xor_train(neur_net *nn, double learning_rate);
 
 neur_net *nn_load(char *path);
 

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <err.h>
 
 #include "neural_network.h"
 
@@ -168,32 +169,231 @@ double *feed_forward(neur_net *nn, double *inputs)
     return res;
 }
 
-/*
+
 
 void backprop(neur_net *nn, double *inputs, double *target,
                                                         double learning_rate)
 {
-    //TODO
+    feed_forward(nn,inputs);
+	
+    for(unsigned int i = nn->num_arrays-1; i >= 1; i--)
+	{
+
+	    	layer *l = nn->layer_array[i];
+		for(unsigned int j = 0; j < l->num_neur; j++)
+			{
+				neur *n = l->neur_array[j];
+				double d_x = n->value * (1 - n->value);
+				n->d_y = 0;
+				if(i == nn->num_arrays-1)
+				{
+					n->d_y = n->value - target[j];
+				}
+				else
+				{	
+					for(unsigned int k = 0; k < nn->layer_array[i+1]->num_neur; k++)
+					{
+						neur *next_neur = nn->layer_array[i+1]->neur_array[k];
+						n->d_y += (next_neur->weights[j] * (next_neur->value * 
+							(1 - next_neur->value)) * next_neur->d_y);
+					}
+				}
+				n->biase -= learning_rate * n->d_y * d_x;
+				for(unsigned int k = 0; k < n->num_weights; k++)
+				{
+					double d_w = nn->layer_array[i-1]->neur_array[k]->value;
+					n->weights[k] -= learning_rate * d_w * n->d_y * d_x;
+						
+				}
+			
+			}
+
+	}
+    
+
 }
 
-*/
+void xor_train(neur_net *nn, double learning_rate)
+{
+	double param_1[2] = {0,0},
+		param_2[2] = {1,1},
+		param_3[2] = {1,0},
+		param_4[2] = {0,1};
+	double target_1 = 0,
+		target_2 = 0,
+		target_3 = 1,
+		target_4 = 1;
+	
+
+	for(unsigned int i = 0; i < 100000; i++)
+	{
+		backprop(nn,param_1, &target_1, learning_rate);
+		backprop(nn,param_2, &target_2, learning_rate);
+		backprop(nn,param_3, &target_3, learning_rate);
+		backprop(nn,param_4, &target_4, learning_rate);
+	}
+	nn_save(nn, "xor.nn");
+
+}
+
+
+
 
 double sigmoid(double x)
 {
     return (1.0 / (1 + exp(-x)));
 }
 
-/*
+
 
 void nn_save(neur_net *nn, char *path)
 {
-    //TODO
+	// VALABLE POUR LE XOR
+
+	// OUVERTURE DU FICHIER
+
+    FILE* file = NULL;
+    
+    file = fopen(path, "w+");
+
+    if(file == NULL)
+    {
+    errx(1,"Writing error; can't save the network");
+    }
+
+	//INFOS POUR INSTANTIATE 
+
+	fprintf(file,"%u %u %u %u",
+		nn->layer_array[0]->num_neur,
+		nn->num_arrays - 2,
+		nn->layer_array[1]->num_neur,
+		nn->layer_array[nn->num_arrays - 1]->num_neur);
+
+	// STOCKAGE
+
+	for(unsigned int i = 0; i < nn->num_arrays; i++)
+	{
+		fprintf(file,"%u[",i);
+
+
+		for(unsigned int j = 0; j < nn->layer_array[i]->num_neur; j++)
+		{
+			fprintf(file,"%u",j);
+			fprintf(file,"(%lf ", 
+				nn->layer_array[i]->neur_array[j]->biase);
+			for(unsigned int k = 0;
+			  k < nn->layer_array[i]->neur_array[j]->num_weights;
+			  k++)
+			{
+				fprintf(file,"|%lf",
+				nn->layer_array[i]->neur_array[j]->weights[k]);
+			}
+			fprintf(file,")");
+		}
+		fprintf(file,"]");
+	}
+	fprintf(file,"~"); //EOF
+
+	//FERMETURE DU FICHIER
+
+	fclose(file);	
+
 }
+
+/* 
 
 neur_net *nn_load(char *path)
 {
-    //TODO
-    return NULL;
+
+	// OUVERTURE DU FICHIER
+
+    FILE* file = NULL;
+
+    file = fopen(path,"r");
+
+    if(file == NULL)
+    {
+	    errx(1,"reading error; can't load the file");
+    }
+
+	// LECTURES PARAMETRES DE BASES
+	// NUM_INPUTS - NUM_HIDD_LAYERS - NUM_HIDD_NEUR - NUM_OUTPUTS 
+
+	unsigned int num_inputs = 0;
+	unsigned int num_hidden_layers = 0;
+	unsigned int num_hidd_neur = 0;
+	unsigned int num_outputs = 0;
+	
+	fscanf(file, "%u %u %u %u", 
+		&num_inputs, 
+		&num_hidden_layers, 
+		&num_hidd_neur, 
+		&num_outputs);
+
+	//INSTANTIATION DU NN
+	
+	neur_net *nn = instantiate(num_inputs,
+				num_hidden_layers,
+				num_hidd_neur,
+				num_outputs);
+	
+	
+	int layer_count = 0,
+		neur_count = 0,
+		weight_count = 0;
+	
+	double act_weight = 0,
+		act_biase = 0;
+
+	//TRAITEMENT PREMIER LAYER
+	
+	fscanf(file,"%d[",layer_counts);
+	int carac = fgetc(file);
+	while(carac != "]")
+	{
+		fscanf(file,"%d",neur_count);
+		fscanf(file,"(%lf )",act_biase);
+
+		//ATTRTIBUTION AU NN
+
+		nn->layer_array[layer_count]->neur_array[neur_count]->biase = 
+			act_biase;
+		
+		carac = fgetc(file);
+	}
+
+
+	// TRAITEMENT GENERAL FROM 1ST HIDDEN LAYER
+
+	layer_count = 1;
+	while(carac != "~")
+	{
+	
+		fscanf(file,"%d[",layer_count);
+		do
+		{
+			fscanf(file,"%d(",neur_count);
+			fscanf(file,"%lf ",act_biase);
+
+			nn->layer_array[layer_count]->neur_array[neur_count]->biase =
+				act_biase;
+
+			carac = fgetc(file);
+			weight_count = 0;
+			while(carac != ")")
+			{
+				fscanf(file,"%lf",act_weight);
+				nn->layer_array[array_count]->neur_array[neur_count]->weight[weight_count];
+				weight_count++;
+				carac = fgetc(file);
+			}
+			carac = fgetc(file);
+		}
+		while(carac != "]")
+		carac = fgetc(file);
+	}
+	return nn;
 }
 
 */
+

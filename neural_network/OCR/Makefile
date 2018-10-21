@@ -1,21 +1,21 @@
 # MAKEFILE
 
 CC = gcc
-CFLAGS = -Wextra -Werror -Wall -std=c99 -g -O3
+CFLAGS = -Wextra -Werror -Wall -std=c99 -O3
 LDLIBS = -lm
 
 EXEC = xor
 
-SRC = main_xor.c neural_network.c 
+SRC = main.c neural_network.c 
 OBJ = ${SRC:.c=.o}
 
 all : ${EXEC}
 
-xor : main_xor.o neural_network.o
-	gcc main_xor.o neural_network.o -o xor ${CFLAGS} ${LDLIBS}
+xor : main.o neural_network.o
+	gcc main.o neural_network.o -o xor ${CFLAGS} ${LDLIBS}
 
-main.o : main_xor.c
-	gcc -c main_xor.c ${CFLAGS} ${LDLIBS}
+main.o : main.c
+	gcc -c main.c ${CFLAGS} ${LDLIBS}
 
 neural_network.o : neural_network.c neural_network.h
 	gcc -c neural_network.c ${CFLAGS} ${LDLIBS}

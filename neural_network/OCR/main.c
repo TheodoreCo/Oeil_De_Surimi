@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
                  hidd_lay_num = (unsigned int) atoi(argv[3]),
                  hidd_neur_num = (unsigned int) atoi(argv[4]);
 
-    double *inputs = malloc(sizeof(double) * inputs_number);
+    double *inputs = calloc(inputs_number,sizeof(double));
 
     neur_net *nn = instantiate(inputs_number,hidd_lay_num,
             hidd_neur_num,output_number);
