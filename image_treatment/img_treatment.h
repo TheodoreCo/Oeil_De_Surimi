@@ -79,6 +79,8 @@ binary_image *bi_image_detect_char_blocks(binary_image *b_img);
 */
 binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion);
 
+/** Frees memory malloc'd for the binary_image */
+void free_binary_image(binary_image *b_imgage);
 
 // TODO: other useful functions, like denoising, etc.
 

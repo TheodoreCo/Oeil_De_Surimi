@@ -88,6 +88,18 @@ void on_oeil_de_surimi_select_img_clicked(GtkButton *button, GtkImage *image)
     }
 }
 
+void bi_from_gray_to_b_and_w(void) {
+    int img_w = b_image->w;
+    int img_h = b_image->h;
+    for(int y=0; y<img_h; y++)
+    {
+        for(int x=0; x<img_w; x++)
+        {
+            b_image->pixel[y*img_w + x] = (b_image->pixel[y*img_w + x]/255.0 > cf_get_b_and_w_threshold()) ? 1 : 0;
+        }
+    }
+}
+
 gboolean draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
 {
     if(b_image && bin_img_type != DO_NOTHING)
@@ -108,11 +120,15 @@ gboolean draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
         {
             for(int x=0; x<img_w; x++)
             {
-                double col_pix = b_image->pixel[y*img_w + x]/255.0;
-                if (bin_img_type == B_AND_W)
-                {
-                    col_pix = col_pix > cf_get_b_and_w_threshold() ? 1 : 0;
-                }
+                double col_pix = b_image->pixel[y*img_w + x];
+//                if(bin_img_type == GRAYSCALE || bin_img_type == RLSA) {
+//                    col_pix = b_image->pixel[y*img_w + x]/255.0;
+//                } else {
+//                    col_pix = b_image->pixel[y*img_w + x];
+//                }
+                if(col_pix > 1)
+                    col_pix /= 255.0;
+
                 cairo_set_source_rgb (cr, col_pix, col_pix, col_pix);
 //                printf(" %u", col_pix);
                 cairo_move_to(cr, x, y);
@@ -125,31 +141,6 @@ gboolean draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data)
     return FALSE;
 }
 
-void free_binary_image(binary_image *b_imgage) {
-    if(b_image)
-    {
-        if(b_image->pixel)
-        {
-            free(b_image->pixel);
-        }
-        for(int i=0; i<b_image->lr_size; i++)
-        {
-            if(!b_image->lr)
-            {
-                for(int j=0; j>b_image->lr->cr_size; j++)
-                {
-                    if(!b_image->lr->cr)
-                    {
-                        free(b_image->lr->cr);
-                    }
-                }
-                free(b_image->lr);
-            }
-        }
-        free(b_image);
-    }
-}
-
 void on_oeil_de_surimi_grayscale_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
 {
     bin_img_type = GRAYSCALE;
@@ -158,7 +149,10 @@ void on_oeil_de_surimi_grayscale_btn_clicked(GtkButton *button, GtkDrawingArea *
 
 void on_oeil_de_surimi_b_and_w_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
 {
+    check_pixels("BEF B_W");
     bin_img_type = B_AND_W;
+    bi_from_gray_to_b_and_w();
+    check_pixels("AFTER B_W");
     gtk_widget_queue_draw(GTK_WIDGET(drawing_area));
 }
 
@@ -197,7 +191,6 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button) {
         {1.0, 1.0}
     };
 
-
     gchar *text1 = g_strdup_printf ("%.2f", *nn_run(nn, inputs[0]));
     gchar *text2 = g_strdup_printf ("%.2f", *nn_run(nn, inputs[1]));
     gchar *text3 = g_strdup_printf ("%.2f", *nn_run(nn, inputs[2]));
@@ -223,6 +216,7 @@ void on_oeil_de_surimi_def_nn_values_btn_clicked(GtkButton *button) {
 }
 
 void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area) {
+    check_pixels("BEF RLSA");
     binary_image *rlsa_img = bi_image_RLSA(b_image, 20);
 
     free_binary_image(b_image);
@@ -230,5 +224,41 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
 
     gtk_widget_queue_draw(GTK_WIDGET(drawing_area));
     bin_img_type = RLSA;
+    check_pixels("AFTER RLSA");
+//    check_pixels("AFTER RLSA BEF B_W");
+//    bi_from_gray_to_b_and_w();
+//    check_pixels("AFTER RLSA AFTER B_W");
+}
+
+// Helper functions, to be deleted
+void check_pixels(char *cutpoint) {
+    int b_pix = 0, w_pix = 0, t_pix = 0;
+    int p_0_50 = 0, p_51_100 = 0, p_101_150 = 0, p_151_200 = 0, p_201_255 = 0;
+
+    int w = b_image->w;
+    int h = b_image->h;
+
+    for(int i=0; i<h; i++) {
+        for(int j=0; j<w; j++) {
+            unsigned char pix = b_image->pixel[i*w+j];
+            t_pix++;
+            if(pix == 0)
+                b_pix++;
+            if(pix == 1)
+                w_pix++;
+            if(0<=pix && pix < 50)
+                p_0_50++;
+            else if (51<= pix && pix < 100)
+                p_51_100++;
+            else if (101 <= pix && pix < 150)
+                p_101_150++;
+            else if (151 <= pix && pix < 200)
+                p_151_200++;
+            else
+                p_201_255++;
+        }
+    }
+    printf("Check stats [%s]: TOTAL=%d, black=%d, white=%d, others=%d\n", cutpoint, t_pix, b_pix, w_pix, t_pix-b_pix-w_pix);
+    printf("\t0..50=[%d] 51..100=[%d] 101..150=[%d] 151..200=[%d] 201..255=[%d]\n", p_0_50, p_51_100, p_101_150, p_151_200, p_201_255);
 }
 
