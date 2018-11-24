@@ -18,6 +18,17 @@ int main(int argc, char *argv[])
                 -Number of neurons per hidden layer \n");
     }
 
+// PROCEDURE DE CHOIX
+
+    printf("Que voulez-vous faire ?\n1. Créer un réseau de neurones\n2. Entrainer un réseau existant\n3. Utiliser un réseau existant\n\n");
+    int choix = 0;
+    scanf("%d",&choix);
+    switch(choix)
+    {case 1 :
+
+
+
+
 //ASSIGNATIONS
 
     srand(time(NULL));
