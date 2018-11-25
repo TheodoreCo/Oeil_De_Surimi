@@ -26,10 +26,10 @@ rlsa_expansion       = 10
 num_input_ocr        = 1024
 
 # Number of neurons in the output layer for the OCR NN
-num_output_xor       = 1
+num_output_ocr       = 1
 
 # Number of hidden layers for the OCR NN
-num_hid_lay_xor      = 1
+num_hid_lay_ocr      = 1
 
 # Number of hidden neurons in a hidden layer for the XOR NN
-num_hid_neur_xor     = 1024
+num_hid_neur_ocr     = 1024

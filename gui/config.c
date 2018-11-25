@@ -10,7 +10,7 @@
 static config *app_config;
 
 config *cf_read_config(char *path) {
-    if(app_config == 0) {
+    if(!app_config) {
         app_config = malloc(sizeof(config));
         // Changes locale in order to be able to parse '.' as a decimal separarator
         // NB: This very same line as the first line in main.c has no effect if GUI is used,
@@ -26,7 +26,7 @@ config *cf_read_config(char *path) {
 
     FILE *fp;
 
-    if ((fp = fopen(path, "r+")) == NULL)
+    if ((fp = fopen(path, "r")) == NULL)
     {
         perror("fopen()");
         return NULL;
@@ -85,7 +85,7 @@ config *cf_read_config(char *path) {
     }
 
     if(fp)
-        pclose(fp);
+        fclose(fp);
 
     return app_config;
 }
@@ -93,7 +93,7 @@ config *cf_read_config(char *path) {
 void cf_key_val_to_string(char *path)
 {
     //cf_get_app_config(path);
-    if(app_config != 0) {
+    if(app_config) {
         printf("**************** Oeil_de_Surimi config file ******************\n");
         printf("b_and_w_threshold=%f\n", app_config->b_and_w_thresold);
         printf("num_input_xor=%d\n", app_config->num_input_xor);
