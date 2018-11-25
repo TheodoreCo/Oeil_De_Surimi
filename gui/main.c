@@ -1,14 +1,14 @@
 #include <gtk/gtk.h>
 #include <stdlib.h> /* for malloc */
 #include "image_operation.h"
-#include "../neural_network/th/neural_network.h"
+//#include "../neural_network/th/neural_network.h"
 #include "../image_treatment/img_treatment.h"
 #include "config.h"
 
 extern enum Bin_Img_Type {DO_NOTHING, GRAYSCALE, B_AND_W, B_AND_W_DENOISED} bin_img_type;
-binary_image *b_image;
+binary_image *b_image = NULL;
 
-GtkBuilder *builder; /* Used to get widgets from different functions */
+GtkBuilder *builder = NULL; /* Used to get widgets from different functions */
 
 int main (int argc, char *argv[])
 {
@@ -36,6 +36,8 @@ int main (int argc, char *argv[])
 
         cf_key_val_to_string(NULL);
         cf_free_config();
+        if (!co)
+            free(co);
     }
     else
     {
