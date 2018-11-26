@@ -49,8 +49,7 @@ int main (int argc, char *argv[])
             printf("Cannot build config from config file...\n");
         cf_key_val_to_string(NULL);
 
-        builder = gtk_builder_new();
-        gtk_builder_add_from_file(builder, "gui/main_window2.glade", NULL);
+        builder = gtk_builder_new_from_file("gui/main_window2.glade");
 
         window = GTK_WIDGET(gtk_builder_get_object(builder, "oeil_de_surimi_main_ocr"));
         gtk_builder_connect_signals(builder, NULL);

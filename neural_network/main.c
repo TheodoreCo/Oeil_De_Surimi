@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
     printf("Que voulez-vous faire ?\n1. Créer un réseau de neurones\n2. Entrainer un réseau existant\n3. Utiliser un réseau existant\n\n");
     int choix = 0;
     scanf("%d",&choix);
-    switch(choix)
-    {case 1 :
+//    switch(choix)
+//    {case 1 :
 
 
 
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 //ASSIGNATIONS
 
     srand(time(NULL));
-    unsigned int inputs_number = (unsigned int) atoi(argv[1]), 
+    unsigned int inputs_number = (unsigned int) atoi(argv[1]),
                  output_number = (unsigned int) atoi(argv[2]),
                  hidd_lay_num = (unsigned int) atoi(argv[3]),
                  hidd_neur_num = (unsigned int) atoi(argv[4]);
@@ -55,10 +55,10 @@ int main(int argc, char *argv[])
 
     outputs = feed_forward(nn,inputs);
 
-//PRETTY PRINT POST TRAITEMENT 
-    
+//PRETTY PRINT POST TRAITEMENT
+
     pretty_print(nn);
-    printf("\n *** OUTPUTS DU FEED FORWARD *** \n"); 
+    printf("\n *** OUTPUTS DU FEED FORWARD *** \n");
     for(unsigned int i = 0; i < output_number; i++)
     {
         printf("Output %u = %lf \n",i,outputs[i]);

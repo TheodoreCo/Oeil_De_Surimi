@@ -76,13 +76,33 @@ neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers,
 
 void neur_net_free(neur_net *nn)
 {
-
-    if (nn != NULL)
+    if (nn)
     {
+        for(unsigned int i=0; i<nn->num_arrays; i++)
+        {
+            layer *l_layer = nn->layer_array[i];
+
+            if(l_layer)
+            {
+                for(unsigned int j=0; j<l_layer->num_neur; j++)
+                {
+                    neur *l_neur = l_layer->neur_array[j];
+                    if(l_neur)
+                    {
+                        if(l_neur->num_weights > 0)
+                            free(l_neur->weights);
+                        free(l_neur);
+                    }
+                }
+                free(l_layer->neur_array);
+                free(l_layer);
+            }
+        }
+        free(nn->layer_array);
         free(nn);
+        nn = NULL;
     }
 }
-
 
 
 void pretty_print(neur_net *nn)

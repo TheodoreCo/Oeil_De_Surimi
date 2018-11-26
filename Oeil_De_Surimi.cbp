@@ -27,10 +27,10 @@
 					<Add option="-s" />
 				</Linker>
 			</Target>
-			<Target title="Test_XOR_Console">
-				<Option output="bin/Test_XOR_Console/Oeil_De_Surimi" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="bin/Test_XOR_Console/" />
-				<Option object_output="obj/Test_XOR_Console/" />
+			<Target title="XOR">
+				<Option output="bin/neural_network/XOR/Oeil_De_Surimi" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/neural_network/XOR/" />
+				<Option object_output="obj/neural_network/XOR/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -38,9 +38,9 @@
 				</Compiler>
 			</Target>
 			<Target title="nn">
-				<Option output="bin/nn/Oeil_De_Surimi" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="bin/nn/" />
-				<Option object_output="obj/nn/" />
+				<Option output="bin/neural_network/Oeil_De_Surimi" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/neural_network/" />
+				<Option object_output="obj/neural_network/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -49,17 +49,6 @@
 				<Linker>
 					<Add option="-s" />
 				</Linker>
-			</Target>
-			<Target title="nn_OCR">
-				<Option output="bin/nn_OCR/Oeil_De_Surimi" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="bin/nn_OCR/" />
-				<Option object_output="obj/nn_OCR/" />
-				<Option type="1" />
-				<Option compiler="gcc" />
-				<Option parameters="2 1 1 2" />
-				<Compiler>
-					<Add option="-g" />
-				</Compiler>
 			</Target>
 		</Build>
 		<Compiler>
@@ -101,38 +90,18 @@
 			<Option target="Release" />
 			<Option target="Debug" />
 		</Unit>
-		<Unit filename="neural_network/OCR/main.c">
+		<Unit filename="neural_network/XOR/main_xor.c">
 			<Option compilerVar="CC" />
-			<Option target="nn_OCR" />
+			<Option target="XOR" />
 		</Unit>
-		<Unit filename="neural_network/main_xor.c">
+		<Unit filename="neural_network/main.c">
 			<Option compilerVar="CC" />
 			<Option target="nn" />
 		</Unit>
 		<Unit filename="neural_network/neural_network.c">
 			<Option compilerVar="CC" />
-			<Option target="nn" />
-			<Option target="nn_OCR" />
 		</Unit>
-		<Unit filename="neural_network/neural_network.h">
-			<Option target="nn" />
-			<Option target="nn_OCR" />
-		</Unit>
-		<Unit filename="neural_network/th/main_xor.c">
-			<Option compilerVar="CC" />
-			<Option target="Test_XOR_Console" />
-		</Unit>
-		<Unit filename="neural_network/th/neural_network.c">
-			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
-			<Option target="Test_XOR_Console" />
-		</Unit>
-		<Unit filename="neural_network/th/neural_network.h">
-			<Option target="Debug" />
-			<Option target="Release" />
-			<Option target="Test_XOR_Console" />
-		</Unit>
+		<Unit filename="neural_network/neural_network.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

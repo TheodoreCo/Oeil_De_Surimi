@@ -4,9 +4,9 @@
 #include <time.h>
 #include <err.h>
 
-#include "neural_network.h"
+#include "../neural_network.h"
 
-int main(/*int argc, char *argv[]*/ )
+int main(void)
 {
 	/*
 	if (argc != 3)
@@ -16,15 +16,15 @@ int main(/*int argc, char *argv[]*/ )
 			-2nd input value (0 or 1)\n");
 	}
 	*/
-	
+
 //ASSIGNATIONS
 
 	// neur_net *neural = nn_load("xor.nn");
-	
-	
+
+
     srand(time(NULL));
 
-	unsigned int inputs_number = 2, 
+	unsigned int inputs_number = 2,
                  hidd_lay_num = 1,
                  hidd_neur_num = 3,
                  output_number = 1 ;
@@ -58,8 +58,8 @@ int main(/*int argc, char *argv[]*/ )
 
    // outputs = feed_forward(nn,inputs);
 
-//PRETTY PRINT POST TRAITEMENT 
-    
+//PRETTY PRINT POST TRAITEMENT
+
     printf("\n POST TRAITEMENT \n\n");
 
 //EXECUTION DE LA BACKPROP
@@ -69,7 +69,7 @@ int main(/*int argc, char *argv[]*/ )
 	pretty_print(nn);
 
 
-//SAVE DU FICHIER 
+//SAVE DU FICHIER
 
 	nn_save(nn,"xor.nn");
 
