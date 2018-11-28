@@ -33,3 +33,7 @@ num_hid_lay_ocr      = 1
 
 # Number of hidden neurons in a hidden layer for the XOR NN
 num_hid_neur_ocr     = 1024
+
+# Path to the OCR training results file
+ocr_train_file    = ./ocr_training.results
+

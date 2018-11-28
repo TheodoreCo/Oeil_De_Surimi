@@ -36,6 +36,8 @@ typedef struct config {
     int num_hid_lay_ocr;
     // Number of hidden neurons in a hidden layer for the OCR NN
     int num_hid_neur_ocr;
+    // File (with path) storing the OCR training results
+    char *ocr_train_file;
 
 } config;
 
@@ -54,6 +56,7 @@ int cf_get_num_hid_lay_ocr(void);
 int cf_get_num_hid_neur_ocr(void);
 int cf_get_num_train_epochs_xor(void);
 unsigned int cf_get_rlsa_expansion(void);
+char *cf_get_ocr_train_file(void);
 
 /** Frees the static config structure */
 void cf_free_config(void);
