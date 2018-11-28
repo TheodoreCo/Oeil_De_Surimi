@@ -196,13 +196,6 @@ void bi_from_gray_to_b_and_w(void)
     }
 }
 
-
-void on_oeil_de_surimi_grayscale_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
-{
-    bin_img_type = GRAYSCALE;
-    gtk_widget_queue_draw(GTK_WIDGET(drawing_area));
-}
-
 void on_oeil_de_surimi_b_and_w_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
 {
     check_pixels("BEF B_W");
