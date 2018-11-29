@@ -96,7 +96,7 @@ void neur_net_free(neur_net *nn)
                 }
                 free(l_layer->neur_array);
                 free(l_layer);
-            }0
+            }
         }
         free(nn->layer_array);
         free(nn);
@@ -126,7 +126,7 @@ void pretty_print(neur_net *nn)
                         k++)
                 {
                     printf("\t\t weigth%u : %lf \n", k,
-                            nn->0layer_array[i]->neur_array[j]->weights[k]);
+                            nn->layer_array[i]->neur_array[j]->weights[k]);
                 }
             }
         }
@@ -233,10 +233,12 @@ void backprop(neur_net *nn, double *inputs, double *target,
 
 }
 
+/*
 void ocr_train(neur_net *nn, double learning_rate)
 {
 
 }
+*/
 
 void xor_train(neur_net *nn, double learning_rate)
 {
@@ -325,7 +327,7 @@ void nn_save(neur_net *nn, char *path)
 }
 
 
-
+/*
 neur_net *nn_load(char *path)
 {
 
@@ -418,6 +420,6 @@ neur_net *nn_load(char *path)
 	}
 	return nn;
 }
-
+*/
 
 
