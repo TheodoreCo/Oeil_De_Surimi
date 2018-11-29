@@ -61,6 +61,10 @@ int main (int argc, char *argv[])
 //        g_signal_connect(drawing_area, "draw", G_CALLBACK(draw_callback), NULL);
 
         gtk_widget_show(window);
+
+        // Default values for the spin buttons
+        on_oeil_de_surimi_xor_def_nn_values_btn_clicked(NULL);
+        on_oeil_de_surimi_xor_def_train_values_btn_clicked(NULL);
         gtk_main();
     }
 

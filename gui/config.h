@@ -38,7 +38,12 @@ typedef struct config {
     int num_hid_neur_ocr;
     // File (with path) storing the OCR training results
     char *ocr_train_file;
-
+    // Learning rate XOR NN
+    double learn_rate_xor;
+    // Learning rate OCR NN
+    double learn_rate_ocr;
+    // Number of training epochs for the OCR NN
+    int num_train_epochs_ocr;
 } config;
 
 config *cf_read_config(char *path);
@@ -55,8 +60,11 @@ int cf_get_num_output_ocr(void);
 int cf_get_num_hid_lay_ocr(void);
 int cf_get_num_hid_neur_ocr(void);
 int cf_get_num_train_epochs_xor(void);
+int cf_get_num_train_epochs_ocr(void);
 unsigned int cf_get_rlsa_expansion(void);
 char *cf_get_ocr_train_file(void);
+double cf_get_learn_rate_xor(void);
+double cf_get_learn_rate_ocr(void);
 
 /** Frees the static config structure */
 void cf_free_config(void);

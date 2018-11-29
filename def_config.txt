@@ -19,6 +19,9 @@ num_hid_neur_xor     = 3
 # Number of training epochs for the XOR NN
 num_train_epochs_xor = 1000
 
+# Learning rate XOR NN
+learn_rate_xor       = 0.1;
+
 # Expansion for RLSA function
 rlsa_expansion       = 10
 
@@ -33,6 +36,12 @@ num_hid_lay_ocr      = 1
 
 # Number of hidden neurons in a hidden layer for the XOR NN
 num_hid_neur_ocr     = 1024
+
+# Number of training epochs for the OCR NN
+num_train_epochs_ocr = 100000
+
+# Learning rate OCR NN
+learn_rate_ocr       = 0.2;
 
 # Path to the OCR training results file
 ocr_train_file    = ./ocr_training.results

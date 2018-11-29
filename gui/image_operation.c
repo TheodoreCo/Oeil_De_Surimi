@@ -264,10 +264,23 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button)
     neur_net_free(nn);
 }
 
-void on_oeil_de_surimi_def_nn_values_btn_clicked(GtkButton *button)
+// Initializes the XOR neural network spin buttons values from the config file
+void on_oeil_de_surimi_xor_def_nn_values_btn_clicked(GtkButton *button)
 {
-    // TODO
-    // Reinitialize default values
+    GtkSpinButton *hid_lay_val_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_hid_lay_val"));
+    GtkSpinButton *hid_neur_val_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_hid_neur_val"));
+
+    gtk_spin_button_set_value(hid_lay_val_btn, cf_get_num_hid_lay_xor());
+    gtk_spin_button_set_value(hid_neur_val_btn, cf_get_num_hid_neur_xor());
+}
+
+// Initializes the XOR training spin buttons values from the config file
+void on_oeil_de_surimi_xor_def_train_values_btn_clicked(GtkButton *button) {
+    GtkSpinButton *epochs_val_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_epochs_val"));
+    GtkSpinButton *learning_rate_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_learning_rate_val"));
+
+    gtk_spin_button_set_value(epochs_val_btn, cf_get_num_train_epochs_xor());
+    gtk_spin_button_set_value(learning_rate_btn, cf_get_learn_rate_xor());
 }
 
 void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
