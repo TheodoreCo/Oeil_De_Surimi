@@ -18,7 +18,8 @@ void on_oeil_de_surimi_b_and_w_btn_clicked(GtkButton *button, GtkDrawingArea *dr
 
 void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button);
 
-void on_oeil_de_surimi_def_nn_values_btn_clicked(GtkButton *button);
+void on_oeil_de_surimi_xor_def_nn_values_btn_clicked(GtkButton *button);
+void on_oeil_de_surimi_xor_def_train_values_btn_clicked(GtkButton *button);
 
 /** Handles the 'RLSA' button click */
 void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button);

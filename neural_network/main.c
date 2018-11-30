@@ -3,67 +3,85 @@
 #include <math.h>
 #include <time.h>
 #include <err.h>
+#include <dirent.h>
 
 #include "neural_network.h"
 
-int main(int argc, char *argv[])
+int main(/* int argc, char *argv[] */)
 {
+	/*
+	// RECUPERATION DES CARACTERES 
+	
+	struct dirent *pDirent;
+	
+	DIR *MajDir;
+	MajDir = opendir("./../Dataset/Majuscules");
+	if (MajDir == NULL)
+		errx(1, "Could not open directory Majuscules, wrong path ?");
+	
+	DIR *MinDir;
+	MinDir = opendir("./../Dataset/Minuscules");
+	if (MinDir == NULL)
+		errx(1,"Could not open directory Minuscules, wrong path ?");
 
-    if(argc != 5)
-    {
-        errx(1,"Wrong inputs, please follow this pattern : \n \
-                -Number of inputs\n \
-                -Number of outputs\n \
-                -Number of hidden layers\n \
-                -Number of neurons per hidden layer \n");
-    }
+	DIR *NumDir;
+	NumDir = opendir("./../Dataset/Chiffres");
+	if (NumDir == NULL)
+		errx(1,"Could not open directory Chiffres, wrong path ?");
+	
 
-// PROCEDURE DE CHOIX
-
-    printf("Que voulez-vous faire ?\n1. Créer un réseau de neurones\n2. Entrainer un réseau existant\n3. Utiliser un réseau existant\n\n");
-    int choix = 0;
-    scanf("%d",&choix);
-//    switch(choix)
-//    {case 1 :
+	DIR *PoncDir;
+	PoncDir = opendir("./../Dataset/Ponctuation");
+	if (PoncDir == NULL)
+		errx(1, "Could not open directory Ponctuation, wrong path ?");
 
 
 
 
-//ASSIGNATIONS
 
-    srand(time(NULL));
-    unsigned int inputs_number = (unsigned int) atoi(argv[1]),
-                 output_number = (unsigned int) atoi(argv[2]),
-                 hidd_lay_num = (unsigned int) atoi(argv[3]),
-                 hidd_neur_num = (unsigned int) atoi(argv[4]);
 
-    double *inputs = calloc(inputs_number,sizeof(double));
+	// INSTIATE NN
 
-    neur_net *nn = instantiate(inputs_number,hidd_lay_num,
-            hidd_neur_num,output_number);
+	size_t num_inputs = 256;
+	size_t num_hidden_layers = 2;
+	size_t num_hidd_neur = 3;
+	size_t num_outputs = 93;
 
-//PRETTY PRINT PRE-TRAITEMENT
+	neur_net *nn = instantiate(num_inputs,num_hidden_layers,num_hidd_neur,num_outputs);
+	
+	// TRAINING DES MAJUSCULES
+	FILE *fichier;
 
-    pretty_print(nn);
-    printf("\n");
+	while((pDirent = readdir(MajDir)) != 0)
+	{
+		char *act = pDirent->d_name;
+		fichier = fopen(act,"r");
+		int num;
+		char **line;
+		while(getline(line,) != -1)
+		{
+			fscanf(fichier,"%d", &num);
+			printf("Value of n=%d\n", num);
+		}
+	}
+	*/
+/*	
+	size_t num_inputs = 2;
+	size_t num_hidden_layers = 2;
+	size_t num_hidd_neur = 3;
+	size_t num_outputs = 1;
 
-//CREATION DE L'ARRAY D'OUTPUT
+ 	neur_net *nn = instantiate(num_inputs,num_hidden_layers,num_hidd_neur,num_outputs);
+	
+	xor_train(nn, 0.1);
+*/	
+	neur_net *nn = nn_load("xor.nn");
+	double inputs[] = {1,1};
+	double *outputs = feed_forward(nn, inputs);
+	printf("Output = %f\n", *outputs);
+	pretty_print(nn);
+	//nn_save(nn,"xor.nn");
 
-   double *outputs = malloc(sizeof(double) * output_number);
-
-//EXECUTION DU FEEDFORWARD
-
-    outputs = feed_forward(nn,inputs);
-
-//PRETTY PRINT POST TRAITEMENT
-
-    pretty_print(nn);
-    printf("\n *** OUTPUTS DU FEED FORWARD *** \n");
-    for(unsigned int i = 0; i < output_number; i++)
-    {
-        printf("Output %u = %lf \n",i,outputs[i]);
-    }
-    printf("\n");
-    return 0;
+	return 0;
 }
 

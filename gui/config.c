@@ -82,6 +82,19 @@ config *cf_read_config(char *path) {
         else if(!strcmp(key, "num_hid_neur_ocr")) {
             app_config->num_hid_neur_ocr = atoi(value);
         }
+        else if(!strcmp(key, "ocr_train_file")) {
+            app_config->ocr_train_file = malloc(CONFIG_ARG_MAX_BYTES + 1);
+            strcpy(app_config->ocr_train_file, value);
+        }
+        else if(!strcmp(key, "num_train_epochs_ocr")) {
+            app_config->num_train_epochs_ocr = atoi(value);
+        }
+        else if(!strcmp(key, "learn_rate_ocr")) {
+            app_config->learn_rate_ocr = atof(value);
+        }
+        else if(!strcmp(key, "learn_rate_xor")) {
+            app_config->learn_rate_xor = atof(value);
+        }
     }
 
     if(fp)
@@ -101,11 +114,15 @@ void cf_key_val_to_string(char *path)
         printf("num_hid_lay_xor=%d\n", app_config->num_hid_lay_xor);
         printf("num_hid_neur_xor=%d\n", app_config->num_hid_neur_xor);
         printf("num_train_epochs_xor=%d\n", app_config->num_train_epochs_xor);
+        printf("learn_rate_xor=%f\n", app_config->learn_rate_xor);
         printf("num_input_ocr=%d\n", app_config->num_input_ocr);
         printf("num_output_ocr=%d\n", app_config->num_output_ocr);
         printf("num_hid_lay_ocr=%d\n", app_config->num_hid_lay_ocr);
         printf("num_hid_neur_ocr=%d\n", app_config->num_hid_neur_ocr);
+        printf("num_train_epochs_ocr=%d\n", app_config->num_train_epochs_ocr);
+        printf("learn_rate_ocr=%f\n", app_config->learn_rate_ocr);
         printf("rlsa_expansion=%d\n", app_config->rlsa_expansion);
+        printf("ocr_train_file=%s\n", app_config->ocr_train_file);
         printf("**************** Oeil_de_Surimi config file ******************\n");
     }
 }
@@ -176,7 +193,34 @@ int cf_get_num_hid_neur_ocr(void) {
     return -1;
 }
 
-void cf_free_config(void) {
+char *cf_get_ocr_train_file(void) {
     if(app_config)
-        free(app_config);
+        return app_config->ocr_train_file;
+    return NULL;
 }
+
+double cf_get_learn_rate_xor(void) {
+    if(app_config)
+        return app_config->learn_rate_xor;
+    return 0.0;
+}
+double cf_get_learn_rate_ocr(void) {
+    if(app_config)
+        return app_config->learn_rate_ocr;
+    return 0.0;
+}
+
+int cf_get_num_train_epochs_ocr(void) {
+    if(app_config)
+        return app_config->num_train_epochs_ocr;
+    return -1;
+}
+
+void cf_free_config(void) {
+    if(app_config) {
+        if(app_config->ocr_train_file)
+            free(app_config->ocr_train_file);
+        free(app_config);
+    }
+}
+

@@ -233,6 +233,13 @@ void backprop(neur_net *nn, double *inputs, double *target,
 
 }
 
+/*
+void ocr_train(neur_net *nn, double learning_rate)
+{
+
+}
+*/
+
 void xor_train(neur_net *nn, double learning_rate)
 {
 	double param_1[2] = {0,0},
@@ -282,17 +289,17 @@ void nn_save(neur_net *nn, char *path)
 
 	//INFOS POUR INSTANTIATE
 
-	fprintf(file,"%u %u %u %u",
-		nn->layer_array[0]->num_neur,
-		nn->num_arrays - 2,
-		nn->layer_array[1]->num_neur,
-		nn->layer_array[nn->num_arrays - 1]->num_neur);
+	fprintf(file,"%u %u %u %u ",
+		nn->layer_array[0]->num_neur, //num input neur
+		nn->num_arrays - 2, 		  //num hidd array
+		nn->layer_array[1]->num_neur, //num neur hidd lay
+		nn->layer_array[nn->num_arrays - 1]->num_neur); // num output
 
 	// STOCKAGE
 
 	for(unsigned int i = 0; i < nn->num_arrays; i++)
 	{
-		fprintf(file,"%u[",i);
+		fprintf(file,"%u[",i); //array 0, couche input
 
 
 		for(unsigned int j = 0; j < nn->layer_array[i]->num_neur; j++)
@@ -319,7 +326,7 @@ void nn_save(neur_net *nn, char *path)
 
 }
 
-/*
+
 
 neur_net *nn_load(char *path)
 {
@@ -365,13 +372,15 @@ neur_net *nn_load(char *path)
 		act_biase = 0;
 
 	//TRAITEMENT PREMIER LAYER
-
-	fscanf(file,"%d[",layer_counts);
+	
+	unsigned int layer_counts;
+	fscanf(file,"%d[",&layer_counts);
 	int carac = fgetc(file);
-	while(carac != "]")
+	while(carac != ']')
 	{
-		fscanf(file,"%d",neur_count);
-		fscanf(file,"(%lf )",act_biase);
+		//DECALAGE CREE PAR FGETC
+		fscanf(file,"%d",&neur_count);
+		fscanf(file,"(%lf )",&act_biase);
 
 		//ATTRTIBUTION AU NN
 
@@ -381,38 +390,36 @@ neur_net *nn_load(char *path)
 		carac = fgetc(file);
 	}
 
-
 	// TRAITEMENT GENERAL FROM 1ST HIDDEN LAYER
 
 	layer_count = 1;
-	while(carac != "~")
+	while(carac != '~')
 	{
 
-		fscanf(file,"%d[",layer_count);
+		fscanf(file,"%d[",&layer_count);
 		do
 		{
-			fscanf(file,"%d(",neur_count);
-			fscanf(file,"%lf ",act_biase);
+			fscanf(file,"%d(",&neur_count);
+			fscanf(file,"%lf ",&act_biase);
 
 			nn->layer_array[layer_count]->neur_array[neur_count]->biase =
 				act_biase;
 
 			carac = fgetc(file);
 			weight_count = 0;
-			while(carac != ")")
+			while(carac != ')')
 			{
-				fscanf(file,"%lf",act_weight);
-				nn->layer_array[array_count]->neur_array[neur_count]->weight[weight_count];
+				fscanf(file,"%lf",&act_weight);
+				nn->layer_array[layer_count]->neur_array[neur_count]->weights[weight_count] = act_weight;
 				weight_count++;
 				carac = fgetc(file);
 			}
 			carac = fgetc(file);
-		}
-		while(carac != "]")
+		} while(carac != ']');
 		carac = fgetc(file);
 	}
 	return nn;
 }
 
-*/
+
 

@@ -4,7 +4,7 @@ CC = gcc
 CFLAGS = -Wextra -Werror -Wall -std=c99 -g -O3
 LDLIBS = -lm
 
-# EXEC = neural
+EXEC = main
 
 SRC = neural_network.c main.c 
 OBJ = ${SRC:.c=.o}
