@@ -62,17 +62,30 @@ OBJDIR_NN = obj/neural_network
 DEP_NN = 
 OUT_NN = bin/neural_network/Oeil_De_Surimi
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)/gui/config.o $(OBJDIR_DEBUG)/gui/image_operation.o $(OBJDIR_DEBUG)/gui/main.o $(OBJDIR_DEBUG)/image_treatment/img_treatment.o $(OBJDIR_DEBUG)/neural_network/neural_network.o
+INC_SCALE_IMAGE = $(INC)
+CFLAGS_SCALE_IMAGE = $(CFLAGS) -O2
+RESINC_SCALE_IMAGE = $(RESINC)
+RCFLAGS_SCALE_IMAGE = $(RCFLAGS)
+LIBDIR_SCALE_IMAGE = $(LIBDIR)
+LIB_SCALE_IMAGE = $(LIB)
+LDFLAGS_SCALE_IMAGE = $(LDFLAGS) -s
+OBJDIR_SCALE_IMAGE = obj/scale_image
+DEP_SCALE_IMAGE = 
+OUT_SCALE_IMAGE = bin/scale_image/Oeil_De_Surimi
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/gui/config.o $(OBJDIR_RELEASE)/gui/image_operation.o $(OBJDIR_RELEASE)/gui/main.o $(OBJDIR_RELEASE)/image_treatment/img_treatment.o $(OBJDIR_RELEASE)/neural_network/neural_network.o
+OBJ_DEBUG = $(OBJDIR_DEBUG)/gui/config.o $(OBJDIR_DEBUG)/gui/image_operation.o $(OBJDIR_DEBUG)/gui/main.o $(OBJDIR_DEBUG)/image_treatment/img_scale.o $(OBJDIR_DEBUG)/image_treatment/img_treatment.o $(OBJDIR_DEBUG)/neural_network/neural_network.o
+
+OBJ_RELEASE = $(OBJDIR_RELEASE)/gui/config.o $(OBJDIR_RELEASE)/gui/image_operation.o $(OBJDIR_RELEASE)/gui/main.o $(OBJDIR_RELEASE)/image_treatment/img_scale.o $(OBJDIR_RELEASE)/image_treatment/img_treatment.o $(OBJDIR_RELEASE)/neural_network/neural_network.o
 
 OBJ_XOR = $(OBJDIR_XOR)/neural_network/XOR/main_xor.o $(OBJDIR_XOR)/neural_network/neural_network.o
 
 OBJ_NN = $(OBJDIR_NN)/neural_network/main.o $(OBJDIR_NN)/neural_network/neural_network.o
 
-all: debug release xor nn
+OBJ_SCALE_IMAGE = $(OBJDIR_SCALE_IMAGE)/image_treatment/img_scale.o $(OBJDIR_SCALE_IMAGE)/image_treatment/img_treatment.o $(OBJDIR_SCALE_IMAGE)/image_treatment/scale_main.o
 
-clean: clean_debug clean_release clean_xor clean_nn
+all: debug release xor nn scale_image
+
+clean: clean_debug clean_release clean_xor clean_nn clean_scale_image
 
 before_debug: 
 	test -d bin/Debug || mkdir -p bin/Debug
@@ -95,6 +108,9 @@ $(OBJDIR_DEBUG)/gui/image_operation.o: gui/image_operation.c
 
 $(OBJDIR_DEBUG)/gui/main.o: gui/main.c
 	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c gui/main.c -o $(OBJDIR_DEBUG)/gui/main.o
+
+$(OBJDIR_DEBUG)/image_treatment/img_scale.o: image_treatment/img_scale.c
+	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c image_treatment/img_scale.c -o $(OBJDIR_DEBUG)/image_treatment/img_scale.o
 
 $(OBJDIR_DEBUG)/image_treatment/img_treatment.o: image_treatment/img_treatment.c
 	$(CC) $(CFLAGS_DEBUG) $(INC_DEBUG) -c image_treatment/img_treatment.c -o $(OBJDIR_DEBUG)/image_treatment/img_treatment.o
@@ -130,6 +146,9 @@ $(OBJDIR_RELEASE)/gui/image_operation.o: gui/image_operation.c
 
 $(OBJDIR_RELEASE)/gui/main.o: gui/main.c
 	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c gui/main.c -o $(OBJDIR_RELEASE)/gui/main.o
+
+$(OBJDIR_RELEASE)/image_treatment/img_scale.o: image_treatment/img_scale.c
+	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c image_treatment/img_scale.c -o $(OBJDIR_RELEASE)/image_treatment/img_scale.o
 
 $(OBJDIR_RELEASE)/image_treatment/img_treatment.o: image_treatment/img_treatment.c
 	$(CC) $(CFLAGS_RELEASE) $(INC_RELEASE) -c image_treatment/img_treatment.c -o $(OBJDIR_RELEASE)/image_treatment/img_treatment.o
@@ -190,5 +209,30 @@ clean_nn:
 	rm -rf bin/neural_network
 	rm -rf $(OBJDIR_NN)/neural_network
 
-.PHONY: before_debug after_debug clean_debug before_release after_release clean_release before_xor after_xor clean_xor before_nn after_nn clean_nn
+before_scale_image: 
+	test -d bin/scale_image || mkdir -p bin/scale_image
+	test -d $(OBJDIR_SCALE_IMAGE)/image_treatment || mkdir -p $(OBJDIR_SCALE_IMAGE)/image_treatment
+
+after_scale_image: 
+
+scale_image: before_scale_image out_scale_image after_scale_image
+
+out_scale_image: before_scale_image $(OBJ_SCALE_IMAGE) $(DEP_SCALE_IMAGE)
+	$(LD) $(LIBDIR_SCALE_IMAGE) -o $(OUT_SCALE_IMAGE) $(OBJ_SCALE_IMAGE)  $(LDFLAGS_SCALE_IMAGE) $(LIB_SCALE_IMAGE)
+
+$(OBJDIR_SCALE_IMAGE)/image_treatment/img_scale.o: image_treatment/img_scale.c
+	$(CC) $(CFLAGS_SCALE_IMAGE) $(INC_SCALE_IMAGE) -c image_treatment/img_scale.c -o $(OBJDIR_SCALE_IMAGE)/image_treatment/img_scale.o
+
+$(OBJDIR_SCALE_IMAGE)/image_treatment/img_treatment.o: image_treatment/img_treatment.c
+	$(CC) $(CFLAGS_SCALE_IMAGE) $(INC_SCALE_IMAGE) -c image_treatment/img_treatment.c -o $(OBJDIR_SCALE_IMAGE)/image_treatment/img_treatment.o
+
+$(OBJDIR_SCALE_IMAGE)/image_treatment/scale_main.o: image_treatment/scale_main.c
+	$(CC) $(CFLAGS_SCALE_IMAGE) $(INC_SCALE_IMAGE) -c image_treatment/scale_main.c -o $(OBJDIR_SCALE_IMAGE)/image_treatment/scale_main.o
+
+clean_scale_image: 
+	rm -f $(OBJ_SCALE_IMAGE) $(OUT_SCALE_IMAGE)
+	rm -rf bin/scale_image
+	rm -rf $(OBJDIR_SCALE_IMAGE)/image_treatment
+
+.PHONY: before_debug after_debug clean_debug before_release after_release clean_release before_xor after_xor clean_xor before_nn after_nn clean_nn before_scale_image after_scale_image clean_scale_image
 

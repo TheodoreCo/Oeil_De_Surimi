@@ -50,6 +50,19 @@
 					<Add option="-s" />
 				</Linker>
 			</Target>
+			<Target title="scale_image">
+				<Option output="bin/scale_image/Oeil_De_Surimi" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/scale_image/" />
+				<Option object_output="obj/scale_image/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
@@ -81,14 +94,31 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
+		<Unit filename="image_treatment/img_scale.c">
+			<Option compilerVar="CC" />
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="scale_image" />
+		</Unit>
+		<Unit filename="image_treatment/img_scale.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="scale_image" />
+		</Unit>
 		<Unit filename="image_treatment/img_treatment.c">
 			<Option compilerVar="CC" />
 			<Option target="Release" />
 			<Option target="Debug" />
+			<Option target="scale_image" />
 		</Unit>
 		<Unit filename="image_treatment/img_treatment.h">
 			<Option target="Release" />
 			<Option target="Debug" />
+			<Option target="scale_image" />
+		</Unit>
+		<Unit filename="image_treatment/scale_main.c">
+			<Option compilerVar="CC" />
+			<Option target="scale_image" />
 		</Unit>
 		<Unit filename="neural_network/XOR/main_xor.c">
 			<Option compilerVar="CC" />
@@ -100,8 +130,17 @@
 		</Unit>
 		<Unit filename="neural_network/neural_network.c">
 			<Option compilerVar="CC" />
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="XOR" />
+			<Option target="nn" />
 		</Unit>
-		<Unit filename="neural_network/neural_network.h" />
+		<Unit filename="neural_network/neural_network.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="XOR" />
+			<Option target="nn" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<debugger />
