@@ -56,6 +56,30 @@ typedef struct binary_image {
 } binary_image;
 
 /*
+    Future input data for neural network
+*/
+typedef struct char_bimg char_bimg;
+struct char_bimg
+{
+    unsigned char *pixel; //array of pixels of size (w * h)
+    char_bimg *next;
+
+    char result; // deducted character (output of neural network)
+};
+/*
+    List of char_bimg elements. Useful to pass a list of characters to the neural network.
+*/
+typedef struct char_bimg_list char_bimg_list;
+struct char_bimg_list
+{
+    unsigned int w, h;
+    unsigned int size;
+
+    char_bimg *first;
+};
+
+
+/*
     Builds a binary image given a file name.
     File should be a 32-bit bitmap file with some restrictions (no compression etc.)
 */

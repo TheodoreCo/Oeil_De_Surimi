@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "img_treatment.h"
 
 void free_binary_image(binary_image *b_image) {
@@ -302,4 +303,73 @@ binary_image *bi_image_show_blocks(binary_image *b_img)
     }
 
     return result_image;
+}
+
+
+//  32 * 32
+
+void resize_img(binary_image *original_b_img, l_rect *rect,
+    unsigned int side_length, unsigned char *result)
+{
+
+    unsigned int width = rect->max_x - rect->min_x + 1;
+    unsigned int height = rect->max_y - rect->min_y + 1;
+
+
+    size_t original_x, original_y;
+
+    float ratio = (float)((width > height) ? width : height) / side_length;
+
+    //printf("intial size : (%d, %d)    ratio = %f\n", width, height, ratio);
+
+    char col;
+
+    for (size_t x = 0; x < side_length; x++) {
+        for (size_t y = 0; y < side_length; y++) {
+
+            original_x = (size_t)floor((float)x * ratio );
+            original_y = (size_t)floor((float)y * ratio );
+
+
+            if (original_x > width || original_y > height) {
+                col = 1; //WHITE
+                //printf("%zu > %zu || %zu > %zu\n", original_x, width, original_y, height );
+            }
+            else
+            {
+                col = original_b_img->pixel[ original_x + rect->min_x
+                + (original_y + rect->min_y) * original_b_img->w];
+            }
+            //printf("(%zu, %zu) from (%zu, %zu) = %d\n", x, y, original_x, original_y, col);
+
+            result[x + y * side_length] = col;
+        }
+    }
+}
+
+char_bimg_list *gen_char_bimg_list(binary_image *b_img, unsigned int side_length)
+{
+    char_bimg_list *list;
+    list = malloc(sizeof(char_bimg_list));
+
+    l_rect *current = b_img->lr;
+
+    char_bimg *cb;
+    char_bimg *prev = NULL;
+
+    for (size_t i = 0; i < b_img->lr_size; i++) {
+
+        cb = malloc(sizeof(char_bimg));
+
+        cb->pixel = malloc(side_length * side_length * sizeof(char));
+
+        resize_img(b_img, current, side_length, cb->pixel);
+
+        cb->next = prev;
+        prev = cb;
+
+        current = current->next;
+    }
+
+    return list;
 }
