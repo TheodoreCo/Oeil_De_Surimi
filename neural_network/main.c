@@ -66,17 +66,19 @@ int main(/* int argc, char *argv[] */)
 	}
 	*/
 
-	size_t num_inputs = 256;
-	size_t num_hidden_layers = 2;
-	size_t num_hidd_neur = 3;
-	size_t num_outputs = 93;
+//	size_t num_inputs = 2;
+//	size_t num_hidden_layers = 2;
+//	size_t num_hidd_neur = 3;
+//	size_t num_outputs = 1;
 
-	neur_net *nn = instantiate(num_inputs,num_hidden_layers,num_hidd_neur,num_outputs);
+	//neur_net *nn = instantiate(num_inputs,num_hidden_layers,num_hidd_neur,num_outputs);
 	
-	xor_train(nn, 0.1);
-
-	double *tab
-
+	//xor_train(nn, 0.1);
+	neur_net *nn = nn_load("xor.nn");
+	double inputs[] = {1,1};
+	double *outputs = feed_forward(nn, inputs);
+	printf("Output = %f\n", *outputs);
+	//nn_save(nn,"xor.nn");
 
 	return 0;
 }
