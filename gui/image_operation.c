@@ -392,12 +392,8 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
     printf("done creating preview_nn_input !\n");
 */
 
-<<<<<<< HEAD
-    unsigned int h = character_mediant_height(b_image);
+    unsigned int h = character_mediant_height(b_image, 50);
     printf("MEDIAN HEIGHT = %u\n", h);
-=======
-    //check_pixels("BEF RLSA");
->>>>>>> bb2041729de3de68d3b499f88ae21d5f4cc391d1
 
     //printf("%zu, %zu\n",b_image->w,b_image->h );
 
@@ -406,7 +402,7 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
     // check_pixels("BEF RLSA");
 
     show_image_info(b_image, "(1) b_image");
-    binary_image *rlsa_img = bi_image_RLSA(b_image, cf_get_rlsa_expansion());
+    binary_image *rlsa_img = bi_image_RLSA(b_image, cf_get_rlsa_expansion(), cf_get_rlsa_expansion());
     show_image_info(b_image, "(2) b_image");
     show_image_info(rlsa_img, "(2) rlsa_img");
 
@@ -448,7 +444,21 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
 
 }
 
-void on_oeil_de_surimi_test_gabriel_btn_clicked(GtkButton *button) {
-    printf("Clicked !\n");
+void on_oeil_de_surimi_test_gabriel_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area) {
+    printf("Automatic RLSA !\n");
 
+    unsigned int mediant_height = character_mediant_height(b_image, 50);
+    printf("mediant_height = %u\n", mediant_height);
+
+    binary_image *rlsa_img = bi_image_RLSA(b_image, b_image->w-2, mediant_height * 2);
+    bi_image_blocks_from_RLSA(b_image, rlsa_img);
+    smallen_charboxes(b_image);
+
+    binary_image *preview_blocks = bi_image_show_blocks(b_image);
+
+    free_binary_image(b_image);
+    b_image = preview_blocks;
+
+    gtk_widget_queue_draw(GTK_WIDGET(drawing_area));
+    bin_img_type = RLSA;
 }

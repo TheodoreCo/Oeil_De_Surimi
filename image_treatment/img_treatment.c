@@ -113,7 +113,7 @@ binary_image *bi_image_from_file(char *filename) {
     return 0;
 }
 
-binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
+binary_image *bi_image_RLSA(binary_image *b_img, unsigned int h_expansion, unsigned int v_expansion)
 {
     if(!b_img) return 0;
 
@@ -130,7 +130,7 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
             unsigned char pixel = b_img->pixel[y*b_img->w + x];
             //printf("pixel (%d, %d) = %d / counter = %d\n",x, y, pixel, counter);
             if (!pixel) { //if black pixel
-                if (counter <= expansion) {
+                if (counter <= h_expansion) {
                     for (size_t i = 1; i <= counter; i++)
                         horizontal_RLSA[y*b_img->w + x - i] = 0;
                 }
@@ -141,7 +141,7 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
                 horizontal_RLSA[y*b_img->w + x] = 1;
             }
         }
-        if (counter <= expansion) {
+        if (counter <= h_expansion) {
             for (size_t i = 1; i <= counter; i++) {
                 horizontal_RLSA[(y+1)*b_img->w - i] = 0;
             }
@@ -154,7 +154,7 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
             unsigned char pixel = b_img->pixel[y*b_img->w + x];
             //printf("pixel (%d, %d) = %d / counter = %d\n",x, y, pixel, counter);
             if (!pixel) { //if black pixel
-                if (counter <= expansion) {
+                if (counter <= v_expansion) {
                     for (size_t i = 1; i <= counter; i++)
                         vertical_RLSA[(y - i)*b_img->w + x] = 0;
                 }
@@ -165,7 +165,7 @@ binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion)
                 vertical_RLSA[y*b_img->w + x] = 1;
             }
         }
-        if (counter <= expansion) {
+        if (counter <= v_expansion) {
             for (size_t i = 1; i <= counter; i++) {
                 vertical_RLSA[(b_img->h-i)*b_img->w + x] = 0;
             }
@@ -278,23 +278,99 @@ static int comp(void const *a, void const *b)
 
 unsigned int character_mediant_height(binary_image *b_img, unsigned int max)
 {
-    binary_image *rlsa_img = bi_image_RLSA(b_img, 0);
+    binary_image *rlsa_img = bi_image_RLSA(b_img, 0, 0);
     bi_image_blocks_from_RLSA(rlsa_img, rlsa_img);
 
-    unsigned int *tab = malloc(rlsa_img->lr_size * sizeof(int));
+    unsigned int max_iteration = max > rlsa_img->lr_size ? rlsa_img->lr_size : max;
+
+    unsigned int *tab = malloc(max_iteration * sizeof(int));
 
     l_rect *current = rlsa_img->lr;
+    l_rect *prev;
 
-    for (size_t i = 0; i < rlsa_img->lr_size && i < max; i++) {
+    size_t i = 0;
+
+    for (; i < max_iteration; i++) {
         tab[i] = current->max_y - current->min_y;
+
+        prev = current;
         current = current->next;
-        //printf("height = %u\n", tab[i] );
+        free(prev);
+    }
+
+    for (; i < rlsa_img->lr_size; i++) {
+        prev = current;
+        current = current->next;
+        free(prev);
     }
 
     qsort(tab, rlsa_img->lr_size, sizeof(int), comp);
 
-    return tab[rlsa_img->lr_size / 2];
+    unsigned int value = tab[rlsa_img->lr_size / 2];
+
+
+    free_binary_image(rlsa_img);
+    free(tab);
+
+    return value;
 }
+
+void smallen_charboxes(binary_image *b_image)
+{
+    l_rect *current = b_image->lr;
+
+    char blankline;
+    for (; current != NULL; current = current->next) {
+
+
+        //VERTICAL HAUT VERS BAS
+        blankline = 1;
+        for (size_t y = current->min_y; y <= current->max_y && blankline; y++) {
+            blankline = 1;
+            for (size_t x = current->min_x; x <= current->max_x && blankline; x++) {
+                blankline = b_image->pixel[y * b_image->w + x];
+            }
+            if (blankline)
+                current->min_y++;
+        }
+
+        //VERTICAL BAS VERS HAUT
+        blankline = 1;
+        for (size_t y = current->max_y; y >= current->min_y && blankline; y--) {
+            blankline = 1;
+            for (size_t x = current->min_x; x <= current->max_x && blankline; x++) {
+                blankline = b_image->pixel[y * b_image->w + x];
+            }
+            if (blankline)
+                current->max_y--;
+        }
+
+
+        //HORIZONTAL GAUCHE VERS DROITE
+        blankline = 1;
+        for (size_t x = current->min_x; x <= current->max_x && blankline; x++) {
+            blankline = 1;
+            for (size_t y = current->min_y; y <= current->max_y && blankline; y++) {
+                blankline = b_image->pixel[y * b_image->w + x];
+            }
+            if (blankline)
+                current->min_x++;
+        }
+
+
+        //HORIZONTAL DROITE VERS GAUCHE
+        blankline = 1;
+        for (size_t x = current->max_x; x >= current->min_x && blankline; x--) {
+            blankline = 1;
+            for (size_t y = current->min_y; y <= current->max_y && blankline; y++) {
+                blankline = b_image->pixel[y * b_image->w + x];
+            }
+            if (blankline)
+                current->max_x--;
+        }
+    }
+}
+
 
 binary_image *bi_image_show_blocks(binary_image *b_img)
 {

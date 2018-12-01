@@ -105,7 +105,7 @@ binary_image *bi_image_from_file(char *filename);
     Returns a image containing the zones (black pixels) of text blocks in an image
     using "expansion" as the number of pixel to feed the RLSA algorithm.
 */
-binary_image *bi_image_RLSA(binary_image *b_img, unsigned int expansion);
+binary_image *bi_image_RLSA(binary_image *b_img, unsigned int h_expansion, unsigned int v_expansion);
 
 
 /*
@@ -131,6 +131,8 @@ char_bimg_list *gen_char_bimg_list(binary_image *b_img, unsigned int side_length
 void resize_img(binary_image *original_b_img, l_rect *rect, unsigned int side_length, unsigned char *result);
 
 unsigned int character_mediant_height(binary_image *b_img, unsigned int max);
+
+void smallen_charboxes(binary_image *b_image);
 
 
 #endif // IMG_TREATMENT_H_INCLUDED
