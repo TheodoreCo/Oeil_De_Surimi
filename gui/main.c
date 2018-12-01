@@ -1,17 +1,20 @@
 #include <gtk/gtk.h>
 #include <stdlib.h> /* for malloc */
 #include "image_operation.h"
-//#include "../neural_network/th/neural_network.h"
 #include "../image_treatment/img_treatment.h"
 #include "config.h"
+#include "../neural_network/neural_network.h"
 
 extern enum Bin_Img_Type {DO_NOTHING, GRAYSCALE, B_AND_W, B_AND_W_DENOISED} bin_img_type;
 binary_image *b_image = NULL;
 
 GtkBuilder *builder = NULL; /* Used to get widgets from different functions */
 
+extern neur_net *ocr_nn;
+
 int main (int argc, char *argv[])
 {
+    ocr_nn = NULL;
     // Following commented line has no effect if GTK is used !
     // setlocale (LC_NUMERIC , "C");
     // Solution was to call setlocale just when needed (from cf_get_app_config())
@@ -54,6 +57,9 @@ void on_window_main_destroy(void)
 {
     if(b_image)
         free_binary_image(b_image);
+
+    if(ocr_nn)
+        neur_net_free(ocr_nn);
 
     g_object_unref(builder);
     cf_free_config();

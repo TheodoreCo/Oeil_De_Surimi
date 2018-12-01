@@ -9,6 +9,9 @@ enum Bin_Img_Type {DO_NOTHING, GRAYSCALE, B_AND_W, B_AND_W_DENOISED, RLSA} bin_i
 extern GtkBuilder *builder; /* Used to get widgets from different functions */
 extern binary_image *b_image;
 
+/** Neural network used for the OCR tab. The one used in the XOR tab is a local variable */
+neur_net *ocr_nn;
+
 /** Connect the draw_picture() function to the draw event for the bmp image only once */
 // static int is_img_draw_connected = 0;
 
