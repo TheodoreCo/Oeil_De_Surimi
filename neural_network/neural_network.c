@@ -304,7 +304,7 @@ void nn_save(neur_net *nn, char *path)
 
 		for(unsigned int j = 0; j < nn->layer_array[i]->num_neur; j++)
 		{
-			fprintf(file,"%u",j);
+			fprintf(file,"%f",nn->layer_array[i]->neur_array[j]->value);
 			fprintf(file,"(%lf ",
 				nn->layer_array[i]->neur_array[j]->biase);
 			for(unsigned int k = 0;
@@ -375,7 +375,7 @@ neur_net *nn_load(char *path)
 	
 	unsigned int layer_counts;
 	fscanf(file,"%d[",&layer_counts);
-	int carac = fgetc(file);
+	int carac;
 	while(carac != ']')
 	{
 		//DECALAGE CREE PAR FGETC
