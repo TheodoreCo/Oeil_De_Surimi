@@ -234,13 +234,13 @@ void backprop(neur_net *nn, double *inputs, double *target,
 }
 
 /*
-void ocr_train(neur_net *nn, double learning_rate)
+void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs)
 {
 
 }
 */
 
-void xor_train(neur_net *nn, double learning_rate)
+void xor_train(neur_net *nn, double learning_rate, unsigned int epochs)
 {
 	double param_1[2] = {0,0},
 		param_2[2] = {1,1},
@@ -252,7 +252,7 @@ void xor_train(neur_net *nn, double learning_rate)
 		target_4 = 1;
 
 
-	for(unsigned int i = 0; i < 100000; i++)
+	for(unsigned int i = 0; i < epochs; i++)
 	{
 		backprop(nn,param_1, &target_1, learning_rate);
 		backprop(nn,param_2, &target_2, learning_rate);
@@ -375,7 +375,7 @@ neur_net *nn_load(char *path)
 	
 	unsigned int layer_counts;
 	fscanf(file,"%d[",&layer_counts);
-	int carac;
+	int carac = -1;
 	while(carac != ']')
 	{
 		//DECALAGE CREE PAR FGETC
