@@ -185,62 +185,61 @@ void on_oeil_de_surimi_select_img_clicked(GtkButton *button, GtkImage *image)
 
 void on_oeil_de_surimi_train_ocr_btn_clicked(GtkButton *button)
 {
-    // Get needed values to build the NN
-    GtkSpinButton *hid_lay_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_hid_lay"));
-    const double hidden_layers = gtk_spin_button_get_value(hid_lay_spin_btn);
-    GtkSpinButton *hid_neur_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_neur_per_hl"));
-    const double hidden_neurons = gtk_spin_button_get_value(hid_neur_spin_btn);
-    GtkSpinButton *inputs_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_inputs"));
-    const double input_neurons = gtk_spin_button_get_value(inputs_btn);
-    GtkSpinButton *outputs_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_outputs"));
-    const double output_neurons = gtk_spin_button_get_value(outputs_btn);
-
-    // Build a NN with the specified parameters
-    neur_net *nn =  instantiate(input_neurons, hidden_layers, hidden_neurons, output_neurons);
-
-    // Get needed values to train the NN
-    // TODO: externalize num_epochs in nn_xor_learn() function and uncomment below !
-    // GtkSpinButton *epochs_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_epochs"));
-    //    const double num_epochs = gtk_spin_button_get_value(epochs_spin_btn);
-    GtkSpinButton *learning_rate_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_learn_rate"));
-    const double learning_rate = gtk_spin_button_get_value(learning_rate_spin_btn);
-
-    // Train it for OCR
-    // TODO: externalize the num_epochs parameter !
-    xor_train(nn, learning_rate);
-
-    // Get the widgets to show results
-    GtkEntry *xor_out_1_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_1_entry"));
-    GtkEntry *xor_out_2_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_2_entry"));
-    GtkEntry *xor_out_3_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_3_entry"));
-    GtkEntry *xor_out_4_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_4_entry"));
-
-
-    // Run NN 4 times & update GUI to show results
-    double inputs[4][2] =
-    {
-        {0.0, 0.0},
-        {0.0, 1.0},
-        {1.0, 0.0},
-        {1.0, 1.0}
-    };
-
-    gchar *text1 = g_strdup_printf ("%.2f", *feed_forward(nn, inputs[0]));
-    gchar *text2 = g_strdup_printf ("%.2f", *feed_forward(nn, inputs[1]));
-    gchar *text3 = g_strdup_printf ("%.2f", *feed_forward(nn, inputs[2]));
-    gchar *text4 = g_strdup_printf ("%.2f", *feed_forward(nn, inputs[3]));
-
-    gtk_entry_set_text(xor_out_1_entry, text1);
-    gtk_entry_set_text(xor_out_2_entry, text2);
-    gtk_entry_set_text(xor_out_3_entry, text3);
-    gtk_entry_set_text(xor_out_4_entry, text4);
-
-    g_free(text1);
-    g_free(text2);
-    g_free(text3);
-    g_free(text4);
-
-    neur_net_free(nn);
+//    // Get needed values to build the NN
+//    GtkSpinButton *hid_lay_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_hid_lay"));
+//    const double hidden_layers = gtk_spin_button_get_value(hid_lay_spin_btn);
+//    GtkSpinButton *hid_neur_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_neur_per_hl"));
+//    const double hidden_neurons = gtk_spin_button_get_value(hid_neur_spin_btn);
+//    GtkSpinButton *inputs_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_inputs"));
+//    const double input_neurons = gtk_spin_button_get_value(inputs_btn);
+//    GtkSpinButton *outputs_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_outputs"));
+//    const double output_neurons = gtk_spin_button_get_value(outputs_btn);
+//
+//    // Build a NN with the specified parameters
+//    neur_net *nn =  instantiate(input_neurons, hidden_layers, hidden_neurons, output_neurons);
+//
+//    // Get needed values to train the NN
+//    GtkSpinButton *epochs_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_epochs"));
+//    const double num_epochs = gtk_spin_button_get_value(epochs_spin_btn);
+//    GtkSpinButton *learning_rate_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_learn_rate"));
+//    const double learning_rate = gtk_spin_button_get_value(learning_rate_spin_btn);
+//
+//    // Train it for OCR
+//    // TODO: externalize the num_epochs parameter !
+//    ocr_train(nn, learning_rate, epochs_spin_btn);
+//
+//    // Get the widgets to show results
+//    GtkEntry *xor_out_1_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_1_entry"));
+//    GtkEntry *xor_out_2_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_2_entry"));
+//    GtkEntry *xor_out_3_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_3_entry"));
+//    GtkEntry *xor_out_4_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_4_entry"));
+//
+//
+//    // Run NN 4 times & update GUI to show results
+//    double inputs[4][2] =
+//    {
+//        {0.0, 0.0},
+//        {0.0, 1.0},
+//        {1.0, 0.0},
+//        {1.0, 1.0}
+//    };
+//
+//    gchar *text1 = g_strdup_printf ("%.2f", *feed_forward(nn, inputs[0]));
+//    gchar *text2 = g_strdup_printf ("%.2f", *feed_forward(nn, inputs[1]));
+//    gchar *text3 = g_strdup_printf ("%.2f", *feed_forward(nn, inputs[2]));
+//    gchar *text4 = g_strdup_printf ("%.2f", *feed_forward(nn, inputs[3]));
+//
+//    gtk_entry_set_text(xor_out_1_entry, text1);
+//    gtk_entry_set_text(xor_out_2_entry, text2);
+//    gtk_entry_set_text(xor_out_3_entry, text3);
+//    gtk_entry_set_text(xor_out_4_entry, text4);
+//
+//    g_free(text1);
+//    g_free(text2);
+//    g_free(text3);
+//    g_free(text4);
+//
+//    neur_net_free(nn);
 }
 
 void bi_from_gray_to_b_and_w(void)
@@ -278,8 +277,8 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button)
 
     // Get needed values to train the NN
     // TODO: externalize num_epochs in nn_xor_learn() function and uncomment below !
-    // GtkSpinButton *epochs_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_epochs_val"));
-    //    const double num_epochs = gtk_spin_button_get_value(epochs_spin_btn);
+    GtkSpinButton *epochs_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_epochs_val"));
+    const double num_epochs = gtk_spin_button_get_value(epochs_spin_btn);
     GtkSpinButton *learning_rate_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_learning_rate_val"));
     const double learning_rate = gtk_spin_button_get_value(learning_rate_spin_btn);
 
@@ -287,7 +286,7 @@ void on_oeil_de_surimi_run_xor_btn_clicked(GtkButton *button)
     // TODO -- nn_xor_learn is not defined anymore (Steph)
     // nn_xor_learn(nn, num_epochs, learning_rate);
     // TODO: externalize the num_epochs parameter !
-    xor_train(nn, learning_rate);
+    xor_train(nn, learning_rate, num_epochs);
 
     // Get the widgets to show results
     GtkEntry *xor_out_1_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_1_entry"));
@@ -377,27 +376,23 @@ void show_image_info(binary_image *bi, char *msg)
 void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
 {
 
-/*
-    binary_image *rlsa_img = bi_image_RLSA(b_image, cf_get_rlsa_expansion());
+    /*
+        binary_image *rlsa_img = bi_image_RLSA(b_image, cf_get_rlsa_expansion());
 
-    bi_image_blocks_from_RLSA(b_image, rlsa_img);
+        bi_image_blocks_from_RLSA(b_image, rlsa_img);
 
-    printf("creating char bimg list...\n");
-    unsigned int sl = 16;
-    char_bimg_list *list = gen_char_bimg_list(b_image, sl);
-    printf("done creating char bimg list !\n");
+        printf("creating char bimg list...\n");
+        unsigned int sl = 16;
+        char_bimg_list *list = gen_char_bimg_list(b_image, sl);
+        printf("done creating char bimg list !\n");
 
-    printf("creating preview_nn_input...\n");
-    b_image = preview_nn_input(list);
-    printf("done creating preview_nn_input !\n");
-*/
+        printf("creating preview_nn_input...\n");
+        b_image = preview_nn_input(list);
+        printf("done creating preview_nn_input !\n");
+    */
 
-<<<<<<< HEAD
-    unsigned int h = character_mediant_height(b_image);
+    unsigned int h = character_mediant_height(b_image, 50);
     printf("MEDIAN HEIGHT = %u\n", h);
-=======
-    //check_pixels("BEF RLSA");
->>>>>>> bb2041729de3de68d3b499f88ae21d5f4cc391d1
 
     //printf("%zu, %zu\n",b_image->w,b_image->h );
 
@@ -406,7 +401,7 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
     // check_pixels("BEF RLSA");
 
     show_image_info(b_image, "(1) b_image");
-    binary_image *rlsa_img = bi_image_RLSA(b_image, cf_get_rlsa_expansion());
+    binary_image *rlsa_img = bi_image_RLSA(b_image, cf_get_rlsa_expansion(), cf_get_rlsa_expansion());
     show_image_info(b_image, "(2) b_image");
     show_image_info(rlsa_img, "(2) rlsa_img");
 
@@ -448,7 +443,32 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
 
 }
 
-void on_oeil_de_surimi_test_gabriel_btn_clicked(GtkButton *button) {
-    printf("Clicked !\n");
+void on_oeil_de_surimi_load_btn_clicked(GtkButton *button)
+{
+    // TODO
+}
 
+void on_oeil_de_surimi_save_btn_clicked(GtkButton *button)
+{
+    // TODO
+}
+
+void on_oeil_de_surimi_test_gabriel_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
+{
+    printf("Automatic RLSA !\n");
+
+    unsigned int mediant_height = character_mediant_height(b_image, 50);
+    printf("mediant_height = %u\n", mediant_height);
+
+    binary_image *rlsa_img = bi_image_RLSA(b_image, b_image->w-2, mediant_height * 2);
+    bi_image_blocks_from_RLSA(b_image, rlsa_img);
+    smallen_charboxes(b_image);
+
+    binary_image *preview_blocks = bi_image_show_blocks(b_image);
+
+    free_binary_image(b_image);
+    b_image = preview_blocks;
+
+    gtk_widget_queue_draw(GTK_WIDGET(drawing_area));
+    bin_img_type = RLSA;
 }

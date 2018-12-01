@@ -64,7 +64,7 @@ int main(void)
 
 //EXECUTION DE LA BACKPROP
 
-	xor_train(nn,0.1);
+	xor_train(nn,0.1,10000);
 
 	pretty_print(nn);
 

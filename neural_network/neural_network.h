@@ -31,7 +31,7 @@ struct neur_net
     layer *outputs;
 };
 
-neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers, 
+neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers,
 	size_t num_hidd_neur, size_t num_outputs);
 
 void neur_net_free(neur_net *nn);
@@ -44,7 +44,7 @@ void layer_compute(layer *l, layer *prev_layer);
 
 double *feed_forward(neur_net *nn, double *inputs);
 
-void backprop(neur_net *nn, double *inputs, double *target, 
+void backprop(neur_net *nn, double *inputs, double *target,
 	double learning_rate);
 
 double sigmoid(double x);
@@ -53,7 +53,11 @@ void nn_save(neur_net *nn, char *path);
 
 void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs);
 
+<<<<<<< HEAD
 void xor_train(neur_net *nn, double learning_rate, unsigned int epochs);
+=======
+void xor_train(neur_net *nn, double learning_rate, unsigned int epochs);
+>>>>>>> master
 
 neur_net *nn_load(char *path);
 
