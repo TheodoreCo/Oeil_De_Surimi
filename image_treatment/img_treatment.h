@@ -72,7 +72,7 @@ struct char_bimg
 typedef struct char_bimg_list char_bimg_list;
 struct char_bimg_list
 {
-    unsigned int w, h;
+    unsigned int side_length;
     unsigned int size;
 
     char_bimg *first;
@@ -123,5 +123,13 @@ binary_image *bi_image_show_blocks(binary_image *b_img);
 void free_binary_image(binary_image *b_imgage);
 
 // TODO: other useful functions, like denoising, etc.
+
+binary_image *preview_nn_input(char_bimg_list *list);
+
+char_bimg_list *gen_char_bimg_list(binary_image *b_img, unsigned int side_length);
+
+void resize_img(binary_image *original_b_img, l_rect *rect, unsigned int side_length, unsigned char *result);
+
+
 
 #endif // IMG_TREATMENT_H_INCLUDED

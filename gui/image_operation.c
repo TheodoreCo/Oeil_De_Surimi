@@ -283,31 +283,26 @@ void on_oeil_de_surimi_xor_def_train_values_btn_clicked(GtkButton *button) {
     gtk_spin_button_set_value(learning_rate_btn, cf_get_learn_rate_xor());
 }
 
+
+
 void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
 {
-    l_rect *rect = malloc(sizeof(l_rect));
-    rect->min_x = 50;
-    rect->min_y = 50;
-    rect->max_x = 99;
-    rect->max_y = 99;
-
-    b_image->lr = rect;
-
-    unsigned int sl = 32;
-
-    binary_image *b = malloc(sizeof(binary_image));
-    b->w = sl;
-    b->h = sl;
-    b->pixel = malloc(b->w * b->h * sizeof(b->pixel));
-
-    resize_img(b_image, rect, sl, b->pixel);
-
-    b_image = b;
-
-
-    printf("%zu, %zu\n",b_image->w,b_image->h );
-
 /*
+    binary_image *rlsa_img = bi_image_RLSA(b_image, cf_get_rlsa_expansion());
+
+    bi_image_blocks_from_RLSA(b_image, rlsa_img);
+
+    printf("creating char bimg list...\n");
+    unsigned int sl = 16;
+    char_bimg_list *list = gen_char_bimg_list(b_image, sl);
+    printf("done creating char bimg list !\n");
+
+    printf("creating preview_nn_input...\n");
+    b_image = preview_nn_input(list);
+    printf("done creating preview_nn_input !\n");
+*/
+
+
     check_pixels("BEF RLSA");
     binary_image *rlsa_img = bi_image_RLSA(b_image, cf_get_rlsa_expansion());
 
@@ -317,11 +312,8 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
 
     free_binary_image(b_image);
     b_image = preview_blocks;
-*/
+
+
     gtk_widget_queue_draw(GTK_WIDGET(drawing_area));
     bin_img_type = RLSA;
-    //check_pixels("AFTER RLSA");
-//    check_pixels("AFTER RLSA BEF B_W");
-//    bi_from_gray_to_b_and_w();
-//    check_pixels("AFTER RLSA AFTER B_W");
 }

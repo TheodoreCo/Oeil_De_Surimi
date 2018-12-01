@@ -306,7 +306,6 @@ binary_image *bi_image_show_blocks(binary_image *b_img)
 }
 
 
-//  32 * 32
 
 void resize_img(binary_image *original_b_img, l_rect *rect,
     unsigned int side_length, unsigned char *result)
@@ -347,14 +346,50 @@ void resize_img(binary_image *original_b_img, l_rect *rect,
     }
 }
 
+//5 * 5 grid of chars
+binary_image *preview_nn_input(char_bimg_list *list)
+{
+    binary_image *result = malloc(sizeof(binary_image));
+
+    unsigned int side = 3;
+
+    result->w = list->side_length * side;
+    result->h = list->side_length * side;
+
+    result->pixel = malloc(result->w * result->h * sizeof(char));
+
+    char_bimg *current = list->first;
+
+    printf("nb = %u\n", list->size);
+    unsigned int x = 0;
+
+    for (;current != NULL && x < side * side ; x++ ) {
+
+        printf("x = %u\n", x);
+
+        for (size_t i = 0; i < list->side_length; i++) {
+            for (size_t j = 0; j < list->side_length; j++) {
+
+                result->pixel[((x/side) * list->side_length + j) * result->w +
+                    (x % list->side_length) * list->side_length + i] = current->pixel[i + j * list->side_length];
+            }
+        }
+        current = current->next;
+    }
+
+    return result;
+}
+
 char_bimg_list *gen_char_bimg_list(binary_image *b_img, unsigned int side_length)
 {
     char_bimg_list *list;
     list = malloc(sizeof(char_bimg_list));
+    list->size = b_img->lr_size;
+    list->side_length = side_length;
 
     l_rect *current = b_img->lr;
 
-    char_bimg *cb;
+    char_bimg *cb = NULL;
     char_bimg *prev = NULL;
 
     for (size_t i = 0; i < b_img->lr_size; i++) {
@@ -370,6 +405,8 @@ char_bimg_list *gen_char_bimg_list(binary_image *b_img, unsigned int side_length
 
         current = current->next;
     }
+
+    list->first = cb;
 
     return list;
 }
