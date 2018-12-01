@@ -267,6 +267,35 @@ void bi_image_blocks_from_RLSA(binary_image *b_img, binary_image *rlsa_img)
     b_img->lr_size = i;
 }
 
+
+static int comp(void const *a, void const *b)
+{
+    int const *pa = a;
+    int const *pb = b;
+
+    return (int)(*pa - *pb);
+}
+
+unsigned int character_mediant_height(binary_image *b_img, unsigned int max)
+{
+    binary_image *rlsa_img = bi_image_RLSA(b_img, 0);
+    bi_image_blocks_from_RLSA(rlsa_img, rlsa_img);
+
+    unsigned int *tab = malloc(rlsa_img->lr_size * sizeof(int));
+
+    l_rect *current = rlsa_img->lr;
+
+    for (size_t i = 0; i < rlsa_img->lr_size && i < max; i++) {
+        tab[i] = current->max_y - current->min_y;
+        current = current->next;
+        //printf("height = %u\n", tab[i] );
+    }
+
+    qsort(tab, rlsa_img->lr_size, sizeof(int), comp);
+
+    return tab[rlsa_img->lr_size / 2];
+}
+
 binary_image *bi_image_show_blocks(binary_image *b_img)
 {
     binary_image *result_image = malloc(sizeof (binary_image));

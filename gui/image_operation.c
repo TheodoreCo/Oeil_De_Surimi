@@ -302,6 +302,8 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
     printf("done creating preview_nn_input !\n");
 */
 
+    unsigned int h = character_mediant_height(b_image);
+    printf("MEDIAN HEIGHT = %u\n", h);
 
     check_pixels("BEF RLSA");
     binary_image *rlsa_img = bi_image_RLSA(b_image, cf_get_rlsa_expansion());
@@ -309,6 +311,8 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
     bi_image_blocks_from_RLSA(b_image, rlsa_img);
 
     binary_image *preview_blocks = bi_image_show_blocks(b_image);
+
+    printf("lr_size = %i\n",b_image->lr_size );
 
     free_binary_image(b_image);
     b_image = preview_blocks;

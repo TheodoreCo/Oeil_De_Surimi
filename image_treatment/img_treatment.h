@@ -130,6 +130,7 @@ char_bimg_list *gen_char_bimg_list(binary_image *b_img, unsigned int side_length
 
 void resize_img(binary_image *original_b_img, l_rect *rect, unsigned int side_length, unsigned char *result);
 
+unsigned int character_mediant_height(binary_image *b_img, unsigned int max);
 
 
 #endif // IMG_TREATMENT_H_INCLUDED

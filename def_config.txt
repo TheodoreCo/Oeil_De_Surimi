@@ -23,7 +23,7 @@ num_train_epochs_xor = 1000
 learn_rate_xor       = 0.1;
 
 # Expansion for RLSA function
-rlsa_expansion       = 10
+rlsa_expansion       = 100
 
 # Number of neurons in the input layer for the OCR NN
 num_input_ocr        = 1024
@@ -45,4 +45,3 @@ learn_rate_ocr       = 0.2;
 
 # Path to the OCR training results file
 ocr_train_file    = ./ocr_training.results
-
