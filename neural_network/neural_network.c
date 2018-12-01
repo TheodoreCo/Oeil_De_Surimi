@@ -393,6 +393,7 @@ neur_net *nn_load(char *path)
 		neur_count++;
 	}
 	fgetc(file);
+	printf("num_inputs = %u; num_hidden_layers = %u; num_hidd_neur = %u; num_outputs = %u",num_inputs,num_hidden_layers, num_hidd_neur, num_outputs);
 	
 
 	// TRAITEMENT GENERAL FROM 1ST HIDDEN LAYER TO AVANT DERNIER LAYER
