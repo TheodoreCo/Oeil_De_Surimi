@@ -74,8 +74,8 @@ int main(/* int argc, char *argv[] */)
  	neur_net *nn = instantiate(num_inputs,num_hidden_layers,num_hidd_neur,num_outputs);
 	
 	xor_train(nn, 0.1,10000);
-	*/
-
+	
+*/
 	neur_net *nn = nn_load("xor.nn");
 	
 	//double inputs[] = {1,1};

@@ -53,11 +53,7 @@ void nn_save(neur_net *nn, char *path);
 
 void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs);
 
-<<<<<<< HEAD
 void xor_train(neur_net *nn, double learning_rate, unsigned int epochs);
-=======
-void xor_train(neur_net *nn, double learning_rate, unsigned int epochs);
->>>>>>> master
 
 neur_net *nn_load(char *path);
 
