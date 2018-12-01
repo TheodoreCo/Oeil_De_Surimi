@@ -3,8 +3,6 @@
 
 #include "img_scale.h"
 
-const unsigned int TRAIN_IMG_SZ = 28;
-
 int *image_to_01(binary_image *image, c_rect *c, int *ret_val)
 {
     // c_rect dimensions

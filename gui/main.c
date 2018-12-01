@@ -16,57 +16,35 @@ int main (int argc, char *argv[])
     // setlocale (LC_NUMERIC , "C");
     // Solution was to call setlocale just when needed (from cf_get_app_config())
 
-    if(argc > 1)
-    {
-        printf("Launching Oeil_de_Surimi in CONSOLE mode...\n");
-        // Usage: ./Oeil_de_Surimi bitmap_file text_file config_file
-        // No other arguments for the time being (all arguments read from the configuration file)
+    GtkWidget *window;
+    gtk_init(&argc, &argv);
 
-        config *co = NULL;
-        // 1. Test read configuration file
-        if(argc == 3)
-            co = cf_read_config(NULL);
-        else
-            co = cf_read_config(argv[3]);
+    //cf_get_config("./def_config.txt");
+    if(!cf_read_config(NULL))
+        printf("Cannot build config from config file...\n");
+    cf_key_val_to_string(NULL);
 
-        if (co == NULL) {
-            perror("Reading config file error");
-            return -1;
-        }
+    builder = gtk_builder_new_from_file("gui/main_window2.glade");
 
-        cf_key_val_to_string(NULL);
-        cf_free_config();
-        if (!co)
-            free(co);
-    }
-    else
-    {
-        GtkWidget *window;
-        gtk_init(&argc, &argv);
+    window = GTK_WIDGET(gtk_builder_get_object(builder, "oeil_de_surimi_main_ocr"));
+    gtk_builder_connect_signals(builder, NULL);
 
-        //cf_get_config("./def_config.txt");
-        if(!cf_read_config(NULL))
-            printf("Cannot build config from config file...\n");
-        cf_key_val_to_string(NULL);
-
-        builder = gtk_builder_new_from_file("gui/main_window2.glade");
-
-        window = GTK_WIDGET(gtk_builder_get_object(builder, "oeil_de_surimi_main_ocr"));
-        gtk_builder_connect_signals(builder, NULL);
-
-        /* Connect signal wiring for the drawing area (the binary image).
-           We don't want to draw immediatley after loading the bitmap image ==> DO_NOTHING */
-        bin_img_type = DO_NOTHING;
+    /* Connect signal wiring for the drawing area (the binary image).
+       We don't want to draw immediatley after loading the bitmap image ==> DO_NOTHING */
+    bin_img_type = DO_NOTHING;
 //        GtkDrawingArea *drawing_area = GTK_DRAWING_AREA(gtk_builder_get_object(builder, "oeil_de_surimi_drawing_area"));
 //        g_signal_connect(drawing_area, "draw", G_CALLBACK(draw_callback), NULL);
 
-        gtk_widget_show(window);
+    gtk_widget_show(window);
 
-        // Default values for the spin buttons
-        on_oeil_de_surimi_xor_def_nn_values_btn_clicked(NULL);
-        on_oeil_de_surimi_xor_def_train_values_btn_clicked(NULL);
-        gtk_main();
-    }
+    // Fill the XOR NN tab with default values from config file
+    on_oeil_de_surimi_xor_def_nn_values_btn_clicked(NULL);
+    on_oeil_de_surimi_xor_def_train_values_btn_clicked(NULL);
+
+    // Fill the OCR NN tab with default values from config file
+    on_oeil_de_surimi_ocr_def_nn_values_btn_clicked(NULL);
+    on_oeil_de_surimi_ocr_def_train_values_btn_clicked(NULL);
+    gtk_main();
 
     return 0;
 }
