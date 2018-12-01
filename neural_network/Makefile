@@ -1,7 +1,8 @@
 # MAKEFILE
+#-Werror
 
 CC = gcc
-CFLAGS = -Wextra -Werror -Wall -std=c99 -g -O3
+CFLAGS = -Wextra -Wall -std=c99 -g -O2
 LDLIBS = -lm
 
 EXEC = main
@@ -31,11 +32,10 @@ main : ${OBJ}
 #	gcc -c neural_network.c ${CFLAGS} ${LDLIBS}
 
 clean : 
-	rm -rf *.o
-
-run : clean
-	./${EXEC}
+	rm -rf *.o 
+	rm -rf *.d
+	rm ${EXEC} 
 
 del : clean 
-	rm -rf ${EXEC}
+	rm -rf xor.nn
 

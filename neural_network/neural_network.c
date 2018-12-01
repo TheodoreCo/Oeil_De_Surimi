@@ -116,7 +116,7 @@ void pretty_print(neur_net *nn)
         printf("layer : %u \n",i);
         for(unsigned int j = 0; j < nn->layer_array[i]->num_neur ; j++)
         {
-            printf("\t neur:%u  key:%lf \n \t biase:%lf \n", j,
+            printf("\t neur:%u  value:%lf \n \t biase:%lf \n", j,
                       nn->layer_array[i]->neur_array[j]->value,
                       nn->layer_array[i]->neur_array[j]->biase);
             if(i != 0)
@@ -304,7 +304,7 @@ void nn_save(neur_net *nn, char *path)
 
 		for(unsigned int j = 0; j < nn->layer_array[i]->num_neur; j++)
 		{
-			fprintf(file,"%f",nn->layer_array[i]->neur_array[j]->value);
+			fprintf(file,"%lf",nn->layer_array[i]->neur_array[j]->value);
 			fprintf(file,"(%lf ",
 				nn->layer_array[i]->neur_array[j]->biase);
 			for(unsigned int k = 0;
@@ -345,10 +345,10 @@ neur_net *nn_load(char *path)
 	// LECTURES PARAMETRES DE BASES
 	// NUM_INPUTS - NUM_HIDD_LAYERS - NUM_HIDD_NEUR - NUM_OUTPUTS
 
-	unsigned int num_inputs = 0;
-	unsigned int num_hidden_layers = 0;
-	unsigned int num_hidd_neur = 0;
-	unsigned int num_outputs = 0;
+	unsigned int num_inputs;
+	unsigned int num_hidden_layers;
+	unsigned int num_hidd_neur;
+	unsigned int num_outputs;
 
 	fscanf(file, "%u %u %u %u",
 		&num_inputs,
@@ -364,60 +364,74 @@ neur_net *nn_load(char *path)
 				num_outputs);
 
 
-	int layer_count = 0,
+	unsigned int layer_count = 0,
 		neur_count = 0,
 		weight_count = 0;
 
 	double act_weight = 0,
-		act_biase = 0;
+		act_biase = 0,
+		act_value = 0;
 
 	//TRAITEMENT PREMIER LAYER
 	
 	unsigned int layer_counts;
 	fscanf(file,"%d[",&layer_counts);
-	int carac = -1;
-	while(carac != ']')
+
+	while(neur_count < num_inputs)
 	{
-		//DECALAGE CREE PAR FGETC
-		fscanf(file,"%d",&neur_count);
+
+		//value
+		fscanf(file,"%lf",&act_value);
+		nn->layer_array[layer_count]->neur_array[neur_count]->value = act_value;
+
+
+		//biase
 		fscanf(file,"(%lf )",&act_biase);
-
-		//ATTRTIBUTION AU NN
-
 		nn->layer_array[layer_count]->neur_array[neur_count]->biase =
 			act_biase;
 
-		carac = fgetc(file);
+		neur_count++;
 	}
+	fgetc(file);
+	
 
-	// TRAITEMENT GENERAL FROM 1ST HIDDEN LAYER
-
-	layer_count = 1;
-	while(carac != '~')
+	// TRAITEMENT GENERAL FROM 1ST HIDDEN LAYER TO AVANT DERNIER LAYER
+	
+	while(layer_count <= num_hidden_layers + 1)
 	{
-
+		//boucle sur layer
 		fscanf(file,"%d[",&layer_count);
-		do
-		{
-			fscanf(file,"%d(",&neur_count);
+		neur_count = 0;
+		while(neur_count < nn->layer_array[layer_count]->num_neur)
+		{	
+			//boucle sur neurone
+			fscanf(file,"%lf(",&act_value);
+			printf("layer %u neurone %u valeur %lf",layer_count, neur_count, act_value);
+			nn->layer_array[layer_count]->neur_array[neur_count]->value = 
+				act_value;
+
 			fscanf(file,"%lf ",&act_biase);
-
-			nn->layer_array[layer_count]->neur_array[neur_count]->biase =
+			nn->layer_array[layer_count]->neur_array[neur_count]->biase = 
 				act_biase;
-
-			carac = fgetc(file);
+				
 			weight_count = 0;
-			while(carac != ')')
+			
+			while(weight_count < nn->layer_array[layer_count]->neur_array[neur_count]->num_weights)
 			{
-				fscanf(file,"%lf",&act_weight);
+				fscanf(file,"|%lf",&act_weight);
 				nn->layer_array[layer_count]->neur_array[neur_count]->weights[weight_count] = act_weight;
-				weight_count++;
-				carac = fgetc(file);
+
+				weight_count ++;
 			}
-			carac = fgetc(file);
-		} while(carac != ']');
-		carac = fgetc(file);
+			fgetc(file);
+			
+			
+			neur_count++;
+		}
+		fgetc(file);
+		layer_count++;
 	}
+	
 	return nn;
 }
 

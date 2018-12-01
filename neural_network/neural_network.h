@@ -51,9 +51,9 @@ double sigmoid(double x);
 
 void nn_save(neur_net *nn, char *path);
 
-void ocr_train(neur_net *nn, double learning_rate);
+void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs);
 
-void xor_train(neur_net *nn, double learning_rate);
+void xor_train(neur_net *nn, double learning_rate, unsigned int epochs);
 
 neur_net *nn_load(char *path);
 
