@@ -620,39 +620,28 @@ char_bimg_list *image_segmentation(binary_image *b_image, unsigned int side_leng
 
 
 
-
-
-
-
 unsigned char *getmatrix(char *filename){
   binary_image *b = bi_image_from_file(filename);
 
-  l_rect rect;
+  l_rect *rect = malloc(sizeof(l_rect));
 
-  rect.min_x = 0;
-  rect.min_y = 0;
+  rect->min_x = 0;
+  rect->min_y = 0;
 
-  rect.max_x = 27;
-  rect.max_y = 27;
+  rect->max_x = 27;
+  rect->max_y = 27;
 
   b->lr_size = 1;
+
+  b->lr = rect;
 
   smallen_charboxes(b);
 
 
-  unsigned char result[256];
+  unsigned char *result = malloc(sizeof(char) * 256);
+  resize_img( b, rect, 16, result);
 
-  resize_img( b, &rect, 16, result);
   free_binary_image(b);
 
   return result;
 }
-
-
-/*
-void printstring(char list){
-
-
-
-}
-*/
