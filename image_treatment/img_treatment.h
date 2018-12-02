@@ -61,8 +61,9 @@ typedef struct binary_image {
 typedef struct char_bimg char_bimg;
 struct char_bimg
 {
-    unsigned char *pixel; //array of pixels of size (w * h)
+    double *pixel; //array of pixels of size (w * h)
     char_bimg *next;
+    unsigned int x, y;
 
     char result; // deducted character (output of neural network)
 };
@@ -129,13 +130,13 @@ binary_image *preview_nn_input(char_bimg_list *list);
 
 char_bimg_list *gen_char_bimg_list(binary_image *b_img, unsigned int side_length);
 
-void resize_img(binary_image *original_b_img, l_rect *rect, unsigned int side_length, unsigned char *result);
+void resize_img(binary_image *original_b_img, l_rect *rect, unsigned int side_length, double *result);
 
 unsigned int character_mediant_height(binary_image *b_img, unsigned int max);
 
 void smallen_charboxes(binary_image *b_image);
 
-unsigned char *getmatrix(char *filename);
+double *getmatrix(char *filename);
 
 char_bimg_list *image_segmentation(binary_image *b_image, unsigned int side_length);
 

@@ -8,24 +8,11 @@ void free_binary_image(binary_image *b_image) {
     if(b_image)
     {
         if(b_image->pixel)
-        {
             free(b_image->pixel);
-        }
 
-        for(unsigned int i=0; i<b_image->lr_size; i++)
-        {
-            if(!b_image->lr)
-            {
-                for(unsigned int j=0; j>b_image->lr->cr_size; j++)
-                {
-                    if(!b_image->lr->cr)
-                    {
-                        free(b_image->lr->cr);
-                    }
-                }
-                free(b_image->lr);
-            }
-        }
+        l_rect *current = b_image->lr;
+        for(; current != NULL; current = current->next)
+            free(b_image->lr);
         free(b_image);
     }
 }
@@ -379,17 +366,10 @@ unsigned int character_mediant_height(binary_image *b_img, unsigned int max)
     }
 
     qsort(tab, max_iteration, sizeof(int), comp);
-
-/*
-    for (size_t j = 0; j < max_iteration; j++) {
-        printf("tab[%u] = %u\n",j, tab[j] );
-    }
-*/
-
     unsigned int value = tab[max_iteration / 2];
 
 
-    free_binary_image(rlsa_img);
+    //free_binary_image(rlsa_img);
     free(tab);
 
     return value;
@@ -490,7 +470,7 @@ binary_image *bi_image_show_blocks(binary_image *b_img)
     return result_image;
 }
 
-void resize_img(binary_image *original_b_img, l_rect *rect, unsigned int side_length, unsigned char *result)
+void resize_img(binary_image *original_b_img, l_rect *rect, unsigned int side_length, double *result)
 {
 
     unsigned int width = rect->max_x - rect->min_x + 1;
@@ -582,13 +562,14 @@ char_bimg_list *gen_char_bimg_list(binary_image *b_img, unsigned int side_length
 
         resize_img(b_img, current, side_length, cb->pixel);
 
+        cb->x = (current->max_x + current->min_x) / 2;
+        cb->y = (current->max_y + current->min_y) / 2;
+
         cb->next = prev;
         prev = cb;
 
         current = current->next;
     }
-
-    free_binary_image(b_img);
 
     list->first = cb;
 
@@ -605,22 +586,26 @@ OUTPUT : -char_bimg_list OF ALL CHARS IN IMAGE
 */
 char_bimg_list *image_segmentation(binary_image *b_image, unsigned int side_length)
 {
+    //printf("TEST inside\n" );
     unsigned int mediant_height = character_mediant_height(b_image, 50);
 
     binary_image *rlsa_img = bi_image_RLSA(b_image, b_image->w-2, mediant_height * 3);
+
     bi_image_blocks_from_RLSA(b_image, rlsa_img);
+
     smallen_charboxes(b_image);
 
+    //printf("TEST before\n" );
     char_bimg_list *cbl = gen_char_bimg_list(b_image, side_length);
-
-    free_binary_image(b_image);
+    //printf("TEST after\n" );
+    //printf("TEST after 2\n" );
     return cbl;
 }
 
 
 
 
-unsigned char *getmatrix(char *filename){
+double *getmatrix(char *filename){
   binary_image *b = bi_image_from_file(filename);
 
   l_rect *rect = malloc(sizeof(l_rect));
@@ -638,7 +623,7 @@ unsigned char *getmatrix(char *filename){
   smallen_charboxes(b);
 
 
-  unsigned char *result = malloc(sizeof(char) * 256);
+  double *result = malloc(sizeof(double) * 256);
   resize_img( b, rect, 16, result);
 
   free_binary_image(b);

@@ -313,15 +313,12 @@ void on_oeil_de_surimi_check_train_btn_clicked(GtkButton *button)
 
 void bi_from_gray_to_b_and_w(void)
 {
-    int img_w = b_image->w;
-    int img_h = b_image->h;
-    for(int y=0; y<img_h; y++)
+
+    for(unsigned int x=0 ; x < b_image->w * b_image->h ; x++)
     {
-        for(int x=0; x<img_w; x++)
-        {
-            b_image->pixel[y*img_w + x] = (b_image->pixel[y*img_w + x]/255.0 > cf_get_b_and_w_threshold()) ? 1 : 0;
-        }
+        b_image->pixel[x] = (b_image->pixel[x]/255.0 > cf_get_b_and_w_threshold()) ? 1 : 0;
     }
+
 }
 
 void on_oeil_de_surimi_b_and_w_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
@@ -444,86 +441,58 @@ void show_image_info(binary_image *bi, char *msg)
 
 void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
 {
+    bi_from_gray_to_b_and_w();
+
+    //printf("TEST\n" );
+
+    char_bimg_list *im_chars = image_segmentation(b_image, TRAIN_IMG_SZ);
+
+
+    printf("Got im_chars list of size %u\n", im_chars->size);
+    if(im_chars)
+    {
+        char_bimg *im_c = im_chars->first;
+        for (; im_c != NULL; im_c = im_c->next) {
+            printf("bloc pos :(%u, %u)\n", im_c->x, im_c->y);
+        }
+    }
+
 
     /*
-        binary_image *rlsa_img = bi_image_RLSA(b_image, cf_get_rlsa_expansion());
 
-        bi_image_blocks_from_RLSA(b_image, rlsa_img);
+    ICI IL FAUT INITIALISER LE RESEAU :
 
-        printf("creating char bimg list...\n");
-        unsigned int sl = 16;
-        char_bimg_list *list = gen_char_bimg_list(b_image, sl);
-        printf("done creating char bimg list !\n");
+    neur_net *nn = ???????????
 
-        printf("creating preview_nn_input...\n");
-        b_image = preview_nn_input(list);
-        printf("done creating preview_nn_input !\n");
     */
+    char_bimg *im_c = im_chars->first;
 
-    unsigned int h = character_mediant_height(b_image, 50);
-    printf("MEDIAN HEIGHT = %u\n", h);
+    double *result = NULL;
 
-    //printf("%zu, %zu\n",b_image->w,b_image->h );
+    double max_val;
+    size_t index;
 
-
-
-    // check_pixels("BEF RLSA");
-
-    show_image_info(b_image, "(1) b_image");
-    binary_image *rlsa_img = bi_image_RLSA(b_image, cf_get_rlsa_expansion(), cf_get_rlsa_expansion());
-    show_image_info(b_image, "(2) b_image");
-    show_image_info(rlsa_img, "(2) rlsa_img");
-
-    bi_image_blocks_from_RLSA(b_image, rlsa_img);
-    show_image_info(b_image, "(3) b_image");
-    show_image_info(rlsa_img, "(3) rlsa_img");
-
-    binary_image *preview_blocks = bi_image_show_blocks(b_image);
-
-    printf("lr_size = %i\n",b_image->lr_size );
-
-    free_binary_image(b_image);
-    b_image = preview_blocks;
+    for (; im_c != NULL; im_c = im_c->next) {
+        result = feed_forward(nn, im_c->pixel);
 
 
-    gtk_widget_queue_draw(GTK_WIDGET(drawing_area));
-    bin_img_type = RLSA;
+        index = 0;
+        max_val = 0;
+        for (size_t i = 0; i < 93; i++) {
+            if (result[i] > max_val)
+            {
+                max_val = result[i];
+                index = i;
+            }
+        }
 
-    l_rect *rect = b_image->lr;
-
-    for (; rect; rect = rect->next)
-    {
-        //l_rect *rect = b_image->lr;
-        printf("[<%u,%u><%u,%u>]  ", rect->min_x, rect->min_y, rect->max_x, rect->max_y);
-        //rect = rect->next;
+        im_c->result = (char)(33 + index);
+        printf("guessed char : %c\n", im_c->result);
     }
-    printf("\n");
-
-
-    char_bimg_list * im_chars = image_segmentation(b_image, TRAIN_IMG_SZ);
-
-    // char_bimg_list *im_chars = gen_char_bimg_list(b_image, TRAIN_IMG_SZ);
-//    printf("Got im_chars list of size %ul\n", im_chars->size);
-//    if(im_chars)
-//    {
-//        char_bimg *im_c = im_chars->first;
-//        if(im_c) {
-//            printf("%s\n", im_c->pixel);
-//            for(unsigned int i = 0; i < im_chars->size; i++)
-//            {
-//                im_c = im_c->next;
-//                printf("%s\n", im_c->pixel);
-//            }
-//        }
-//    }
 
 
 
 
-    //check_pixels("AFTER RLSA");
-//    check_pixels("AFTER RLSA BEF B_W");
-//    bi_from_gray_to_b_and_w();
-//    check_pixels("AFTER RLSA AFTER B_W");
 
 }
 
