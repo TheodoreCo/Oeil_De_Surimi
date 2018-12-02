@@ -313,6 +313,8 @@ void on_oeil_de_surimi_check_train_btn_clicked(GtkButton *button)
 
 void bi_from_gray_to_b_and_w(void)
 {
+    if (bin_img_type == RLSA)
+        return;
 
     for(unsigned int x=0 ; x < b_image->w * b_image->h ; x++)
     {
@@ -441,70 +443,23 @@ void show_image_info(binary_image *bi, char *msg)
 
 void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
 {
-    bi_from_gray_to_b_and_w();
-
-    //printf("TEST\n" );
-
-    char_bimg_list *im_chars = image_segmentation(b_image, TRAIN_IMG_SZ);
+    //bi_from_gray_to_b_and_w();
 
 
-    printf("Got im_chars list of size %u\n", im_chars->size);
-    if(im_chars)
-    {
-        char_bimg *im_c = im_chars->first;
-        for (; im_c != NULL; im_c = im_c->next) {
-            printf("bloc pos :(%u, %u)\n", im_c->x, im_c->y);
-        }
-    }
+    unsigned int mediant_height = character_mediant_height(b_image, 50);
+    //printf("mediant character height = %u\n", mediant_height);
 
+    binary_image *rlsa_img = bi_image_RLSA(b_image, b_image->w-2, mediant_height * 2);
+    bi_image_blocks_from_RLSA(b_image, rlsa_img);
+    smallen_charboxes(b_image);
 
-    neur_net *nn = instantiate(
+    binary_image *preview_blocks = bi_image_show_blocks(b_image);
 
-    cf_get_num_input_ocr(),
-    cf_get_num_hid_lay_ocr(),
-    cf_get_num_hid_neur_ocr(),
-    cf_get_num_output_ocr());
+    b_image = preview_blocks;
 
+    bin_img_type = RLSA;
 
-    char_bimg *im_c = im_chars->first;
-
-    double *result = NULL;
-
-    double max_val;
-    size_t index;
-
-
-
-
-
-    for (; im_c != NULL; im_c = im_c->next) {
-        result = feed_forward(nn, im_c->pixel);
-
-
-        index = 0;
-        max_val = 0;
-        for (size_t i = 0; i < 93; i++) {
-            if (result[i] > max_val)
-            {
-                max_val = result[i];
-                index = i;
-            }
-        }
-
-        im_c->result = (char)(33 + index);
-        printf("guessed char : %c\n", im_c->result);
-    }
-
-
-    //CREER FICHIER TEXTE
-    /*
-
-ICI IL FAUT FAIRE LA RECONSTRUCTINO DU TEXTE
-
-
-
-
-    */
+    gtk_widget_queue_draw(GTK_WIDGET(drawing_area));
 
 }
 
