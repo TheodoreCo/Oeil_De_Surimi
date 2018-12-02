@@ -134,5 +134,7 @@ unsigned int character_mediant_height(binary_image *b_img, unsigned int max);
 
 void smallen_charboxes(binary_image *b_image);
 
+char getmatrix(char *filename);
+
 
 #endif // IMG_TREATMENT_H_INCLUDED
