@@ -457,14 +457,12 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
         }
     }
 
+    neur_net *nn = instantiate(
+        cf_get_num_input_ocr(),
+        cf_get_num_hid_lay_ocr(),
+        cf_get_num_hid_neur_ocr(),
+        cf_get_num_output_ocr());
 
-    /*
-
-    ICI IL FAUT INITIALISER LE RESEAU :
-
-    neur_net *nn = ???????????
-
-    */
     char_bimg *im_c = im_chars->first;
 
     double *result = NULL;
