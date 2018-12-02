@@ -1,15 +1,42 @@
+Oeil_De_Surimi is an OCR program written during the S3 semester at Epita.
+
+There are several Makefile. The one at the root creates 5 executable files:
+bin
+├── Debug
+│   └── Oeil_De_Surimi
+├── neural_network
+│   ├── Oeil_De_Surimi
+│   └── XOR
+│       └── Oeil_De_Surimi
+├── Release
+│   └── Oeil_De_Surimi
+└── scale_image
+    └── Oeil_De_Surimi
+    
+bin/scale_image/Oeil_De_Surimi : test to upscale/downscale an image to a given size
+bin/neural_network/XOR/Oeil_De_Surimi: Console test of the XOR neural network
+bin/neural_network/Oeil_De_Surimi: Console test of the OCR training & recognizing neural network
+bin/Debug/Oeil_De_Surimi: main GUI application, compiled in Debug mode
+bin/Release/Oeil_De_Surimi: main GUI application, compiled in Release mode
+
 To use Oeil_de_Surimi, execute the file Oeil_de_Surimi.
 
 In the tab "Image Processing & OCR", you can select an image and read the characters in it.
-To do so, Click on the button "Select..." and choose a image from your computer. The image will be shown to you, and ready to be processed.
+To do so, Click on the button "Select..." and choose an image from your computer. The image is shown in the left panel and is ready to be processed. It is already transformed to a gray image.
+
 You can now click on the following buttons :
-* "Grayscale" to turn the image into shades of gray
 * "B&W" to binarize the image (only black and white pixels)
 * "Denoise" to denoise the image (this feature is not available yet)
 * "RLSA" to detect block of text in the image. The blocks found by the algorithm will be highlighted and framed in a red rectangle.
 
-You  can change parameters of those buttons in the "def_config.txt". The "Parameters" is supposed to let you change those parameters, but its not ready yet.
+You  can change parameters of those buttons in the "def_config.txt".
 
 In the tab "IA Training - XOR", you can test our neural network by making it learn the behavior of a XOR gate.
 You can change the number of neurons, epochs, and more in this tab. To Train the neural network, press the button "Run NN...".
 The neural network will then be tested for different values of inputs, and results will be printed in the "Output" column.
+
+Play with the values (number of epochs, etc.) and see how the final result is impacted - the neural network will perform a better or a poorer recognition.
+
+The tab "IA Training - OCR" is like the XOR tab, but values are bigger. The chosen size for the training characters is 28x28 and a network with 784 input neurons is harder to train.
+
+Train results parameters can be saved to disk and, inversely, a previously saved file can be used to restore a neural network.
