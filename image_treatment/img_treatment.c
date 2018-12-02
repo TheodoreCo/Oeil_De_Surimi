@@ -289,25 +289,35 @@ unsigned int character_mediant_height(binary_image *b_img, unsigned int max)
     l_rect *prev;
 
     size_t i = 0;
+    unsigned int val;
 
-    for (; i < max_iteration; i++) {
-
-        tab[i] = current->max_y - current->min_y;
-        printf("tab[%u] = %u\n", i, tab[i]);
+    for (; i < max_iteration; ) {
+        val = current->max_y - current->min_y;
+        if (val > 0)
+        {
+            tab[i] = val;
+            //printf("tab[%u] = %u\n", i, tab[i]);
+            i++;
+        }
         prev = current;
         current = current->next;
         free(prev);
     }
 
-    for (; i < rlsa_img->lr_size; i++) {
+    for (; current != NULL; current = current->next ) {
         prev = current;
-        current = current->next;
         free(prev);
     }
 
-    qsort(tab, rlsa_img->lr_size, sizeof(int), comp);
+    qsort(tab, max_iteration, sizeof(int), comp);
 
-    unsigned int value = tab[rlsa_img->lr_size / 2];
+/*
+    for (size_t j = 0; j < max_iteration; j++) {
+        printf("tab[%u] = %u\n",j, tab[j] );
+    }
+*/
+
+    unsigned int value = tab[max_iteration / 2];
 
 
     free_binary_image(rlsa_img);
