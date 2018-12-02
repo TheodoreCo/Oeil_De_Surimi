@@ -617,13 +617,6 @@ char_bimg_list *image_segmentation(binary_image *b_image, unsigned int side_leng
     return cbl;
 }
 
-
-
-
-
-
-
-
 unsigned char *getmatrix(char *filename){
   binary_image *b = bi_image_from_file(filename);
 
@@ -650,14 +643,3 @@ unsigned char *getmatrix(char *filename){
 
   return *output;
 }
-
-
-
-/*
-void pathtostring(char *filename){
-
-
-}
-
-
-*/
