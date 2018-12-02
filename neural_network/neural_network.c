@@ -6,7 +6,7 @@
 #include <dirent.h>
 
 #include "neural_network.h"
-#include "img_treatment.h"
+#include "./../image_treatment/img_treatment.h"
 
 neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers,
         size_t num_hidd_neur, size_t num_outputs)
