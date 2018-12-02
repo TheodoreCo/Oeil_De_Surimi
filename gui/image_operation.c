@@ -457,11 +457,14 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
         }
     }
 
+
     neur_net *nn = instantiate(
-        cf_get_num_input_ocr(),
-        cf_get_num_hid_lay_ocr(),
-        cf_get_num_hid_neur_ocr(),
-        cf_get_num_output_ocr()); //
+
+    cf_get_num_input_ocr(),
+    cf_get_num_hid_lay_ocr(),
+    cf_get_num_hid_neur_ocr(),
+    cf_get_num_output_ocr());
+
 
     char_bimg *im_c = im_chars->first;
 
@@ -469,6 +472,10 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
 
     double max_val;
     size_t index;
+
+
+
+
 
     for (; im_c != NULL; im_c = im_c->next) {
         result = feed_forward(nn, im_c->pixel);
@@ -489,21 +496,15 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
     }
 
 
-//CREER FICHIER TEXTE
+    //CREER FICHIER TEXTE
+    /*
 
-    unsigned int len = im_chars->size;
-
-    char_pos *array = malloc(sizeof(char_pos) * );
-
+ICI IL FAUT FAIRE LA RECONSTRUCTINO DU TEXTE
 
 
 
 
-
-
-
-
-
+    */
 
 }
 
