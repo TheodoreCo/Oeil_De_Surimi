@@ -605,7 +605,7 @@ char_bimg_list *image_segmentation(binary_image *b_image, unsigned int side_leng
 
 
 
-double *getmatrix(char *filename){
+unsigned char *getmatrix(char *filename){
   binary_image *b = bi_image_from_file(filename);
 
   l_rect *rect = malloc(sizeof(l_rect));
@@ -628,5 +628,10 @@ double *getmatrix(char *filename){
 
   free_binary_image(b);
 
-  return result;
+  unsigned char *t = malloc(sizeof(char) * 256);
+  for (size_t i = 0; i < 256; i++) {
+      t[i] = (unsigned char)result[i];
+  }
+
+  return t;
 }

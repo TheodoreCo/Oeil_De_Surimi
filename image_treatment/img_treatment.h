@@ -80,6 +80,13 @@ struct char_bimg_list
 };
 
 
+typedef struct char_pos char_pos;
+struct char_pos
+{
+    unsigned char c;
+    unsigned int lpos;
+};
+
 /*
     Builds a binary image given a file name.
     File should be a 32-bit bitmap file with some restrictions (no compression etc.)
@@ -136,7 +143,7 @@ unsigned int character_mediant_height(binary_image *b_img, unsigned int max);
 
 void smallen_charboxes(binary_image *b_image);
 
-double *getmatrix(char *filename);
+unsigned char *getmatrix(char *filename);
 
 char_bimg_list *image_segmentation(binary_image *b_image, unsigned int side_length);
 
