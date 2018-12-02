@@ -112,6 +112,21 @@ binary_image *bi_image_from_file(char *filename) {
     }
     return 0;
 }
+/*
+int binary_image_to_file(char[] filename)
+{
+
+
+}
+
+*/
+
+
+
+
+
+
+
 
 binary_image *bi_image_RLSA(binary_image *b_img, unsigned int h_expansion, unsigned int v_expansion)
 {
@@ -528,6 +543,34 @@ char_bimg_list *gen_char_bimg_list(binary_image *b_img, unsigned int side_length
 
     return list;
 }
+
+
+
+/*
+INPUT : -ORIGINAL Image
+        -SIDE_LENGTH OF DESTINATION SQUARED IMAGE
+
+OUTPUT : -char_bimg_list OF ALL CHARS IN IMAGE
+*/
+char_bimg_list *image_segmentation(binary_image *b_image, unsigned int side_length)
+{
+    unsigned int mediant_height = character_mediant_height(b_image, 50);
+
+    binary_image *rlsa_img = bi_image_RLSA(b_image, b_image->w-2, mediant_height * 3);
+    bi_image_blocks_from_RLSA(b_image, rlsa_img);
+    smallen_charboxes(b_image);
+
+    char_bimg_list *cbl = gen_char_bimg_list(b_image, side_length);
+
+    free_binary_image(b_image);
+    return cbl;
+}
+
+
+
+
+
+
 
 /*
 char getmatrix(char *filename){
