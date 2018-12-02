@@ -189,28 +189,68 @@ void on_oeil_de_surimi_select_img_clicked(GtkButton *button, GtkImage *image)
 
 void on_oeil_de_surimi_train_ocr_btn_clicked(GtkButton *button)
 {
-//    // Get needed values to build the NN
-//    GtkSpinButton *hid_lay_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_hid_lay"));
-//    const double hidden_layers = gtk_spin_button_get_value(hid_lay_spin_btn);
-//    GtkSpinButton *hid_neur_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_neur_per_hl"));
-//    const double hidden_neurons = gtk_spin_button_get_value(hid_neur_spin_btn);
-//    GtkSpinButton *inputs_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_inputs"));
-//    const double input_neurons = gtk_spin_button_get_value(inputs_btn);
-//    GtkSpinButton *outputs_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_outputs"));
-//    const double output_neurons = gtk_spin_button_get_value(outputs_btn);
-//
-//    // Build a NN with the specified parameters
-//    neur_net *nn =  instantiate(input_neurons, hidden_layers, hidden_neurons, output_neurons);
-//
-//    // Get needed values to train the NN
-//    GtkSpinButton *epochs_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_epochs"));
-//    const double num_epochs = gtk_spin_button_get_value(epochs_spin_btn);
-//    GtkSpinButton *learning_rate_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_learn_rate"));
-//    const double learning_rate = gtk_spin_button_get_value(learning_rate_spin_btn);
-//
-//    // Train it for OCR
-//    // TODO: externalize the num_epochs parameter !
-//    ocr_train(nn, learning_rate, epochs_spin_btn);
+    // Get needed values to build the NN
+    GtkSpinButton *hid_lay_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_hid_lay"));
+    const double hidden_layers = gtk_spin_button_get_value(hid_lay_spin_btn);
+    GtkSpinButton *hid_neur_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_neur_per_hl"));
+    const double hidden_neurons = gtk_spin_button_get_value(hid_neur_spin_btn);
+    GtkSpinButton *inputs_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_inputs"));
+    const double input_neurons = gtk_spin_button_get_value(inputs_btn);
+    GtkSpinButton *outputs_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_outputs"));
+    const double output_neurons = gtk_spin_button_get_value(outputs_btn);
+
+    // Build a NN with the specified parameters
+    if(ocr_nn)
+        neur_net_free(ocr_nn);
+
+    ocr_nn =  instantiate(input_neurons, hidden_layers, hidden_neurons, output_neurons);
+
+    // Get needed values to train the NN
+    GtkSpinButton *epochs_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_epochs"));
+    const double num_epochs = gtk_spin_button_get_value(epochs_spin_btn);
+    GtkSpinButton *learning_rate_spin_btn = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_learn_rate"));
+    const double learning_rate = gtk_spin_button_get_value(learning_rate_spin_btn);
+
+    for(int i = 0; i < (int)num_epochs; i++)
+    {
+        double inputs[TRAIN_IMG_SZ * TRAIN_IMG_SZ];
+        double target[NUM_OF_TRAIN_CHARS] = {0};
+
+        int *train_char = get_training_character();
+        // letter to learn will be in first position
+        int letter_to_learn = train_char[0];
+        int index = 0;
+        if(letter_to_learn >= 65 && letter_to_learn <= 90)
+        {
+            // This is an uppercase. Get its index by subtracting 'A'
+            index = letter_to_learn - 65;
+        } else if (letter_to_learn >= 97 && letter_to_learn <= 122)
+        {
+            // This is a lowercase. Subtract 'a' and add the uppsercase set size to get the index
+            index = letter_to_learn - 97 + 26 + 1;
+        } else
+        {
+            // Nasty thing -- we do not have other charactes but letters. For the time being...
+            printf("Hey !! Detected letter_to_learn %c which is out of scope for now.\n", (char)letter_to_learn);
+        }
+
+        for (int i = 1; i < TRAIN_IMG_SZ * TRAIN_IMG_SZ; i++)
+        {
+            // Because of the fact that train_char has the charater itself in the first position, the 2 indexes are not in sync
+            // => subtract 1
+            inputs[i-1] = train_char[i];
+        }
+
+        target[index] = letter_to_learn;
+
+
+        backprop(ocr_nn, inputs, target, learning_rate);
+        printf("backprop called... %d\n", i);
+    }
+
+    // Train it for OCR
+    // TODO: externalize the num_epochs parameter !
+    //ocr_train(nn, learning_rate, num_epochs);
 //
 //    // Get the widgets to show results
 //    GtkEntry *xor_out_1_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_1_entry"));

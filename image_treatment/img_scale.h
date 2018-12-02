@@ -7,7 +7,7 @@
 #define TRAIN_IMG_SZ 28
 
 // 26 uppercase, 27 lowercase (there are 2 models of 'a')
-#define NUM_OF_TRAIN_CHARS 53
+#define NUM_OF_TRAIN_CHARS 52
 
 // To hold every training character as a one-dimension array.
 // In first position we should have the training character itself.

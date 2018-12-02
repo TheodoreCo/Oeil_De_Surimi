@@ -26,10 +26,10 @@ learn_rate_xor       = 0.1;
 rlsa_expansion       = 100
 
 # Number of neurons in the input layer for the OCR NN
-num_input_ocr        = 1024
+num_input_ocr        = 784
 
 # Number of neurons in the output layer for the OCR NN
-num_output_ocr       = 1
+num_output_ocr       = 52
 
 # Number of hidden layers for the OCR NN
 num_hid_lay_ocr      = 1
