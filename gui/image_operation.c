@@ -3,6 +3,7 @@
 #include "../image_treatment/img_treatment.h"
 #include "../neural_network/neural_network.h"
 #include "config.h"
+#include "../image_treatment/img_scale.h"
 
 enum Bin_Img_Type {DO_NOTHING, GRAYSCALE, B_AND_W, B_AND_W_DENOISED, RLSA} bin_img_type;
 
@@ -448,12 +449,35 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
 
 void on_oeil_de_surimi_load_btn_clicked(GtkButton *button)
 {
-    // TODO
+    if(ocr_nn)
+        neur_net_free(ocr_nn);
+
+    printf("Building new nn from %s\n", cf_get_ocr_train_file());
+    ocr_nn = nn_load(cf_get_ocr_train_file());
 }
 
 void on_oeil_de_surimi_save_btn_clicked(GtkButton *button)
 {
-    // TODO
+    if(ocr_nn) {
+        printf("Saving nn config to file");
+        nn_save(ocr_nn, cf_get_ocr_train_file());
+    }
+}
+
+void on_oeil_de_surimi_test_theo_btn_clicked(GtkButton *button)
+{
+    int *letter = get_training_character();
+
+    printf("Here's a %c\n", (char)letter[0]);
+    for(int i = 1; i < TRAIN_IMG_SZ*TRAIN_IMG_SZ+1; i++)
+    {
+        printf("%c", (char)letter[i]);
+        if (i % TRAIN_IMG_SZ == 0)
+        {
+            printf("\n");
+        }
+    }
+    printf("\n");
 }
 
 void on_oeil_de_surimi_test_gabriel_btn_clicked(GtkButton *button, GtkDrawingArea *drawing_area)
