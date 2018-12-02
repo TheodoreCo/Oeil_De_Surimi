@@ -572,7 +572,7 @@ char_bimg_list *image_segmentation(binary_image *b_image, unsigned int side_leng
 
 
 
-/*
+
 unsigned char getmatrix(char *filename){
   binary_image *b = bi_image_from_file(filename);
 
@@ -594,10 +594,10 @@ unsigned char getmatrix(char *filename){
   resize_img( b, rect, 16, result);
   free_binary_image(b);
   free(rect);
-  return result;
+  return *result;
 }
 
-*/
+
 /*
 void pathtostring(char *filename){
 
