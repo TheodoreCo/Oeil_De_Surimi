@@ -617,14 +617,7 @@ char_bimg_list *image_segmentation(binary_image *b_image, unsigned int side_leng
     return cbl;
 }
 
-
-
-
-
-
-
-
-unsigned char getmatrix(char *filename){
+unsigned char *getmatrix(char *filename){
   binary_image *b = bi_image_from_file(filename);
 
   l_rect *rect = malloc(sizeof(l_rect));
@@ -642,18 +635,11 @@ unsigned char getmatrix(char *filename){
 
   unsigned char result[16 * 16];
 
+  unsigned char **output = result;
+
   resize_img( b, rect, 16, result);
   free_binary_image(b);
   free(rect);
-  return *result;
+
+  return *output;
 }
-
-
-/*
-void pathtostring(char *filename){
-
-
-}
-
-
-*/

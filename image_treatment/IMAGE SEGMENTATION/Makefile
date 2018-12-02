@@ -1,5 +1,8 @@
 all : main
 
+clean:
+	rm -f ImageSegmentation *.o
+
 main : main.o img_treatment.o
 	gcc -o ImageSegmentation main.o img_treatment.o -lm
 

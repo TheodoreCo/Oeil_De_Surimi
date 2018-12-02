@@ -136,7 +136,7 @@ unsigned int character_mediant_height(binary_image *b_img, unsigned int max);
 
 void smallen_charboxes(binary_image *b_image);
 
-unsigned char getmatrix(char *filename);
+unsigned char *getmatrix(char *filename);
 
 char_bimg_list *image_segmentation(binary_image *b_image, unsigned int side_length);
 

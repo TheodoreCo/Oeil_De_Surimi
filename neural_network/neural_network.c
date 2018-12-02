@@ -249,6 +249,7 @@ void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs)
 	char act;
 	binary_image *bin;
 	double inputs[256];
+	unsigned char *matrix;
 
 	for(unsigned int i = 0; i < epochs; i++)
 	{
@@ -272,10 +273,10 @@ void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs)
 			target[(int) act] = 1;
 
 			//RECUP INPUTS
-			
-			bin = bi_image_from_file(act_file);
+			matrix = getmatrix(act_file);
 			for(int i = 0; i < 256; i++)
-				inputs[i] = bin->pixel[i];
+				inputs[i] = *(matrix + i);
+			
 
 
 			backprop(nn,inputs,target,learning_rate);
