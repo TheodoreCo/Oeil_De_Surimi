@@ -234,10 +234,6 @@ void backprop(neur_net *nn, double *inputs, double *target,
 
 }
 
-
-
-
-
 void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs)
 {
 	struct dirent *pDirent;
@@ -255,15 +251,24 @@ void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs)
 	
 	for(int unsigned int i = 0; i < epochs; i++)
 	{
+		Dir = opendir("./../Dataset");
 		while((pDirent = readdir(Dir)) != NULL)
 		{
 			act_file = pDirent->d_name;
 			file = fopen(act_file,"r");
 			fscanf(fichier,"%c\n",&act);
-			char_ascii = 
+			char_ascii = (int) act;
+			target[char_ascii] = 1;
+			
+
+			//RECUP INPUITS
+
+
+			backprop(nn,inputs,target,learning_rate);
 		}
-	
+		free(Dir);
 	}
+	nn_save(nn,"ocr.nn");
 }
 
 

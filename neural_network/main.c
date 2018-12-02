@@ -10,36 +10,6 @@
 int main(/* int argc, char *argv[] */)
 {
 	
-	// RECUPERATION DES CARACTERES 
-	
-	struct dirent *pDirent;
-	
-	DIR *MajDir;
-	MajDir = opendir("./../Dataset/Majuscules");
-	if (MajDir == NULL)
-		errx(1, "Could not open directory Majuscules, wrong path ?");
-	
-	DIR *MinDir;
-	MinDir = opendir("./../Dataset/Minuscules");
-	if (MinDir == NULL)
-		errx(1,"Could not open directory Minuscules, wrong path ?");
-
-	DIR *NumDir;
-	NumDir = opendir("./../Dataset/Chiffres");
-	if (NumDir == NULL)
-		errx(1,"Could not open directory Chiffres, wrong path ?");
-	
-
-	DIR *PoncDir;
-	PoncDir = opendir("./../Dataset/Ponctuation");
-	if (PoncDir == NULL)
-		errx(1, "Could not open directory Ponctuation, wrong path ?");
-
-
-
-
-
-
 	// INSTIATE NN
 
 	size_t num_inputs = 256;
