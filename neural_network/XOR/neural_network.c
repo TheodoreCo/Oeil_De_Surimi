@@ -6,7 +6,7 @@
 #include <dirent.h>
 
 #include "neural_network.h"
-#include "./../image_treatment/img_treatment.h"
+#include "img_treatment.h"
 
 neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers,
         size_t num_hidd_neur, size_t num_outputs)
@@ -247,6 +247,7 @@ void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs)
 	double target[93] = {0};
 	char *act_file;
 	char act;
+	binary_image *bin;
 	double inputs[256];
 	unsigned char *matrix;
 
@@ -276,6 +277,8 @@ void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs)
 			for(int i = 0; i < 256; i++)
 				inputs[i] = *(matrix + i);
 			
+
+
 			backprop(nn,inputs,target,learning_rate);
 		}
 		free(Dir);
