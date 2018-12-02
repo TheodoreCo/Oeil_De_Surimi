@@ -23,7 +23,7 @@ int main (int argc, char *argv[])
 
     binary_image *preview_blocks = bi_image_show_blocks(b_image);
 
-    free_binary_image(b_image);
+    //free_binary_image(b_image);
     b_image = preview_blocks;
 
     binary_image_to_file(argv[2], b_image);
