@@ -85,6 +85,8 @@ struct char_bimg_list
 */
 binary_image *bi_image_from_file(char *filename);
 
+void binary_image_to_file(char filename[], binary_image *b_image );
+
 
 /*
     Detects lines of text in the binary image and returns an enriched image

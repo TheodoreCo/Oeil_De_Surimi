@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "img_treatment.h"
 
 void free_binary_image(binary_image *b_image) {
@@ -49,8 +50,7 @@ binary_image *bi_image_from_file(char *filename) {
         fread(&img_w, 4, 1, file);
         fread(&img_h, 4, 1, file);
 
-        printf("File len: %d; DIB header len: %d; Image width: %d; Image height: %d\n",
-               file_len, dib_header_len, img_w, img_h);
+        //printf("File len: %d; DIB header len: %d; Image width: %d; Image height: %d\n", file_len, dib_header_len, img_w, img_h);
 
         binary_image *b_image = malloc(sizeof (binary_image));
         if(!b_image) return 0;
@@ -112,20 +112,74 @@ binary_image *bi_image_from_file(char *filename) {
     }
     return 0;
 }
-/*
-int binary_image_to_file(char[] filename)
+
+void binary_image_to_file(char filename[], binary_image *b_image )
 {
+    int w = b_image->w; /* Put here what ever width you want */
+    int h = b_image->h; /* Put here what ever height you want */
+
+    FILE *f;
+    unsigned char *img = NULL;
+    int filesize = 54 + 3*w*h;  //w is your image width, h is image height
+    if( img )
+            free( img );
+    img = (unsigned char *)malloc(3*w*h);
+    memset(img,0,sizeof(char) * 3*w*h);
+    int x, y, r, g, b;
+
+    unsigned char val;
+
+    for(int i=0; i<w; i++)
+    {
+        for(int j=0; j<h; j++)
+        {
+            x=i; y=(h-1)-j;
+
+            val = b_image->pixel[x + y * w];
+
+            r = g = b = val;
 
 
+            if (val == 2) {
+                r = 255;
+                g = b = 0;
+            }
+
+            img[(x+y*w)*3+2] = r;
+            img[(x+y*w)*3+1] = g;
+            img[(x+y*w)*3+0] = b;
+        }
+    }
+
+    unsigned char bmpfileheader[14] = {'B','M', 0,0,0,0, 0,0, 0,0, 54,0,0,0};
+    unsigned char bmpinfoheader[40] = {40,0,0,0, 0,0,0,0, 0,0,0,0, 1,0, 24,0};
+    unsigned char bmppad[3] = {0,0,0};
+
+    bmpfileheader[2] = (unsigned char)(filesize);
+    bmpfileheader[3] = (unsigned char)(filesize>> 8);
+    bmpfileheader[4] = (unsigned char)(filesize>>16);
+    bmpfileheader[5] = (unsigned char)(filesize>>24);
+
+    bmpinfoheader[4] = (unsigned char)(w);
+    bmpinfoheader[5] = (unsigned char)(w>>8);
+    bmpinfoheader[6] = (unsigned char)(w>>16);
+    bmpinfoheader[7] = (unsigned char)(w>>24);
+    bmpinfoheader[8] = (unsigned char)(h);
+    bmpinfoheader[9] = (unsigned char)(h>>8);
+    bmpinfoheader[10] = (unsigned char)(h>>16);
+    bmpinfoheader[11] = (unsigned char)(h>>24);
+
+    f = fopen(filename,"wb");
+
+    fwrite(bmpfileheader,1,14,f);
+    fwrite(bmpinfoheader,1,40,f);
+    for(int i=0; i<h; i++)
+    {
+        fwrite(img+(w*(h-i-1)*3),3,w,f);
+        fwrite(bmppad,1,(4-(w*3)%4)%4,f);
+    }
+    fclose(f);
 }
-
-*/
-
-
-
-
-
-
 
 
 binary_image *bi_image_RLSA(binary_image *b_img, unsigned int h_expansion, unsigned int v_expansion)
@@ -235,7 +289,7 @@ unsigned int *min_x, unsigned int *min_y, unsigned int *max_x, unsigned int *max
 
 void bi_image_blocks_from_RLSA(binary_image *b_img, binary_image *rlsa_img)
 {
-    printf("Creating blocks...\n");
+    //printf("Creating blocks...\n");
 
     unsigned char mark_array[b_img->w * b_img->h];
     for (size_t i = 0; i < b_img->w * b_img->h; i++)
@@ -436,10 +490,7 @@ binary_image *bi_image_show_blocks(binary_image *b_img)
     return result_image;
 }
 
-
-
-void resize_img(binary_image *original_b_img, l_rect *rect,
-    unsigned int side_length, unsigned char *result)
+void resize_img(binary_image *original_b_img, l_rect *rect, unsigned int side_length, unsigned char *result)
 {
 
     unsigned int width = rect->max_x - rect->min_x + 1;
@@ -491,7 +542,7 @@ binary_image *preview_nn_input(char_bimg_list *list)
 
     char_bimg *current = list->first;
 
-    printf("nb = %u\n", list->size);
+    //printf("nb = %u\n", list->size);
     unsigned int x = 0;
 
     for (;current != NULL && x < side * side ; x++ ) {
