@@ -642,7 +642,7 @@ unsigned char *getmatrix(char *filename){
 
   unsigned char result[16 * 16];
 
-  unsigned char *output = result;
+  unsigned char **output = result;
 
   resize_img( b, rect, 16, result);
   free_binary_image(b);
