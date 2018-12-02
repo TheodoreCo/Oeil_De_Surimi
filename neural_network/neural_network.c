@@ -248,23 +248,23 @@ void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs)
 	char *act_file;
 	int char_ascii;
 	char act;
-	
-	for(int unsigned int i = 0; i < epochs; i++)
+
+	for(unsigned int i = 0; i < epochs; i++)
 	{
 		Dir = opendir("./../Dataset");
 		while((pDirent = readdir(Dir)) != NULL)
 		{
 			act_file = pDirent->d_name;
 			file = fopen(act_file,"r");
-			fscanf(fichier,"%c\n",&act);
+			//fscanf(fichier,"%c\n",&act);
 			char_ascii = (int) act;
 			target[char_ascii] = 1;
-			
+
 
 			//RECUP INPUITS
 
 
-			backprop(nn,inputs,target,learning_rate);
+			//backprop(nn,inputs,target,learning_rate);
 		}
 		free(Dir);
 	}
@@ -409,7 +409,7 @@ neur_net *nn_load(char *path)
 		act_value = 0;
 
 	//TRAITEMENT PREMIER LAYER
-	
+
 	unsigned int layer_counts;
 	fscanf(file,"%d[",&layer_counts);
 
@@ -430,29 +430,29 @@ neur_net *nn_load(char *path)
 	}
 	fgetc(file);
 	printf("num_inputs = %u; num_hidden_layers = %u; num_hidd_neur = %u; num_outputs = %u",num_inputs,num_hidden_layers, num_hidd_neur, num_outputs);
-	
+
 
 	// TRAITEMENT GENERAL FROM 1ST HIDDEN LAYER TO AVANT DERNIER LAYER
-	
+
 	while(layer_count <= num_hidden_layers + 1)
 	{
 		//boucle sur layer
 		fscanf(file,"%d[",&layer_count);
 		neur_count = 0;
 		while(neur_count < nn->layer_array[layer_count]->num_neur)
-		{	
+		{
 			//boucle sur neurone
 			fscanf(file,"%lf(",&act_value);
 			printf("layer %u neurone %u valeur %lf",layer_count, neur_count, act_value);
-			nn->layer_array[layer_count]->neur_array[neur_count]->value = 
+			nn->layer_array[layer_count]->neur_array[neur_count]->value =
 				act_value;
 
 			fscanf(file,"%lf ",&act_biase);
-			nn->layer_array[layer_count]->neur_array[neur_count]->biase = 
+			nn->layer_array[layer_count]->neur_array[neur_count]->biase =
 				act_biase;
-				
+
 			weight_count = 0;
-			
+
 			while(weight_count < nn->layer_array[layer_count]->neur_array[neur_count]->num_weights)
 			{
 				fscanf(file,"|%lf",&act_weight);
@@ -461,16 +461,13 @@ neur_net *nn_load(char *path)
 				weight_count ++;
 			}
 			fgetc(file);
-			
-			
+
+
 			neur_count++;
 		}
 		fgetc(file);
 		layer_count++;
 	}
-	
+
 	return nn;
 }
-
-
-

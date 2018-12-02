@@ -278,7 +278,7 @@ static int comp(void const *a, void const *b)
 
 unsigned int character_mediant_height(binary_image *b_img, unsigned int max)
 {
-    binary_image *rlsa_img = bi_image_RLSA(b_img, 0, 0);
+    binary_image *rlsa_img = bi_image_RLSA(b_img, 1, 1);
     bi_image_blocks_from_RLSA(rlsa_img, rlsa_img);
 
     unsigned int max_iteration = max > rlsa_img->lr_size ? rlsa_img->lr_size : max;
@@ -291,8 +291,9 @@ unsigned int character_mediant_height(binary_image *b_img, unsigned int max)
     size_t i = 0;
 
     for (; i < max_iteration; i++) {
-        tab[i] = current->max_y - current->min_y;
 
+        tab[i] = current->max_y - current->min_y;
+        printf("tab[%u] = %u\n", i, tab[i]);
         prev = current;
         current = current->next;
         free(prev);
@@ -511,11 +512,14 @@ char_bimg_list *gen_char_bimg_list(binary_image *b_img, unsigned int side_length
         current = current->next;
     }
 
+    free_binary_image(b_img);
+
     list->first = cb;
 
     return list;
 }
 
+/*
 char getmatrix(char *filename){
   binary_image *b = bi_image_from_file(filename);
 
@@ -539,6 +543,8 @@ char getmatrix(char *filename){
   free(rect);
   return result;
 }
+*/
+
 /*
 void pathtostring(char *filename){
 

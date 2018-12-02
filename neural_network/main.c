@@ -9,7 +9,7 @@
 
 int main(/* int argc, char *argv[] */)
 {
-	
+	/*
 	// INSTIATE NN
 
 	size_t num_inputs = 256;
@@ -18,7 +18,7 @@ int main(/* int argc, char *argv[] */)
 	size_t num_outputs = 93;
 
 	neur_net *nn = instantiate(num_inputs,num_hidden_layers,num_hidd_neur,num_outputs);
-	
+
 	// TRAINING DES MAJUSCULES
 	FILE *fichier;
 
@@ -34,7 +34,7 @@ int main(/* int argc, char *argv[] */)
 			printf("Value of n=%d\n", num);
 		}
 	}
-		
-	return 0;
-}
 
+	return 0;
+	*/
+}
