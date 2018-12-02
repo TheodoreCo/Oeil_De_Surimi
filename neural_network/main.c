@@ -7,9 +7,9 @@
 
 #include "neural_network.h"
 
-int main(/* int argc, char *argv[] */)
+int main()
 {
-	/*
+	
 	// INSTIATE NN
 
 	size_t num_inputs = 256;
@@ -18,23 +18,9 @@ int main(/* int argc, char *argv[] */)
 	size_t num_outputs = 93;
 
 	neur_net *nn = instantiate(num_inputs,num_hidden_layers,num_hidd_neur,num_outputs);
-
-	// TRAINING DES MAJUSCULES
-	FILE *fichier;
-
-	while((pDirent = readdir(MajDir)) != 0)
-	{
-		char *act = pDirent->d_name;
-		fichier = fopen(act,"r");
-		int num;
-		char **line;
-		while(getline(line,) != -1)
-		{
-			fscanf(fichier,"%d", &num);
-			printf("Value of n=%d\n", num);
-		}
-	}
+	
+	ocr_train(nn,0.01,100);
 
 	return 0;
-	*/
+	
 }

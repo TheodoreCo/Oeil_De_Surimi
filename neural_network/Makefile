@@ -7,7 +7,7 @@ LDLIBS = -lm
 
 EXEC = main
 
-SRC = neural_network.c main.c  
+SRC = neural_network.c img_treatment.c main.c  
 OBJ = ${SRC:.c=.o}
 DEP = ${SRC:.c=.d}
 
