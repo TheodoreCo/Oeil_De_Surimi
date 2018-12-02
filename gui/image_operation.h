@@ -27,6 +27,8 @@ void on_oeil_de_surimi_ocr_def_train_values_btn_clicked(GtkButton *button);
 void on_oeil_de_surimi_load_btn_clicked(GtkButton *button);
 void on_oeil_de_surimi_save_btn_clicked(GtkButton *button);
 
+void on_oeil_de_surimi_check_train_btn_clicked(GtkButton *button);
+
 /** Handles the 'RLSA' button click */
 void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button);
 

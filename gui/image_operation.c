@@ -245,45 +245,57 @@ void on_oeil_de_surimi_train_ocr_btn_clicked(GtkButton *button)
 
 
         backprop(ocr_nn, inputs, target, learning_rate);
-        printf("backprop called... %d\n", i);
+        if(i%1000 == 0)
+            printf(".");
+        // printf("backprop called... %d\n", i);
+    }
+    printf("Training done\n");
+}
+
+/** Seeks the representation array in global variable */
+int *get_representation_for(gchar symbol)
+{
+    for(int i = 0; i < NUM_OF_TRAIN_CHARS; i++) {
+        int chr = train_chars[i][0];
+        if(symbol == (char)chr)
+            return train_chars[i];
     }
 
-    // Train it for OCR
-    // TODO: externalize the num_epochs parameter !
-    //ocr_train(nn, learning_rate, num_epochs);
-//
-//    // Get the widgets to show results
-//    GtkEntry *xor_out_1_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_1_entry"));
-//    GtkEntry *xor_out_2_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_2_entry"));
-//    GtkEntry *xor_out_3_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_3_entry"));
-//    GtkEntry *xor_out_4_entry = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_xor_out_4_entry"));
-//
-//
-//    // Run NN 4 times & update GUI to show results
-//    double inputs[4][2] =
-//    {
-//        {0.0, 0.0},
-//        {0.0, 1.0},
-//        {1.0, 0.0},
-//        {1.0, 1.0}
-//    };
-//
-//    gchar *text1 = g_strdup_printf ("%.2f", *feed_forward(nn, inputs[0]));
-//    gchar *text2 = g_strdup_printf ("%.2f", *feed_forward(nn, inputs[1]));
-//    gchar *text3 = g_strdup_printf ("%.2f", *feed_forward(nn, inputs[2]));
-//    gchar *text4 = g_strdup_printf ("%.2f", *feed_forward(nn, inputs[3]));
-//
-//    gtk_entry_set_text(xor_out_1_entry, text1);
-//    gtk_entry_set_text(xor_out_2_entry, text2);
-//    gtk_entry_set_text(xor_out_3_entry, text3);
-//    gtk_entry_set_text(xor_out_4_entry, text4);
-//
-//    g_free(text1);
-//    g_free(text2);
-//    g_free(text3);
-//    g_free(text4);
-//
-//    neur_net_free(nn);
+    printf("Representation not found for symbol %c !!\n", (char)symbol);
+    return 0;
+}
+
+void on_oeil_de_surimi_check_train_btn_clicked(GtkButton *button)
+{
+    if(!ocr_nn)
+    {
+        printf("Sorry, there's no active NN available. Either train one or load one !\n");
+        return;
+    }
+
+    GtkEntry *gtk_entry_input = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_train_input"));
+    const gchar* txt = gtk_entry_get_text(gtk_entry_input);
+
+    int k = 0;
+    while(txt[k] != '\0') {
+        int *arr = get_representation_for(txt[k]);
+
+        double inputs[TRAIN_IMG_SZ * TRAIN_IMG_SZ];
+        for(int i = 0; i<TRAIN_IMG_SZ*TRAIN_IMG_SZ; i++)
+        {
+            inputs[i] = arr[i+1];
+        }
+        double *result = feed_forward(ocr_nn, inputs);
+
+        for (int idx = 0; idx < NUM_OF_TRAIN_CHARS; idx++)
+        {
+            if(result[idx] == 1)
+                printf("Found result at %d", idx);
+        }
+        printf("\n");
+        k++;
+    }
+
 }
 
 void bi_from_gray_to_b_and_w(void)
@@ -466,9 +478,6 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
 
     l_rect *rect = b_image->lr;
 
-
-
-
     for (; rect; rect = rect->next)
     {
         //l_rect *rect = b_image->lr;
@@ -476,6 +485,24 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
         //rect = rect->next;
     }
     printf("\n");
+
+
+    char_bimg_list * im_chars = image_segmentation(b_image, TRAIN_IMG_SZ);
+
+    // char_bimg_list *im_chars = gen_char_bimg_list(b_image, TRAIN_IMG_SZ);
+//    printf("Got im_chars list of size %ul\n", im_chars->size);
+//    if(im_chars)
+//    {
+//        char_bimg *im_c = im_chars->first;
+//        if(im_c) {
+//            printf("%s\n", im_c->pixel);
+//            for(unsigned int i = 0; i < im_chars->size; i++)
+//            {
+//                im_c = im_c->next;
+//                printf("%s\n", im_c->pixel);
+//            }
+//        }
+//    }
 
 
 
