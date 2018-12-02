@@ -1137,7 +1137,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="oeil_de_surimi_ocr_train_output">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="margin_bottom">15</property>

@@ -275,6 +275,7 @@ void on_oeil_de_surimi_check_train_btn_clicked(GtkButton *button)
 
     GtkEntry *gtk_entry_input = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_train_input"));
     const gchar* txt = gtk_entry_get_text(gtk_entry_input);
+    GtkEntry *gtk_entry_output = GTK_ENTRY(gtk_builder_get_object(builder, "oeil_de_surimi_ocr_train_output"));
 
     int k = 0;
     while(txt[k] != '\0') {
@@ -285,12 +286,24 @@ void on_oeil_de_surimi_check_train_btn_clicked(GtkButton *button)
         {
             inputs[i] = arr[i+1];
         }
+
+        printf("Calling fast forward with inputs representing %c...\n", arr[0]);
         double *result = feed_forward(ocr_nn, inputs);
 
+        int found_count = 0;
         for (int idx = 0; idx < NUM_OF_TRAIN_CHARS; idx++)
         {
             if(result[idx] == 1)
+            {
                 printf("Found result at %d", idx);
+                found_count++;
+            }
+        }
+
+        // Unique char recognized ! -- display it
+        if(found_count == 1)
+        {
+            gtk_entry_set_text(gtk_entry_output, &txt[k]);
         }
         printf("\n");
         k++;
