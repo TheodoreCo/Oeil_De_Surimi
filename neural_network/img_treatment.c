@@ -49,7 +49,7 @@ binary_image *bi_image_from_file(char *filename) {
         fread(&img_w, 4, 1, file);
         fread(&img_h, 4, 1, file);
 
-      //  printf("File len: %d; DIB header len: %d; Image width: %d; Image height: %d\n",
+        printf("File len: %d; DIB header len: %d; Image width: %d; Image height: %d\n",
                file_len, dib_header_len, img_w, img_h);
 
         binary_image *b_image = malloc(sizeof (binary_image));
@@ -278,7 +278,7 @@ static int comp(void const *a, void const *b)
 
 unsigned int character_mediant_height(binary_image *b_img, unsigned int max)
 {
-    binary_image *rlsa_img = bi_image_RLSA(b_img, 0, 0);
+    binary_image *rlsa_img = bi_image_RLSA(b_img, 1, 1);
     bi_image_blocks_from_RLSA(rlsa_img, rlsa_img);
 
     unsigned int max_iteration = max > rlsa_img->lr_size ? rlsa_img->lr_size : max;
@@ -289,24 +289,35 @@ unsigned int character_mediant_height(binary_image *b_img, unsigned int max)
     l_rect *prev;
 
     size_t i = 0;
+    unsigned int val;
 
-    for (; i < max_iteration; i++) {
-        tab[i] = current->max_y - current->min_y;
-
+    for (; i < max_iteration; ) {
+        val = current->max_y - current->min_y;
+        if (val > 0)
+        {
+            tab[i] = val;
+            //printf("tab[%u] = %u\n", i, tab[i]);
+            i++;
+        }
         prev = current;
         current = current->next;
         free(prev);
     }
 
-    for (; i < rlsa_img->lr_size; i++) {
+    for (; current != NULL; current = current->next ) {
         prev = current;
-        current = current->next;
         free(prev);
     }
 
-    qsort(tab, rlsa_img->lr_size, sizeof(int), comp);
+    qsort(tab, max_iteration, sizeof(int), comp);
 
-    unsigned int value = tab[rlsa_img->lr_size / 2];
+/*
+    for (size_t j = 0; j < max_iteration; j++) {
+        printf("tab[%u] = %u\n",j, tab[j] );
+    }
+*/
+
+    unsigned int value = tab[max_iteration / 2];
 
 
     free_binary_image(rlsa_img);
@@ -511,11 +522,14 @@ char_bimg_list *gen_char_bimg_list(binary_image *b_img, unsigned int side_length
         current = current->next;
     }
 
+    free_binary_image(b_img);
+
     list->first = cb;
 
     return list;
 }
 
+/*
 char getmatrix(char *filename){
   binary_image *b = bi_image_from_file(filename);
 
@@ -539,6 +553,8 @@ char getmatrix(char *filename){
   free(rect);
   return result;
 }
+*/
+
 /*
 void pathtostring(char *filename){
 

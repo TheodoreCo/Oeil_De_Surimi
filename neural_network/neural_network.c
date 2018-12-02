@@ -6,6 +6,7 @@
 #include <dirent.h>
 
 #include "neural_network.h"
+#include "img_treatment.h"
 
 neur_net *instantiate(size_t num_inputs, size_t num_hidden_layers,
         size_t num_hidd_neur, size_t num_outputs)
@@ -244,10 +245,10 @@ void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs)
 		errx(1,"Could not open directory Dataset.");
 
 	double target[93] = {0};
-	FILE *file;
 	char *act_file;
-	int char_ascii;
 	char act;
+	binary_image *bin;
+	double inputs[256];
 
 	for(unsigned int i = 0; i < epochs; i++)
 	{
@@ -255,16 +256,29 @@ void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs)
 		while((pDirent = readdir(Dir)) != NULL)
 		{
 			act_file = pDirent->d_name;
-			file = fopen(act_file,"r");
-			//fscanf(fichier,"%c\n",&act);
-			char_ascii = (int) act;
-			target[char_ascii] = 1;
+			
+			//TRAITEMENT SUR NOM
+			if (act_file[0] =='m' && act_file[1] == 'i')
+				act = act_file[3];
+			else if(act_file[0] == 's' && act_file[1] == 'l')
+				act = '/';
+			else if(act_file[0] == 'p' && act_file[1] == 'a' && act_file[10] == 'f')
+				act = ')';
+			else if(act_file[0] == 'p' && act_file[1] == 'a' && act_file[10] == 'o')
+				act = '(';
+			else
+				act = act_file[0];
+
+			target[(int) act] = 1;
+
+			//RECUP INPUTS
+			
+			bin = bi_image_from_file(act_file);
+			for(int i = 0; i < 256; i++)
+				inputs[i] = bin->pixel[i];
 
 
-			//RECUP INPUITS
-
-
-			//backprop(nn,inputs,target,learning_rate);
+			backprop(nn,inputs,target,learning_rate);
 		}
 		free(Dir);
 	}
