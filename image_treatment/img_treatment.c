@@ -529,7 +529,7 @@ char_bimg_list *gen_char_bimg_list(binary_image *b_img, unsigned int side_length
     return list;
 }
 
-
+/*
 unsigned char getmatrix(char *filename){
   binary_image *b = bi_image_from_file(filename);
 
@@ -554,7 +554,7 @@ unsigned char getmatrix(char *filename){
   return result;
 }
 
-
+*/
 /*
 void pathtostring(char *filename){
 
