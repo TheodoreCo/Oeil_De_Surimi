@@ -3,6 +3,7 @@
 #include <math.h>
 #include <time.h>
 #include <err.h>
+#include <dirent.h>
 
 #include "neural_network.h"
 
@@ -233,12 +234,42 @@ void backprop(neur_net *nn, double *inputs, double *target,
 
 }
 
-/*
+
+
+
+
 void ocr_train(neur_net *nn, double learning_rate, unsigned int epochs)
 {
+	struct dirent *pDirent;
 
+	DIR *Dir;
+	Dir = opendir("./../Dataset");
+	if(Dir == NULL)
+		errx(1,"Could not open directory Dataset.");
+
+	double target[93] = {0};
+	FILE *file;
+	char *act_file;
+	int char_ascii;
+	char act;
+	
+	for(int unsigned int i = 0; i < epochs; i++)
+	{
+		while((pDirent = readdir(Dir)) != NULL)
+		{
+			act_file = pDirent->d_name;
+			file = fopen(act_file,"r");
+			fscanf(fichier,"%c\n",&act);
+			char_ascii = 
+		}
+	
+	}
 }
-*/
+
+
+
+
+
 
 void xor_train(neur_net *nn, double learning_rate, unsigned int epochs)
 {
