@@ -491,6 +491,19 @@ void on_oeil_de_surimi_img_rlsa_btn_clicked(GtkButton *button, GtkDrawingArea *d
     }
 
 
+//CREER FICHIER TEXTE
+
+    unsigned int len = im_chars->size;
+
+    char_pos *array = malloc(sizeof(char_pos) * );
+
+
+
+
+
+
+
+
 
 
 
