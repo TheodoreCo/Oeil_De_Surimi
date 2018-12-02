@@ -77,9 +77,9 @@ OBJ_DEBUG = $(OBJDIR_DEBUG)/gui/config.o $(OBJDIR_DEBUG)/gui/image_operation.o $
 
 OBJ_RELEASE = $(OBJDIR_RELEASE)/gui/config.o $(OBJDIR_RELEASE)/gui/image_operation.o $(OBJDIR_RELEASE)/gui/main.o $(OBJDIR_RELEASE)/image_treatment/img_scale.o $(OBJDIR_RELEASE)/image_treatment/img_treatment.o $(OBJDIR_RELEASE)/neural_network/neural_network.o
 
-OBJ_XOR = $(OBJDIR_XOR)/neural_network/XOR/main_xor.o $(OBJDIR_XOR)/neural_network/neural_network.o
+OBJ_XOR = $(OBJDIR_XOR)/image_treatment/img_treatment.o $(OBJDIR_XOR)/neural_network/XOR/main_xor.o $(OBJDIR_XOR)/neural_network/neural_network.o
 
-OBJ_NN = $(OBJDIR_NN)/neural_network/main.o $(OBJDIR_NN)/neural_network/neural_network.o
+OBJ_NN = $(OBJDIR_NN)/image_treatment/img_treatment.o $(OBJDIR_NN)/neural_network/main.o $(OBJDIR_NN)/neural_network/neural_network.o
 
 OBJ_SCALE_IMAGE = $(OBJDIR_SCALE_IMAGE)/image_treatment/img_scale.o $(OBJDIR_SCALE_IMAGE)/image_treatment/img_treatment.o $(OBJDIR_SCALE_IMAGE)/image_treatment/scale_main.o
 
@@ -165,6 +165,7 @@ clean_release:
 
 before_xor: 
 	test -d bin/neural_network/XOR || mkdir -p bin/neural_network/XOR
+	test -d $(OBJDIR_XOR)/image_treatment || mkdir -p $(OBJDIR_XOR)/image_treatment
 	test -d $(OBJDIR_XOR)/neural_network/XOR || mkdir -p $(OBJDIR_XOR)/neural_network/XOR
 	test -d $(OBJDIR_XOR)/neural_network || mkdir -p $(OBJDIR_XOR)/neural_network
 
@@ -175,6 +176,9 @@ xor: before_xor out_xor after_xor
 out_xor: before_xor $(OBJ_XOR) $(DEP_XOR)
 	$(LD) $(LIBDIR_XOR) -o $(OUT_XOR) $(OBJ_XOR)  $(LDFLAGS_XOR) $(LIB_XOR)
 
+$(OBJDIR_XOR)/image_treatment/img_treatment.o: image_treatment/img_treatment.c
+	$(CC) $(CFLAGS_XOR) $(INC_XOR) -c image_treatment/img_treatment.c -o $(OBJDIR_XOR)/image_treatment/img_treatment.o
+
 $(OBJDIR_XOR)/neural_network/XOR/main_xor.o: neural_network/XOR/main_xor.c
 	$(CC) $(CFLAGS_XOR) $(INC_XOR) -c neural_network/XOR/main_xor.c -o $(OBJDIR_XOR)/neural_network/XOR/main_xor.o
 
@@ -184,11 +188,13 @@ $(OBJDIR_XOR)/neural_network/neural_network.o: neural_network/neural_network.c
 clean_xor: 
 	rm -f $(OBJ_XOR) $(OUT_XOR)
 	rm -rf bin/neural_network/XOR
+	rm -rf $(OBJDIR_XOR)/image_treatment
 	rm -rf $(OBJDIR_XOR)/neural_network/XOR
 	rm -rf $(OBJDIR_XOR)/neural_network
 
 before_nn: 
 	test -d bin/neural_network || mkdir -p bin/neural_network
+	test -d $(OBJDIR_NN)/image_treatment || mkdir -p $(OBJDIR_NN)/image_treatment
 	test -d $(OBJDIR_NN)/neural_network || mkdir -p $(OBJDIR_NN)/neural_network
 
 after_nn: 
@@ -197,6 +203,9 @@ nn: before_nn out_nn after_nn
 
 out_nn: before_nn $(OBJ_NN) $(DEP_NN)
 	$(LD) $(LIBDIR_NN) -o $(OUT_NN) $(OBJ_NN)  $(LDFLAGS_NN) $(LIB_NN)
+
+$(OBJDIR_NN)/image_treatment/img_treatment.o: image_treatment/img_treatment.c
+	$(CC) $(CFLAGS_NN) $(INC_NN) -c image_treatment/img_treatment.c -o $(OBJDIR_NN)/image_treatment/img_treatment.o
 
 $(OBJDIR_NN)/neural_network/main.o: neural_network/main.c
 	$(CC) $(CFLAGS_NN) $(INC_NN) -c neural_network/main.c -o $(OBJDIR_NN)/neural_network/main.o
@@ -207,6 +216,7 @@ $(OBJDIR_NN)/neural_network/neural_network.o: neural_network/neural_network.c
 clean_nn: 
 	rm -f $(OBJ_NN) $(OUT_NN)
 	rm -rf bin/neural_network
+	rm -rf $(OBJDIR_NN)/image_treatment
 	rm -rf $(OBJDIR_NN)/neural_network
 
 before_scale_image: 

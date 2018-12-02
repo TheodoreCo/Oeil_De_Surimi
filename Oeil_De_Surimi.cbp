@@ -107,15 +107,8 @@
 		</Unit>
 		<Unit filename="image_treatment/img_treatment.c">
 			<Option compilerVar="CC" />
-			<Option target="Release" />
-			<Option target="Debug" />
-			<Option target="scale_image" />
 		</Unit>
-		<Unit filename="image_treatment/img_treatment.h">
-			<Option target="Release" />
-			<Option target="Debug" />
-			<Option target="scale_image" />
-		</Unit>
+		<Unit filename="image_treatment/img_treatment.h" />
 		<Unit filename="image_treatment/scale_main.c">
 			<Option compilerVar="CC" />
 			<Option target="scale_image" />
